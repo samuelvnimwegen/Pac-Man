@@ -10,7 +10,8 @@ add_executable(Pac-Man main.cpp
         Ghost.cpp
         Wall.cpp
         Collectable.cpp
-        PacMan.cpp)
+        PacMan.cpp
+        Camera.cpp)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/SFML/lib/cmake/SFML)
