@@ -1,6 +1,8 @@
 #include <iostream>
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
+#include <SFML/Graphics.hpp>
+
+int main(){
     return 0;
 }
+
