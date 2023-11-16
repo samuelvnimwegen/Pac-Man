@@ -7,7 +7,8 @@
 
 
 class Subject {
-
+public:
+    Subject();
 };
 
 

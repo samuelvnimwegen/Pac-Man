@@ -3,3 +3,5 @@
 //
 
 #include "Subject.h"
+
+Subject::Subject() = default;

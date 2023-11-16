@@ -4,10 +4,16 @@
 
 #ifndef PAC_MAN_OBSERVER_H
 #define PAC_MAN_OBSERVER_H
-
+#include "World.h"
 
 class Observer {
+    World* world;
+public:
+    Observer();
 
+    World *getWorld() const;
+
+    void setWorld(World *world);
 };
 
 
