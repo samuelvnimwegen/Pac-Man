@@ -1,3 +1,0 @@
-C:/Users/Samue/Documents/GitHub/PacMan/cmake-build-debug/CMakeFiles/APPacMan.dir
-C:/Users/Samue/Documents/GitHub/PacMan/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Samue/Documents/GitHub/PacMan/cmake-build-debug/CMakeFiles/rebuild_cache.dir
