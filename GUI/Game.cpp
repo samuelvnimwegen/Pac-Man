@@ -16,7 +16,11 @@ Game::Game(const int &wd, const int &hg) {
     pixelHeight = int(this->getHeight() / world->getHeight());
     pixelWidth = int(this->getWidth() / world->getWidth());
 
-    sf::RenderWindow window(sf::VideoMode(this->getWidth(), this->getHeight()), "My window");
+    factory = new ConcreteFactory(observer, world);
+
+    this->generateMap();
+
+    sf::RenderWindow window(sf::VideoMode(this->getWidth(), this->getHeight()), "Pac-Man");
 
     sf::RectangleShape rectangle1(sf::Vector2f(50, 50));
     rectangle1.setPosition(50, 50);
@@ -35,8 +39,19 @@ Game::Game(const int &wd, const int &hg) {
             }
         }
         window.clear();
-        window.draw(rectangle1);
-        window.draw(rectangle2);
+        for (int r = 0; r < this->getWorld()->getHeight(); ++r){
+            for (int k = 0; k < this->getWorld()->getWidth(); ++k){
+                if (viewMap[r][k] != nullptr){
+                    auto name = viewMap[r][k]->getSpriteFileName();
+                    auto pos = this->calculatePixel(r, k);
+                    sf::Texture texture;
+                    texture.loadFromFile(name);
+                    sf::Sprite sprite(texture);
+                    sprite.setPosition(float(pos.first), float(pos.second));
+                    window.draw(sprite);
+                }
+            }
+        }
         window.display();
     }
 }
@@ -57,9 +72,9 @@ void Game::setHeight(int hg) {
     Game::height = hg;
 }
 
-pair<int, int> Game::calculatePixel(const int &row, const int &column) {
-    int wd = row * pixelWidth;
-    int hg = column * pixelHeight;
+pair<int, int> Game::calculatePixel(const int &row, const int &column) const {
+    int wd = column * pixelWidth;
+    int hg = row * pixelHeight;
     return make_pair(wd, hg);
 }
 
@@ -69,4 +84,24 @@ World *Game::getWorld() const {
 
 void Game::setWorld(World *world) {
     Game::world = world;
+}
+
+vector<sf::Sprite> Game::collectSprites() {
+    vector<sf::Sprite> sprites;
+
+    return sprites;
+}
+
+void Game::generateMap() {
+    for (int i = 0; i < this->getWorld()->getHeight(); ++i){
+        for (int j = 0; j < this->getWorld()->getWidth(); ++j){
+            // Als het een muur is deze plaatsen.
+            if (this->getWorld()->getItem(i, j) == nullptr){
+                this->viewMap[i][j] = nullptr;
+            }
+            else if (this->getWorld()->getItem(i, j)->getTag() == "Wall"){
+                this->viewMap[i][j] = factory->makeViewEntity(i, j, "Wall");
+            }
+        }
+    }
 }

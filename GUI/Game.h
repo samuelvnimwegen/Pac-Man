@@ -10,6 +10,9 @@
 #include "vector"
 #include "../Observer.h"
 #include "cassert"
+#include "EntityView.h"
+#include "GUIWall.h"
+#include "ConcreteFactory.h"
 using namespace std;
 
 class Game {
@@ -19,8 +22,15 @@ class Game {
     World* world;
     int pixelWidth;
     int pixelHeight;
+    EntityView* viewMap[11][20];
+    ConcreteFactory* factory;
+
 public:
     Game(const int &width, const int &height);
+
+    void generateMap();
+
+    vector<sf::Sprite> collectSprites();
 
     [[nodiscard]] int getWidth() const;
 
@@ -30,11 +40,12 @@ public:
 
     void setHeight(int hg);
 
-    pair<int, int> calculatePixel(const int &row, const int &column);
+    [[nodiscard]] pair<int, int> calculatePixel(const int &row, const int &column) const;
 
     [[nodiscard]] World *getWorld() const;
 
     void setWorld(World *world);
+
 };
 
 

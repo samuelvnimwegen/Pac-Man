@@ -15,3 +15,5 @@ World *Observer::getWorld() const {
 void Observer::setWorld(World *world) {
     Observer::world = world;
 }
+
+Observer::Observer(World *world) : world(world) {}

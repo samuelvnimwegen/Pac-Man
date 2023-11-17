@@ -3,3 +3,9 @@
 //
 
 #include "Wall.h"
+
+
+
+Wall::Wall(int row, int col) : EntityModel(row, col) {
+    this->setTag("Wall");
+}

@@ -11,7 +11,7 @@
 using namespace std;
 
 class World {
-    EntityModel* world[15][15];
+    EntityModel* world[11][20];
     int height;
     int width;
 public:
@@ -19,13 +19,15 @@ public:
 
     [[nodiscard]] int getHeight() const;
 
-    void setHeight(int height);
+    void setHeight(int hg);
 
     [[nodiscard]] int getWidth() const;
 
-    void setWidth(int width);
+    void setWidth(int wd);
 
     EntityModel* getItem(const int &row, const int &col);
+
+    void addItem(EntityModel* item);
 };
 
 

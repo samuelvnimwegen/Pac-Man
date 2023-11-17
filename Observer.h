@@ -11,7 +11,9 @@ class Observer {
 public:
     Observer();
 
-    World *getWorld() const;
+    Observer(World *world);
+
+    [[nodiscard]] World *getWorld() const;
 
     void setWorld(World *world);
 };

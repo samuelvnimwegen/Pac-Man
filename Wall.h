@@ -1,14 +1,16 @@
 //
 // Created by Samuel on 16/11/2023.
 //
-
-#ifndef PAC_MAN_WALL_H
-#define PAC_MAN_WALL_H
+#ifndef PAC_MAN_PACMAN_H
+#define PAC_MAN_PACMAN_H
 #include "EntityModel.h"
 
-class Wall: public EntityModel{
+using namespace std;
 
+class Wall: public EntityModel{
+public:
+    Wall(int row, int col);
 };
 
 
-#endif //PAC_MAN_WALL_H
+#endif //PAC_MAN_GUIWALL_H

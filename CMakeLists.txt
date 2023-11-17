@@ -15,6 +15,9 @@ add_executable(Pac-Man main.cpp
         World.cpp
         Observer.cpp
         GUI/Game.cpp
+        GUI/EntityView.cpp
+        GUI/GUIWall.cpp
+        GUI/ConcreteFactory.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)
