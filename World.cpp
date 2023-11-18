@@ -122,6 +122,13 @@ void World::buildWorld() {
     this->getFactory()->createEntity("Wall", 9, this->getWidth() - 1 - 5);
 }
 
+World::~World() {
+    int entitySize = int(entities.size());
+    for (int i = 0; i < entitySize; ++i){
+        delete entities[i];
+    }
+}
+
 AbstractFactory::AbstractFactory(World *world) : world(world) {}
 
 EntityModel *AbstractFactory::createEntity(const string &tag, const int &row, const int &col) {

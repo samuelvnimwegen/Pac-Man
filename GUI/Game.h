@@ -28,6 +28,8 @@ class Game {
 public:
     Game(const int &width, const int &height);
 
+    virtual ~Game();
+
     void generateMap();
 
     vector<sf::Sprite> collectSprites();
@@ -47,6 +49,8 @@ public:
     void setWorld(World *world);
 
     void setViewItem(EntityView* entity, const int &row, const int &col);
+
+
 
 };
 

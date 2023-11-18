@@ -105,6 +105,16 @@ void Game::setViewItem(EntityView *entity, const int &row, const int &col) {
     viewEntities.push_back(entity);
 }
 
+Game::~Game() {
+    int entitySize = int(this->viewEntities.size());
+    for (int i = 0; i < entitySize; ++i){
+        delete viewEntities[i];
+    }
+    delete factory;
+    delete world;
+
+}
+
 
 EntityModel *ConcreteFactory::createEntity(const string &tag, const int &row, const int &col) {
     EntityModel* model = AbstractFactory::createEntity(tag, row, col);

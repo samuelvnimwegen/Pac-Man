@@ -21,6 +21,8 @@ class World {
 public:
     explicit World();
 
+    virtual ~World();
+
     void buildWorld();
 
     [[nodiscard]] int getHeight() const;
