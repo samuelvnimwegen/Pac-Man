@@ -4,4 +4,6 @@
 
 #include "Subject.h"
 
-Subject::Subject() = default;
+
+
+Subject::Subject(int row, int col) : row(row), col(col) {}

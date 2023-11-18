@@ -7,8 +7,6 @@
 #include "Subject.h"
 
 class EntityModel: public Subject{
-    int row;
-    int col;
     string tag;
 public:
     EntityModel(int row, int col);

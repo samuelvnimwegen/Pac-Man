@@ -8,5 +8,7 @@ string GUIWall::getSpriteFileName() {
     return "Muur2.png";
 }
 
-GUIWall::GUIWall(World *world, int posX, int posY) : EntityView(world, posX, posY) {}
+GUIWall::GUIWall(Subject *subject) : EntityView(subject) {}
+
+
 

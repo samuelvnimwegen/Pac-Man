@@ -4,8 +4,7 @@
 
 #include "EntityModel.h"
 
-EntityModel::EntityModel(int row, int col) : row(row), col(col) {
-}
+
 
 int EntityModel::getRow() const {
     return row;
@@ -30,3 +29,5 @@ const string &EntityModel::getTag() const {
 void EntityModel::setTag(const string &tg) {
     EntityModel::tag = tg;
 }
+
+EntityModel::EntityModel(int row, int col) : Subject(row, col) {}

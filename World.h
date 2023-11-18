@@ -8,14 +8,20 @@
 #include "vector"
 #include "Wall.h"
 #include "iostream"
+#include "AbstractFactory.h"
+#include "cassert"
 using namespace std;
 
 class World {
-    EntityModel* world[11][20];
+    EntityModel* world[11][20]{};
     int height;
     int width;
+    AbstractFactory* factory;
+    vector<EntityModel*> entities;
 public:
-    World();
+    explicit World();
+
+    void buildWorld();
 
     [[nodiscard]] int getHeight() const;
 
@@ -28,6 +34,10 @@ public:
     EntityModel* getItem(const int &row, const int &col);
 
     void addItem(EntityModel* item);
+
+    AbstractFactory *getFactory() const;
+
+    void setFactory(AbstractFactory *fac);
 };
 
 

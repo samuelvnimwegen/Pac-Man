@@ -8,11 +8,10 @@
 #include "SFML/Graphics.hpp"
 
 class EntityView: public Observer{
-    int posX;
-    int posY;
+    int col;
+    int row;
 public:
-
-    EntityView(World *world, int posX, int posY);
+    explicit EntityView(Subject *subject);
 
     virtual string getSpriteFileName();
 };

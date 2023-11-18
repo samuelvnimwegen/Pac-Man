@@ -8,8 +8,8 @@
 
 class GUIWall: public EntityView {
 public:
-    GUIWall(World *world, int posX, int posY);
-public:
+    explicit GUIWall(Subject *subject);
+
     string getSpriteFileName() override;
 };
 

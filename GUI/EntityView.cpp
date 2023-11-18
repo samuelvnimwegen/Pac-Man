@@ -9,4 +9,8 @@ string EntityView::getSpriteFileName() {
     return "Sprites/Error.png";
 }
 
-EntityView::EntityView(World *world, int posX, int posY) : Observer(world), posX(posX), posY(posY) {}
+EntityView::EntityView(Subject *subject) : Observer(subject) {
+    col = subject->col;
+    row = subject->row;
+}
+

@@ -6,14 +6,14 @@
 #define PAC_MAN_CONCRETEFACTORY_H
 #include "EntityView.h"
 #include "GUIWall.h"
-
-class ConcreteFactory {
-    Observer* observer;
-    World* world;
+#include "../AbstractFactory.h"
+class Game;
+class ConcreteFactory: public AbstractFactory{
+    Game* game;
 public:
-    ConcreteFactory(Observer *observer, World *world);
+    ConcreteFactory(World *world, Game *game);
 
-    EntityView* makeViewEntity(const int &row, const int &col, const string &tag);
+    EntityModel* createEntity(const string &tag, const int &row, const int &col) override;
 };
 
 

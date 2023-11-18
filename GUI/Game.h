@@ -18,12 +18,12 @@ using namespace std;
 class Game {
     int width;
     int height;
-    Observer* observer;
-    World* world;
     int pixelWidth;
     int pixelHeight;
     EntityView* viewMap[11][20];
+    vector<EntityView*> viewEntities;
     ConcreteFactory* factory;
+    World* world;
 
 public:
     Game(const int &width, const int &height);
@@ -45,6 +45,8 @@ public:
     [[nodiscard]] World *getWorld() const;
 
     void setWorld(World *world);
+
+    void setViewItem(EntityView* entity, const int &row, const int &col);
 
 };
 

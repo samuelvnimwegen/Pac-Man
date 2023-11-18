@@ -10,7 +10,9 @@ using namespace std;
 
 class Subject {
 public:
-    Subject();
+    int row;
+    int col;
+    Subject(int row, int col);
 };
 
 

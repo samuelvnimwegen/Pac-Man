@@ -7,15 +7,9 @@
 #include "World.h"
 
 class Observer {
-    World* world;
+    Subject* subject;
 public:
-    Observer();
-
-    Observer(World *world);
-
-    [[nodiscard]] World *getWorld() const;
-
-    void setWorld(World *world);
+    explicit Observer(Subject *subject);
 };
 
 

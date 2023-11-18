@@ -7,18 +7,18 @@
 Game::Game(const int &wd, const int &hg) {
     width = wd;
     height = hg;
-    observer = new Observer();
-    world = observer->getWorld();
+
+    world = new World();
+    this->generateMap();
+    factory = new ConcreteFactory(world, this);
+    this->getWorld()->setFactory(factory);
+    world->buildWorld();
 
     assert(this->getHeight() % world->getHeight() == 0);
     assert(this->getWidth() % world->getWidth() == 0);
 
     pixelHeight = int(this->getHeight() / world->getHeight());
     pixelWidth = int(this->getWidth() / world->getWidth());
-
-    factory = new ConcreteFactory(observer, world);
-
-    this->generateMap();
 
     sf::RenderWindow window(sf::VideoMode(this->getWidth(), this->getHeight()), "Pac-Man");
 
@@ -95,13 +95,23 @@ vector<sf::Sprite> Game::collectSprites() {
 void Game::generateMap() {
     for (int i = 0; i < this->getWorld()->getHeight(); ++i){
         for (int j = 0; j < this->getWorld()->getWidth(); ++j){
-            // Als het een muur is deze plaatsen.
-            if (this->getWorld()->getItem(i, j) == nullptr){
-                this->viewMap[i][j] = nullptr;
-            }
-            else if (this->getWorld()->getItem(i, j)->getTag() == "Wall"){
-                this->viewMap[i][j] = factory->makeViewEntity(i, j, "Wall");
-            }
+            this->viewMap[i][j] = nullptr;
         }
     }
 }
+
+void Game::setViewItem(EntityView *entity, const int &row, const int &col) {
+    viewMap[row][col] = entity;
+    viewEntities.push_back(entity);
+}
+
+
+EntityModel *ConcreteFactory::createEntity(const string &tag, const int &row, const int &col) {
+    EntityModel* model = AbstractFactory::createEntity(tag, row, col);
+    if (tag == "Wall"){
+        game->setViewItem(new GUIWall(model), row, col);
+    }
+    return model;
+}
+
+ConcreteFactory::ConcreteFactory(World *world, Game *game) : AbstractFactory(world), game(game) {}

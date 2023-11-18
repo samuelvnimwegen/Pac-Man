@@ -7,84 +7,7 @@
 World::World() {
     width = 20;
     height = 11;
-
-    // Lege map met null-pointers maken:
-    for (auto & i : world){
-        for (auto & j : i){
-            j = nullptr;
-        }
-    }
-    // Muren om level heen
-    for (int i = 0; i < width; ++i){
-        auto wall = new Wall(0, i);
-        addItem(wall);
-        addItem(new Wall(height - 1, i));
-    }
-    for (int i = 0; i < height; ++i){
-        addItem(new Wall(i, 0));
-        addItem(new Wall(i, width - 1));
-    }
-
-    // Custom muren:
-    addItem(new Wall(2, 2));
-    addItem(new Wall(2, 3));
-    addItem(new Wall(3, 2));
-    addItem(new Wall(4, 2));
-
-    addItem(new Wall(6, 2));
-    addItem(new Wall(7, 2));
-    addItem(new Wall(8, 2));
-    addItem(new Wall(8, 3));
-
-    addItem(new Wall(4, 4));
-    addItem(new Wall(4, 5));
-
-    addItem(new Wall(6, 4));
-    addItem(new Wall(6, 5));
-
-    addItem(new Wall(1, 5));
-    addItem(new Wall(2, 5));
-
-    addItem(new Wall(8, 5));
-    addItem(new Wall(9, 5));
-
-    for (int i = 7; i < 13; ++i){
-        addItem(new Wall(2, i));
-        addItem(new Wall(6, i));
-        addItem(new Wall(8, i));
-    }
-    addItem(new Wall(5, 7));
-    addItem(new Wall(5, 12));
-
-    addItem(new Wall(4, 7));
-    addItem(new Wall(4, 8));
-    addItem(new Wall(4, 11));
-    addItem(new Wall(4, 12));
-
-    // Rechts
-    addItem(new Wall(2, this->getWidth() - 1 - 2));
-    addItem(new Wall(2, this->getWidth() - 1 - 3));
-    addItem(new Wall(3, this->getWidth() - 1 - 2));
-    addItem(new Wall(4, this->getWidth() - 1 - 2));
-
-    addItem(new Wall(6, this->getWidth() - 1 - 2));
-    addItem(new Wall(7, this->getWidth() - 1 - 2));
-    addItem(new Wall(8, this->getWidth() - 1 - 2));
-    addItem(new Wall(8, this->getWidth() - 1 - 3));
-
-    addItem(new Wall(4, this->getWidth() - 1 - 4));
-    addItem(new Wall(4, this->getWidth() - 1 - 5));
-
-    addItem(new Wall(6, this->getWidth() - 1 - 4));
-    addItem(new Wall(6, this->getWidth() - 1 - 5));
-
-    addItem(new Wall(1, this->getWidth() - 1 - 5));
-    addItem(new Wall(2, this->getWidth() - 1 - 5));
-
-    addItem(new Wall(8, this->getWidth() - 1 - 5));
-    addItem(new Wall(9, this->getWidth() - 1 - 5));
-
-
+    factory = nullptr;
 }
 
 int World::getHeight() const {
@@ -109,4 +32,103 @@ EntityModel *World::getItem(const int &row, const int &col) {
 
 void World::addItem(EntityModel *item) {
     world[item->getRow()][item->getCol()] = item;
+    entities.push_back(item);
+}
+
+AbstractFactory *World::getFactory() const {
+    return factory;
+}
+
+void World::setFactory(AbstractFactory *fac) {
+    World::factory = fac;
+}
+
+void World::buildWorld() {
+    assert(this->getFactory() != nullptr);
+    // Lege map met null-pointers maken:
+    for (auto & i : world){
+        for (auto & j : i){
+            j = nullptr;
+        }
+    }
+    // Muren om level heen
+    for (int i = 0; i < width; ++i){
+        this->getFactory()->createEntity("Wall", 0, i);
+        this->getFactory()->createEntity("Wall", height - 1, i);
+    }
+    for (int i = 0; i < height; ++i){
+        this->getFactory()->createEntity("Wall", i, 0);
+        this->getFactory()->createEntity("Wall", i, width - 1);
+    }
+
+    // Links muren:
+    this->getFactory()->createEntity("Wall", 2, 2);
+    this->getFactory()->createEntity("Wall", 2, 3);
+    this->getFactory()->createEntity("Wall", 3, 2);
+    this->getFactory()->createEntity("Wall", 4, 2);
+
+    this->getFactory()->createEntity("Wall", 6, 2);
+    this->getFactory()->createEntity("Wall", 7, 2);
+    this->getFactory()->createEntity("Wall", 8, 2);
+    this->getFactory()->createEntity("Wall", 8, 3);
+
+    this->getFactory()->createEntity("Wall", 4, 4);
+    this->getFactory()->createEntity("Wall", 4, 5);
+
+    this->getFactory()->createEntity("Wall", 6, 4);
+    this->getFactory()->createEntity("Wall", 6, 5);
+
+    this->getFactory()->createEntity("Wall", 1, 5);
+    this->getFactory()->createEntity("Wall", 2, 5);
+
+    this->getFactory()->createEntity("Wall", 8, 5);
+    this->getFactory()->createEntity("Wall", 9, 5);
+
+    for (int i = 7; i < 13; ++i){
+        this->getFactory()->createEntity("Wall", 2, i);
+        this->getFactory()->createEntity("Wall", 6, i);
+        this->getFactory()->createEntity("Wall", 8, i);
+    }
+
+    this->getFactory()->createEntity("Wall", 5, 7);
+    this->getFactory()->createEntity("Wall", 5, 12);
+
+    this->getFactory()->createEntity("Wall", 4, 7);
+    this->getFactory()->createEntity("Wall", 4, 8);
+    this->getFactory()->createEntity("Wall", 4, 11);
+    this->getFactory()->createEntity("Wall", 4, 12);
+
+    // Rechts
+    this->getFactory()->createEntity("Wall", 2, this->getWidth() - 1 - 2);
+    this->getFactory()->createEntity("Wall", 2, this->getWidth() - 1 - 3);
+    this->getFactory()->createEntity("Wall", 3, this->getWidth() - 1 - 2);
+    this->getFactory()->createEntity("Wall", 4, this->getWidth() - 1 - 2);
+
+    this->getFactory()->createEntity("Wall", 6, this->getWidth() - 1 - 2);
+    this->getFactory()->createEntity("Wall", 7, this->getWidth() - 1 - 2);
+    this->getFactory()->createEntity("Wall", 8, this->getWidth() - 1 - 2);
+    this->getFactory()->createEntity("Wall", 8, this->getWidth() - 1 - 3);
+
+    this->getFactory()->createEntity("Wall", 4, this->getWidth() - 1 - 4);
+    this->getFactory()->createEntity("Wall", 4, this->getWidth() - 1 - 5);
+
+    this->getFactory()->createEntity("Wall", 6, this->getWidth() - 1 - 4);
+    this->getFactory()->createEntity("Wall", 6, this->getWidth() - 1 - 5);
+
+    this->getFactory()->createEntity("Wall", 1, this->getWidth() - 1 - 5);
+    this->getFactory()->createEntity("Wall", 2, this->getWidth() - 1 - 5);
+
+    this->getFactory()->createEntity("Wall", 8, this->getWidth() - 1 - 5);
+    this->getFactory()->createEntity("Wall", 9, this->getWidth() - 1 - 5);
+}
+
+AbstractFactory::AbstractFactory(World *world) : world(world) {}
+
+EntityModel *AbstractFactory::createEntity(const string &tag, const int &row, const int &col) {
+    if (tag == "Wall"){
+        auto entity = new Wall(row, col);
+        world->addItem(entity);
+        return entity;
+    }
+    return nullptr;
 }
