@@ -1,7 +1,7 @@
 //
 // Created by Samuel on 16/11/2023.
 //
-#ifndef PAC_MAN_PACMAN_H
+#ifndef PAC_MAN_GUIPACMAN_H
 #define PAC_MAN_PACMAN_H
 #include "EntityModel.h"
 

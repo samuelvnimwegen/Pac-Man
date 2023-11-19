@@ -8,6 +8,7 @@ World::World() {
     width = 20;
     height = 11;
     factory = nullptr;
+    camera = new Camera(width, height);
 }
 
 int World::getHeight() const {
@@ -120,6 +121,8 @@ void World::buildWorld() {
 
     this->getFactory()->createEntity("Wall", 8, this->getWidth() - 1 - 5);
     this->getFactory()->createEntity("Wall", 9, this->getWidth() - 1 - 5);
+
+    this->getFactory()->createEntity("PacMan", 1, 1);
 }
 
 World::~World() {
@@ -129,13 +132,122 @@ World::~World() {
     }
 }
 
+PacMan *World::getPacMan() const {
+    return pacMan;
+}
+
+void World::setPacMan(PacMan *pMan) {
+    World::pacMan = pMan;
+}
+
+void World::setItem(EntityModel* item, const int &row, const int &col) {
+    world[col][row] = item;
+}
+
+const vector<EntityModel *> &World::getEntities() const {
+    return entities;
+}
+
+void World::setEntities(const vector<EntityModel *> &ent) {
+    World::entities = ent;
+}
+
+Camera *World::getCamera() const {
+    return camera;
+}
+
+void World::setCamera(Camera *cam) {
+    World::camera = cam;
+}
+
 AbstractFactory::AbstractFactory(World *world) : world(world) {}
 
 EntityModel *AbstractFactory::createEntity(const string &tag, const int &row, const int &col) {
     if (tag == "Wall"){
         auto entity = new Wall(row, col);
+        entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
+        entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
         world->addItem(entity);
         return entity;
     }
+    else if (tag == "PacMan"){
+        auto* entity = new PacMan(row, col, world);
+        entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
+        entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
+        world->addItem(entity);
+        world->setPacMan(entity);
+        return entity;
+    }
     return nullptr;
+}
+
+void PacMan::move(const int &ticks) {
+    if (this->getCurrentDirection() == "UP"){
+        double yCoord = this->getCameraY();
+        yCoord -= ticks * this->getYSpeed();
+        this->setCameraY(yCoord);
+        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        if (abs(world->getCamera()->getCameraCoords(this->getRow() - 1, this->getCol()).first - this->getCameraY()) <
+                abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - this->getCameraY())){
+            world->setItem(nullptr, this->getRow(), this->getCol());
+            world->setItem(this, this->getRow() - 1, this->getCol());
+        }
+    }else if (this->getCurrentDirection() == "DOWN"){
+        double yCoord = this->getCameraY();
+        yCoord += ticks * this->getYSpeed();
+        this->setCameraY(yCoord);
+        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        if (abs(world->getCamera()->getCameraCoords(this->getRow() + 1, this->getCol()).first - this->getCameraY()) <
+            abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - this->getCameraY())){
+            world->setItem(nullptr, this->getRow(), this->getCol());
+            world->setItem(this, this->getRow() + 1, this->getCol());
+        }
+    }
+    else if (this->getCurrentDirection() == "RIGHT"){
+        double xCoord = this->getCameraX();
+        xCoord += ticks * this->getXSpeed();
+        this->setCameraX(xCoord);
+        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() + 1).second - this->getCameraX()) <
+            abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - this->getCameraX())){
+            world->setItem(nullptr, this->getRow(), this->getCol());
+            world->setItem(this, this->getRow(), this->getCol() + 1);
+        }
+    }
+    else if (this->getCurrentDirection() == "LEFT"){
+        double xCoord = this->getCameraX();
+        xCoord -= ticks * this->getXSpeed();
+        this->setCameraX(xCoord);
+        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() - 1).second - this->getCameraX()) <
+            abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - this->getCameraX())){
+            world->setItem(nullptr, this->getRow(), this->getCol());
+            world->setItem(this, this->getRow(), this->getCol() - 1);
+        }
+    }
+    else{
+        assert(this->getCurrentDirection() == "NONE");
+    }
+}
+
+PacMan::PacMan(int row, int col, World *world) : EntityModel(row, col), world(world) {
+    this->setCurrentDirection("NONE");
+    xSpeed = double(1) / this->getWorld()->getWidth() / 11;
+    ySpeed = double(1) / this->getWorld()->getHeight() / 11;
+}
+
+double PacMan::getXSpeed() const {
+    return xSpeed;
+}
+
+void PacMan::setXSpeed(double speed) {
+    PacMan::xSpeed = speed;
+}
+
+double PacMan::getYSpeed() const {
+    return ySpeed;
+}
+
+void PacMan::setYSpeed(double speed) {
+    PacMan::ySpeed = speed;
 }

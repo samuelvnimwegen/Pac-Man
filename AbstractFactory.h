@@ -4,8 +4,10 @@
 
 #ifndef PAC_MAN_ABSTRACTFACTORY_H
 #define PAC_MAN_ABSTRACTFACTORY_H
-#include "EntityModel.h"
-#include "Wall.h"
+
+#include "iostream"
+using namespace std;
+class EntityModel;
 class World;
 class AbstractFactory {
     World* world;

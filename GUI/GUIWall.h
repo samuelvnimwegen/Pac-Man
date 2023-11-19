@@ -10,7 +10,7 @@ class GUIWall: public EntityView {
 public:
     explicit GUIWall(Subject *subject);
 
-    string getSpriteFileName() override;
+    sf::Sprite getSprite() override;
 };
 
 

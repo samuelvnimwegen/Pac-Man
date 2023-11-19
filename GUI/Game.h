@@ -13,17 +13,19 @@
 #include "EntityView.h"
 #include "GUIWall.h"
 #include "ConcreteFactory.h"
+#include "../Camera.h"
+#include "GUIPacMan.h"
+#include "../Stopwatch.h"
 using namespace std;
 
 class Game {
     int width;
     int height;
-    int pixelWidth;
-    int pixelHeight;
     EntityView* viewMap[11][20];
     vector<EntityView*> viewEntities;
     ConcreteFactory* factory;
     World* world;
+    Stopwatch *stopwatch;
 
 public:
     Game(const int &width, const int &height);
@@ -32,7 +34,9 @@ public:
 
     void generateMap();
 
-    vector<sf::Sprite> collectSprites();
+    static string getDirection();
+
+    [[nodiscard]] pair<int, int> cameraToPixels(double xCamera, double yCamera) const;
 
     [[nodiscard]] int getWidth() const;
 
@@ -42,11 +46,9 @@ public:
 
     void setHeight(int hg);
 
-    [[nodiscard]] pair<int, int> calculatePixel(const int &row, const int &column) const;
-
     [[nodiscard]] World *getWorld() const;
 
-    void setWorld(World *world);
+    void setWorld(World *sWorld);
 
     void setViewItem(EntityView* entity, const int &row, const int &col);
 

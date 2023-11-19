@@ -10,6 +10,10 @@ class Observer {
     Subject* subject;
 public:
     explicit Observer(Subject *subject);
+
+    Subject *getSubject() const;
+
+    void setSubject(Subject *subj);
 };
 
 

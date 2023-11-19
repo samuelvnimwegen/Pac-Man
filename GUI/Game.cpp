@@ -7,6 +7,7 @@
 Game::Game(const int &wd, const int &hg) {
     width = wd;
     height = hg;
+    stopwatch = new Stopwatch();
 
     world = new World();
     this->generateMap();
@@ -17,19 +18,8 @@ Game::Game(const int &wd, const int &hg) {
     assert(this->getHeight() % world->getHeight() == 0);
     assert(this->getWidth() % world->getWidth() == 0);
 
-    pixelHeight = int(this->getHeight() / world->getHeight());
-    pixelWidth = int(this->getWidth() / world->getWidth());
 
     sf::RenderWindow window(sf::VideoMode(this->getWidth(), this->getHeight()), "Pac-Man");
-
-    sf::RectangleShape rectangle1(sf::Vector2f(50, 50));
-    rectangle1.setPosition(50, 50);
-    rectangle1.setFillColor(sf::Color::Green);
-    window.draw(rectangle1);
-
-    sf::RectangleShape rectangle2(sf::Vector2f(50, 50));
-    rectangle2.setFillColor(sf::Color::Red);
-    window.draw(rectangle2);
 
     while (window.isOpen()){
         sf::Event event{};
@@ -38,15 +28,17 @@ Game::Game(const int &wd, const int &hg) {
                 window.close();
             }
         }
+        int steps = stopwatch->getSteps();
+        string direction = getDirection();
+        this->getWorld()->getPacMan()->setCurrentDirection(direction);
+        this->getWorld()->getPacMan()->move(steps);
         window.clear();
         for (int r = 0; r < this->getWorld()->getHeight(); ++r){
             for (int k = 0; k < this->getWorld()->getWidth(); ++k){
-                if (viewMap[r][k] != nullptr){
-                    auto name = viewMap[r][k]->getSpriteFileName();
-                    auto pos = this->calculatePixel(r, k);
-                    sf::Texture texture;
-                    texture.loadFromFile(name);
-                    sf::Sprite sprite(texture);
+                auto viewEntity = viewMap[r][k];
+                if (viewEntity != nullptr){
+                    auto pos = this->cameraToPixels(viewEntity->getSubject()->getCameraX(), viewEntity->getSubject()->getCameraY());
+                    sf::Sprite sprite = viewEntity->getSprite();
                     sprite.setPosition(float(pos.first), float(pos.second));
                     window.draw(sprite);
                 }
@@ -72,25 +64,17 @@ void Game::setHeight(int hg) {
     Game::height = hg;
 }
 
-pair<int, int> Game::calculatePixel(const int &row, const int &column) const {
-    int wd = column * pixelWidth;
-    int hg = row * pixelHeight;
-    return make_pair(wd, hg);
-}
+
 
 World *Game::getWorld() const {
     return world;
 }
 
-void Game::setWorld(World *world) {
-    Game::world = world;
+void Game::setWorld(World *sWorld) {
+    Game::world = sWorld;
 }
 
-vector<sf::Sprite> Game::collectSprites() {
-    vector<sf::Sprite> sprites;
 
-    return sprites;
-}
 
 void Game::generateMap() {
     for (int i = 0; i < this->getWorld()->getHeight(); ++i){
@@ -115,11 +99,33 @@ Game::~Game() {
 
 }
 
+string Game::getDirection() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)){
+        return "UP";
+    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+        return "LEFT";
+    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+        return "RIGHT";
+    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+        return "DOWN";
+    }
+    return "NONE";
+}
+
+pair<int, int> Game::cameraToPixels(double xCamera, double yCamera) const {
+    int x = int((xCamera + 1) / 2 * float(this->getWidth()));
+    int y = int((yCamera + 1) / 2 * float(this->getHeight()));
+    return make_pair(x, y);
+}
+
 
 EntityModel *ConcreteFactory::createEntity(const string &tag, const int &row, const int &col) {
     EntityModel* model = AbstractFactory::createEntity(tag, row, col);
     if (tag == "Wall"){
         game->setViewItem(new GUIWall(model), row, col);
+    }
+    if (tag == "PacMan"){
+        game->setViewItem(new GUIPacMan(model), row, col);
     }
     return model;
 }

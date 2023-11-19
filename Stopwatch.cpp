@@ -3,3 +3,14 @@
 //
 
 #include "Stopwatch.h"
+
+Stopwatch::Stopwatch(){
+    tickTime = sf::milliseconds(12);
+}
+
+int Stopwatch::getSteps() {
+    auto elapsedTime = clock.getElapsedTime();
+    int steps = int(elapsedTime / tickTime);
+    clock.restart();
+    return steps;
+}

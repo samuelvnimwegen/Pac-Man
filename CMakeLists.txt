@@ -10,7 +10,6 @@ add_executable(Pac-Man main.cpp
         Ghost.cpp
         Wall.cpp
         Collectable.cpp
-        PacMan.cpp
         Camera.cpp
         World.cpp
         Observer.cpp
@@ -19,6 +18,9 @@ add_executable(Pac-Man main.cpp
         GUI/GUIWall.cpp
         GUI/ConcreteFactory.cpp
         AbstractFactory.cpp
+        Stopwatch.cpp
+        GUI/GUIPacMan.cpp
+        PacMan.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

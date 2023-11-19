@@ -12,7 +12,17 @@ class Subject {
 public:
     int row;
     int col;
+    double cameraX;
+    double cameraY;
     Subject(int row, int col);
+
+    [[nodiscard]] double getCameraX() const;
+
+    void setCameraX(double x);
+
+    [[nodiscard]] double getCameraY() const;
+
+    void setCameraY(double y);
 };
 
 
