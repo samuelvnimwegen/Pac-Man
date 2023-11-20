@@ -6,8 +6,13 @@
 #define PAC_MAN_VICTORYSTATE_H
 #include "State.h"
 
-class VictoryState: State {
+class VictoryState: public State {
+public:
+    VictoryState();
 
+    ~VictoryState() override;
+
+    State* getNext() override;
 };
 
 

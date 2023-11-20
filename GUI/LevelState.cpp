@@ -3,3 +3,15 @@
 //
 
 #include "LevelState.h"
+
+LevelState::LevelState(){
+   this->setTag("LevelState");
+}
+
+VictoryState *LevelState::getNext() {
+    return new VictoryState();
+}
+
+LevelState::~LevelState() = default;
+
+VictoryState::~VictoryState() = default;

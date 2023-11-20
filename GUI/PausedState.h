@@ -5,9 +5,14 @@
 #ifndef PAC_MAN_PAUSEDSTATE_H
 #define PAC_MAN_PAUSEDSTATE_H
 #include "State.h"
+#include "MenuState.h"
+class PausedState: public State {
+public:
+    PausedState();
 
-class PausedState: State {
+    ~PausedState() override;
 
+    State * getNext() override;
 };
 
 

@@ -5,9 +5,14 @@
 #ifndef PAC_MAN_LEVELSTATE_H
 #define PAC_MAN_LEVELSTATE_H
 #include "State.h"
+#include "VictoryState.h"
+class LevelState: public State {
+public:
+    LevelState();
 
-class LevelState: State {
+    ~LevelState() override;
 
+    VictoryState* getNext() override;
 };
 
 

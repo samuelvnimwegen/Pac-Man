@@ -3,3 +3,13 @@
 //
 
 #include "PausedState.h"
+
+PausedState::PausedState() {
+    this->setTag("PausedState");
+}
+
+State *PausedState::getNext() {
+    return new MenuState();
+}
+
+PausedState::~PausedState() = default;

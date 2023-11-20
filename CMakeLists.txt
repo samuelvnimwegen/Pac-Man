@@ -23,6 +23,12 @@ add_executable(Pac-Man main.cpp
         PacMan.cpp
         Coin.cpp
         GUI/GUICoin.cpp
+        GUI/StateManager.cpp
+        GUI/State.cpp
+        GUI/MenuState.cpp
+        GUI/LevelState.cpp
+        GUI/VictoryState.cpp
+        GUI/PausedState.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

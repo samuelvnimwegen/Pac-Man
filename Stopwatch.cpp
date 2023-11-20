@@ -5,7 +5,7 @@
 #include "Stopwatch.h"
 
 Stopwatch::Stopwatch(){
-    tickTime = sf::milliseconds(12);
+    tickTime = sf::milliseconds(1);
 }
 
 int Stopwatch::getSteps() {

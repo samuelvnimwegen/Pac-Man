@@ -12,6 +12,7 @@ World::World() {
     height = 11;
     factory = nullptr;
     camera = new Camera(width, height);
+    coinsLeft = 0;
 }
 
 int World::getHeight() const {
@@ -131,6 +132,7 @@ void World::buildWorld() {
         for (int j = 0; j < this->getWidth(); ++j){
             if (this->getItem(i, j) == nullptr){
                 this->getFactory()->createEntity("Coin", i, j);
+                this->setCoinsLeft(this->getCoinsLeft() + 1);
             }
         }
     }
@@ -169,6 +171,14 @@ Camera *World::getCamera() const {
 
 void World::setCamera(Camera *cam) {
     World::camera = cam;
+}
+
+int World::getCoinsLeft() const {
+    return coinsLeft;
+}
+
+void World::setCoinsLeft(int coins) {
+    World::coinsLeft = coins;
 }
 
 AbstractFactory::AbstractFactory(World *world) : world(world) {}
@@ -265,7 +275,7 @@ void PacMan::move(const int &ticks) {
             if (canMove(this->getRow() - 1, this->getCol())){
                 this->setCameraY(yCoord);
                 if (this->getWorld()->getItem(this->getRow() - 1, this->getCol()) != nullptr){
-                    this->getWorld()->getItem(this->getRow() - 1, this->getCol())->consume();
+                    this->removePrevious(this->getRow() - 1, this->getCol());
                 }
                 world->setItem(nullptr, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow() - 1, this->getCol());
@@ -324,7 +334,7 @@ void PacMan::move(const int &ticks) {
             if (canMove(getRow() + 1, getCol())){
                 this->setCameraY(yCoord);
                 if (this->getWorld()->getItem(this->getRow() + 1, this->getCol()) != nullptr){
-                    this->getWorld()->getItem(this->getRow() + 1, this->getCol())->consume();
+                    this->removePrevious(this->getRow() + 1, this->getCol());
                 }
 
                 world->setItem(nullptr, this->getRow(), this->getCol());
@@ -384,7 +394,7 @@ void PacMan::move(const int &ticks) {
             if (canMove(this->getRow(), this->getCol() + 1)){
                 this->setCameraX(xCoord);
                 if (this->getWorld()->getItem(this->getRow(), this->getCol() + 1) != nullptr){
-                    this->getWorld()->getItem(this->getRow(), this->getCol() + 1)->consume();
+                    this->removePrevious(this->getRow(), this->getCol() + 1);
                 }
                 world->setItem(nullptr, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow(), this->getCol() + 1);
@@ -442,7 +452,7 @@ void PacMan::move(const int &ticks) {
             if (canMove(this->getRow(), this->getCol() - 1)){
                 this->setCameraX(xCoord);
                 if (this->getWorld()->getItem(this->getRow(), this->getCol() - 1) != nullptr){
-                    this->getWorld()->getItem(this->getRow(), this->getCol() - 1)->consume();
+                    this->removePrevious(this->getRow(), this->getCol() - 1);
                 }
                 world->setItem(nullptr, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow(), this->getCol() - 1);
@@ -558,6 +568,7 @@ void PacMan::removePrevious(const int &row, const int &col) {
     else if (this->getWorld()->getItem(row, col)->getTag() == "Coin"){
         this->setScore(this->getScore() + 10);
         this->getWorld()->getItem(row, col)->consume();
+        this->getWorld()->setCoinsLeft(this->getWorld()->getCoinsLeft() - 1);
     }
 }
 

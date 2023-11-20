@@ -3,3 +3,12 @@
 //
 
 #include "VictoryState.h"
+
+VictoryState::VictoryState() {
+    this->setTag("VictoryState");
+}
+
+
+
+
+

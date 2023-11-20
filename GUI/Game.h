@@ -17,6 +17,9 @@
 #include "GUIPacMan.h"
 #include "../Stopwatch.h"
 #include "GUICoin.h"
+#include "StateManager.h"
+#include "chrono"
+#include "thread"
 using namespace std;
 
 class Game {
@@ -27,6 +30,7 @@ class Game {
     ConcreteFactory* factory;
     World* world;
     Stopwatch *stopwatch;
+    StateManager* stateManager;
 
 public:
     Game(const int &width, const int &height);
@@ -36,6 +40,8 @@ public:
     void generateMap();
 
     static string getDirection();
+
+    static string getInput();
 
     [[nodiscard]] pair<int, int> cameraToPixels(double xCamera, double yCamera) const;
 
@@ -53,6 +59,9 @@ public:
 
     void setViewItem(EntityView* entity, const int &row, const int &col);
 
+    StateManager *getStateManager() const;
+
+    void setStateManager(StateManager *state);
 
 
 };

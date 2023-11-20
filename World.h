@@ -23,6 +23,7 @@ class World {
     vector<EntityModel*> entities;
     PacMan* pacMan;
     Camera* camera;
+    int coinsLeft;
 public:
     explicit World();
 
@@ -59,6 +60,10 @@ public:
     [[nodiscard]] Camera *getCamera() const;
 
     void setCamera(Camera *cam);
+
+    int getCoinsLeft() const;
+
+    void setCoinsLeft(int coins);
 };
 
 
