@@ -4,6 +4,7 @@
 
 #include "World.h"
 #include "PacMan.h"
+#include "AbstractFactory.h"
 
 
 World::World() {
@@ -166,21 +167,29 @@ AbstractFactory::AbstractFactory(World *world) : world(world) {}
 
 EntityModel *AbstractFactory::createEntity(const string &tag, const int &row, const int &col) {
     if (tag == "Wall"){
-        auto entity = new Wall(row, col);
-        entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
-        entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
-        world->addItem(entity);
-        return entity;
+        return this->createWall(row, col);
     }
     else if (tag == "PacMan"){
-        auto* entity = new PacMan(row, col, world);
-        entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
-        entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
-        world->addItem(entity);
-        world->setPacMan(entity);
-        return entity;
+        return this->createPacMan(row, col);
     }
     return nullptr;
+}
+
+PacMan *AbstractFactory::createPacMan(const int &row, const int &col) {
+    auto* entity = new PacMan(row, col, world);
+    entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
+    entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
+    world->addItem(entity);
+    world->setPacMan(entity);
+    return entity;
+}
+
+Wall *AbstractFactory::createWall(const int &row, const int &col) {
+    auto entity = new Wall(row, col);
+    entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
+    entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
+    world->addItem(entity);
+    return entity;
 }
 
 void PacMan::move(const int &ticks) {
@@ -421,6 +430,7 @@ PacMan::PacMan(int row, int col, World *world) : EntityModel(row, col), world(wo
     this->setNextDirection("NONE");
     xSpeed = double(1) / this->getWorld()->getWidth() / 8;
     ySpeed = double(1) / this->getWorld()->getHeight() / 8;
+    this->setTag("PacMan");
 }
 
 double PacMan::getXSpeed() const {

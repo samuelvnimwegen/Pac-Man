@@ -7,10 +7,13 @@
 #include "EntityView.h"
 
 class GUIPacMan: public EntityView{
+    PacMan* subject;
 public:
-    explicit GUIPacMan(Subject *subject);
+    explicit GUIPacMan(PacMan *subject);
 
     sf::Sprite getSprite() override;
+
+    Subject * getSubject() const override;
 };
 
 

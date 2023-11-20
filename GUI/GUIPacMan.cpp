@@ -4,12 +4,21 @@
 
 #include "GUIPacMan.h"
 
-GUIPacMan::GUIPacMan(Subject *subject) : EntityView(subject) {}
 
 sf::Sprite GUIPacMan::getSprite() {
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
     this->setTexture(texture);
+
     sf::Sprite sprite(this->getTexture(), sf::IntRect(850, 1, 40, 40));
     return sprite;
+}
+
+GUIPacMan::GUIPacMan(PacMan *subject) : subject(subject) {
+    this->setRow(subject->getRow());
+    this->setCol(subject->getCol());
+}
+
+Subject *GUIPacMan::getSubject() const {
+    return subject;
 }

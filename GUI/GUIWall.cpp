@@ -12,7 +12,17 @@ sf::Sprite GUIWall::getSprite() {
     return sprite;
 }
 
-GUIWall::GUIWall(Subject *subject) : EntityView(subject) {}
+GUIWall::GUIWall(Wall *subject) : subject(subject) {
+    this->setCol(subject->getCol());
+    this->setRow(subject->getRow());
+}
+
+Subject *GUIWall::getSubject() const {
+    return subject;
+}
+
+
+
 
 
 

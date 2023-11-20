@@ -13,9 +13,9 @@ sf::Sprite EntityView::getSprite() {
     return sprite;
 }
 
-EntityView::EntityView(Subject *subject) : Observer(subject) {
-    col = subject->col;
-    row = subject->row;
+EntityView::EntityView(){
+    col = 0;
+    row = 0;
 }
 
 int EntityView::getCol() const {
@@ -38,7 +38,7 @@ const sf::Texture &EntityView::getTexture() const {
     return texture;
 }
 
-void EntityView::setTexture(const sf::Texture &texture) {
-    EntityView::texture = texture;
+void EntityView::setTexture(const sf::Texture &entityTexture) {
+    EntityView::texture = entityTexture;
 }
 

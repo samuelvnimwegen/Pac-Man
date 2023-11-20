@@ -7,8 +7,11 @@
 #include "EntityView.h"
 
 class GUIWall: public EntityView {
+    Wall* subject;
 public:
-    explicit GUIWall(Subject *subject);
+    explicit GUIWall(Wall *subject);
+
+    Subject * getSubject() const override;
 
     sf::Sprite getSprite() override;
 };

@@ -8,13 +8,19 @@
 #include "iostream"
 using namespace std;
 class EntityModel;
+class PacMan;
 class World;
+class Wall;
 class AbstractFactory {
     World* world;
 public:
     explicit AbstractFactory(World *world);
 
-    virtual EntityModel* createEntity(const string &tag, const int &row, const int &col);
+    EntityModel* createEntity(const string &tag, const int &row, const int &col);
+
+    virtual PacMan* createPacMan(const int &row, const int &col);
+
+    virtual Wall* createWall(const int&row, const int &col);
 };
 
 

@@ -14,9 +14,8 @@ class EntityView: public Observer{
 public:
     const sf::Texture &getTexture() const;
 
-    void setTexture(const sf::Texture &texture);
+    void setTexture(const sf::Texture &entityTexture);
 
-public:
     int getCol() const;
 
     void setCol(int c);
@@ -25,7 +24,7 @@ public:
 
     void setRow(int r);
 
-    explicit EntityView(Subject *subject);
+    explicit EntityView();
 
     virtual sf::Sprite getSprite();
 };

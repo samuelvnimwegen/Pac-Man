@@ -24,11 +24,11 @@ public:
 
     void setCameraY(double y);
 
-    int getRow() const;
+    [[nodiscard]] int getRow() const;
 
     void setRow(int row);
 
-    int getCol() const;
+    [[nodiscard]] int getCol() const;
 
     void setCol(int c);
 };

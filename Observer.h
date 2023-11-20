@@ -7,13 +7,10 @@
 #include "World.h"
 
 class Observer {
-    Subject* subject;
 public:
-    explicit Observer(Subject *subject);
+    Observer();
 
-    Subject *getSubject() const;
-
-    void setSubject(Subject *subj);
+    [[nodiscard]] virtual Subject *getSubject() const = 0;
 };
 
 

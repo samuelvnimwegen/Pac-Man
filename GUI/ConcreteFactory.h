@@ -13,7 +13,9 @@ class ConcreteFactory: public AbstractFactory{
 public:
     ConcreteFactory(World *world, Game *game);
 
-    EntityModel* createEntity(const string &tag, const int &row, const int &col) override;
+    PacMan * createPacMan(const int &row, const int &col) override;
+
+    Wall * createWall(const int &row, const int &col) override;
 };
 
 

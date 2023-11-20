@@ -3,6 +3,8 @@
 //
 
 #include "Game.h"
+#include "ConcreteFactory.h"
+
 
 Game::Game(const int &wd, const int &hg) {
     width = wd;
@@ -118,16 +120,16 @@ pair<int, int> Game::cameraToPixels(double xCamera, double yCamera) const {
     return make_pair(x, y);
 }
 
+ConcreteFactory::ConcreteFactory(World *world, Game *game) : AbstractFactory(world), game(game) {}
 
-EntityModel *ConcreteFactory::createEntity(const string &tag, const int &row, const int &col) {
-    EntityModel* model = AbstractFactory::createEntity(tag, row, col);
-    if (tag == "Wall"){
-        game->setViewItem(new GUIWall(model), row, col);
-    }
-    if (tag == "PacMan"){
-        game->setViewItem(new GUIPacMan(model), row, col);
-    }
-    return model;
+PacMan *ConcreteFactory::createPacMan(const int &row, const int &col) {
+    PacMan* subject = AbstractFactory::createPacMan(row, col);
+    game->setViewItem(new GUIPacMan(subject), row, col);
+    return subject;
 }
 
-ConcreteFactory::ConcreteFactory(World *world, Game *game) : AbstractFactory(world), game(game) {}
+Wall *ConcreteFactory::createWall(const int &row, const int &col) {
+    Wall* subject = AbstractFactory::createWall(row, col);
+    game->setViewItem(new GUIWall(subject), row, col);
+    return subject;
+}
