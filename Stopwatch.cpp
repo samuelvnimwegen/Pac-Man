@@ -11,6 +11,9 @@ Stopwatch::Stopwatch(){
 int Stopwatch::getSteps() {
     auto elapsedTime = clock.getElapsedTime();
     int steps = int(elapsedTime / tickTime);
+    if (steps == 0){
+        return 1;
+    }
     clock.restart();
     return steps;
 }

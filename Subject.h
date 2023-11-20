@@ -28,6 +28,8 @@ public:
 
     void setRow(int row);
 
+    [[nodiscard]] virtual bool isConsumed() const = 0;
+
     [[nodiscard]] int getCol() const;
 
     void setCol(int c);

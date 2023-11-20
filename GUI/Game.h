@@ -16,6 +16,7 @@
 #include "../Camera.h"
 #include "GUIPacMan.h"
 #include "../Stopwatch.h"
+#include "GUICoin.h"
 using namespace std;
 
 class Game {

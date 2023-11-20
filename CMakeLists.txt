@@ -21,6 +21,8 @@ add_executable(Pac-Man main.cpp
         Stopwatch.cpp
         GUI/GUIPacMan.cpp
         PacMan.cpp
+        Coin.cpp
+        GUI/GUICoin.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

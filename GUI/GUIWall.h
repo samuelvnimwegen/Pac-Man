@@ -13,7 +13,6 @@ public:
 
     Subject * getSubject() const override;
 
-    sf::Sprite getSprite() override;
 };
 
 

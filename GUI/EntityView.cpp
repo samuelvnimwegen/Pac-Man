@@ -6,10 +6,6 @@
 
 
 sf::Sprite EntityView::getSprite() {
-    sf::Texture tex;
-    tex.loadFromFile("Error.png");
-    this->setTexture(tex);
-    sf::Sprite sprite(this->getTexture());
     return sprite;
 }
 
@@ -40,5 +36,17 @@ const sf::Texture &EntityView::getTexture() const {
 
 void EntityView::setTexture(const sf::Texture &entityTexture) {
     EntityView::texture = entityTexture;
+}
+
+void EntityView::setSprite(const sf::Sprite &entitySprite) {
+    EntityView::sprite = entitySprite;
+}
+
+void EntityView::removeSprite() {
+    sf::Texture tex;
+    tex.loadFromFile("Sprites.png");
+    this->setTexture(tex);
+    sf::Sprite spr(this->getTexture(), sf::IntRect(0, 0, 1, 1));
+    this->setSprite(spr);
 }
 

@@ -12,6 +12,7 @@
 #include "PacMan.h"
 #include "Wall.h"
 #include "Camera.h"
+#include "Coin.h"
 using namespace std;
 
 class World {

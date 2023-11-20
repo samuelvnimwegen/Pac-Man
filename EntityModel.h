@@ -8,20 +8,21 @@
 
 class EntityModel: public Subject{
     string tag;
+    bool consumed;
 public:
     EntityModel(int row, int col);
 
-    [[nodiscard]] int getRow() const;
-
     void setPosX(int x);
-
-    [[nodiscard]] int getCol() const;
 
     void setPosY(int y);
 
     [[nodiscard]] const string &getTag() const;
 
     void setTag(const string &tg);
+
+    [[nodiscard]] bool isConsumed() const override;
+
+    void consume();
 };
 
 

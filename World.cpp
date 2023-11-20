@@ -126,6 +126,14 @@ void World::buildWorld() {
     this->getFactory()->createEntity("Wall", 9, this->getWidth() - 1 - 5);
 
     this->getFactory()->createEntity("PacMan", 1, 1);
+
+    for (int i = 0; i < this->getHeight(); ++i){
+        for (int j = 0; j < this->getWidth(); ++j){
+            if (this->getItem(i, j) == nullptr){
+                this->getFactory()->createEntity("Coin", i, j);
+            }
+        }
+    }
 }
 
 World::~World() {
@@ -172,6 +180,9 @@ EntityModel *AbstractFactory::createEntity(const string &tag, const int &row, co
     else if (tag == "PacMan"){
         return this->createPacMan(row, col);
     }
+    else if (tag == "Coin"){
+        return this->createCoin(row, col);
+    }
     return nullptr;
 }
 
@@ -192,12 +203,21 @@ Wall *AbstractFactory::createWall(const int &row, const int &col) {
     return entity;
 }
 
+Coin *AbstractFactory::createCoin(const int &row, const int &col) {
+    auto entity = new Coin(row, col);
+    entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
+    entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
+    world->addItem(entity);
+    return entity;
+}
+
 void PacMan::move(const int &ticks) {
+    this->setHasMoved(true);
     if (this->getCurrentDirection() == "UP"){
         double yCoord = this->getCameraY();
         yCoord -= ticks * this->getYSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
-        if (this->getNextDirection() == "RIGHT" and world->getItem(this->getRow(), this->getCol() + 1) == nullptr){
+        if (this->getNextDirection() == "RIGHT" and canMove(this->getRow(), this->getCol() + 1)){
             double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
@@ -212,7 +232,7 @@ void PacMan::move(const int &ticks) {
         }
 
         // Als volgende direction naar links is en hij kan naar links:
-        else if (this->getNextDirection() == "LEFT" and world->getItem(this->getRow(), this->getCol() - 1) == nullptr){
+        else if (this->getNextDirection() == "LEFT" and canMove(this->getRow(), this->getCol() - 1)){
             double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
@@ -231,6 +251,7 @@ void PacMan::move(const int &ticks) {
             double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
+                this->setHasMoved(false);
             }
             else{
                 this->setCameraY(yCoord);
@@ -241,9 +262,11 @@ void PacMan::move(const int &ticks) {
         else if (abs(world->getCamera()->getCameraCoords(this->getRow() - 1, this->getCol()).first - yCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - yCoord)){
             // Als het volgende vakje geen muur is: gaan
-            auto nextItem = world->getItem(this->getRow() - 1, this->getCol());
-            if (nextItem == nullptr){
+            if (canMove(this->getRow() - 1, this->getCol())){
                 this->setCameraY(yCoord);
+                if (this->getWorld()->getItem(this->getRow() - 1, this->getCol()) != nullptr){
+                    this->getWorld()->getItem(this->getRow() - 1, this->getCol())->consume();
+                }
                 world->setItem(nullptr, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow() - 1, this->getCol());
                 this->setRow(this->getRow() - 1);
@@ -256,7 +279,7 @@ void PacMan::move(const int &ticks) {
         double yCoord = this->getCameraY();
         yCoord += ticks * this->getYSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
-        if (this->getNextDirection() == "RIGHT" and world->getItem(this->getRow(), this->getCol() + 1) == nullptr){
+        if (this->getNextDirection() == "RIGHT" and canMove(getRow(), getCol() + 1)){
             double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord > wallYCoord){
                 this->setCameraY(wallYCoord);
@@ -270,7 +293,7 @@ void PacMan::move(const int &ticks) {
             }
         }
         // Als volgende direction naar links is en hij kan naar links:
-        else if (this->getNextDirection() == "LEFT" and world->getItem(this->getRow(), this->getCol() - 1) == nullptr){
+        else if (this->getNextDirection() == "LEFT" and canMove(getRow(), getCol() - 1)){
             double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord > wallYCoord){
                 this->setCameraY(wallYCoord);
@@ -288,18 +311,22 @@ void PacMan::move(const int &ticks) {
             double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord > wallYCoord){
                 this->setCameraY(wallYCoord);
+                this->setHasMoved(false);
             }
             else{
                 this->setCameraY(yCoord);
             }
         }
-            // Checken of hij dichter bij een ander vakje staat dan het huidige
+        // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow() + 1, this->getCol()).first - yCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - yCoord)){
             // Als het volgende vakje geen muur is: gaan
-            auto nextItem = world->getItem(this->getRow() + 1, this->getCol());
-            if (nextItem == nullptr){
+            if (canMove(getRow() + 1, getCol())){
                 this->setCameraY(yCoord);
+                if (this->getWorld()->getItem(this->getRow() + 1, this->getCol()) != nullptr){
+                    this->getWorld()->getItem(this->getRow() + 1, this->getCol())->consume();
+                }
+
                 world->setItem(nullptr, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow() + 1, this->getCol());
                 this->setRow(this->getRow() + 1);
@@ -313,7 +340,7 @@ void PacMan::move(const int &ticks) {
         double xCoord = this->getCameraX();
         xCoord += ticks * this->getXSpeed();
         // Als volgende direction naar links is en hij kan naar links:
-        if (this->getNextDirection() == "UP" and world->getItem(this->getRow() - 1, this->getCol()) == nullptr){
+        if (this->getNextDirection() == "UP" and canMove(this->getRow() - 1, this->getCol())){
             double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
             if (xCoord > wallXCoord){
                 this->setCameraX(wallXCoord);
@@ -326,7 +353,7 @@ void PacMan::move(const int &ticks) {
                 this->setCameraX(xCoord);
             }
         }
-        else if (this->getNextDirection() == "DOWN" and world->getItem(this->getRow() + 1, this->getCol()) == nullptr){
+        else if (this->getNextDirection() == "DOWN" and canMove(this->getRow() + 1, this->getCol())){
             double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
             if (xCoord > wallXCoord){
                 this->setCameraX(wallXCoord);
@@ -344,6 +371,7 @@ void PacMan::move(const int &ticks) {
             double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
             if (xCoord > wallXCoord){
                 this->setCameraX(wallXCoord);
+                this->setHasMoved(false);
             }
             else{
                 this->setCameraX(xCoord);
@@ -353,9 +381,11 @@ void PacMan::move(const int &ticks) {
         else if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() + 1).second - xCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - xCoord)){
             // Als het volgende vakje geen muur is: gaan
-            auto nextItem = world->getItem(this->getRow(), this->getCol() + 1);
-            if (nextItem == nullptr){
+            if (canMove(this->getRow(), this->getCol() + 1)){
                 this->setCameraX(xCoord);
+                if (this->getWorld()->getItem(this->getRow(), this->getCol() + 1) != nullptr){
+                    this->getWorld()->getItem(this->getRow(), this->getCol() + 1)->consume();
+                }
                 world->setItem(nullptr, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow(), this->getCol() + 1);
                 this->setCol(this->getCol() + 1);
@@ -368,7 +398,7 @@ void PacMan::move(const int &ticks) {
         double xCoord = this->getCameraX();
         xCoord -= ticks * this->getXSpeed();
         // Als volgende direction naar links is en hij kan naar links:
-        if (this->getNextDirection() == "UP" and world->getItem(this->getRow() - 1, this->getCol()) == nullptr){
+        if (this->getNextDirection() == "UP" and canMove(this->getRow() - 1, this->getCol())){
             double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
             if (xCoord < wallXCoord){
                 this->setCameraX(wallXCoord);
@@ -381,7 +411,7 @@ void PacMan::move(const int &ticks) {
                 this->setCameraX(xCoord);
             }
         }
-        else if (this->getNextDirection() == "DOWN" and world->getItem(this->getRow() + 1, this->getCol()) == nullptr){
+        else if (this->getNextDirection() == "DOWN" and canMove(this->getRow() + 1, this->getCol())){
             double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
             if (xCoord < wallXCoord){
                 this->setCameraX(wallXCoord);
@@ -399,6 +429,7 @@ void PacMan::move(const int &ticks) {
             double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
             if (xCoord < wallXCoord){
                 this->setCameraX(wallXCoord);
+                this->setHasMoved(false);
             }
             else{
                 this->setCameraX(xCoord);
@@ -408,9 +439,11 @@ void PacMan::move(const int &ticks) {
         else if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() - 1).second - xCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - xCoord)){
             // Als het volgende vakje geen muur is: gaan
-            auto nextItem = world->getItem(this->getRow(), this->getCol() - 1);
-            if (nextItem == nullptr){
+            if (canMove(this->getRow(), this->getCol() - 1)){
                 this->setCameraX(xCoord);
+                if (this->getWorld()->getItem(this->getRow(), this->getCol() - 1) != nullptr){
+                    this->getWorld()->getItem(this->getRow(), this->getCol() - 1)->consume();
+                }
                 world->setItem(nullptr, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow(), this->getCol() - 1);
                 this->setCol(this->getCol() - 1);
@@ -428,9 +461,11 @@ void PacMan::move(const int &ticks) {
 PacMan::PacMan(int row, int col, World *world) : EntityModel(row, col), world(world) {
     this->setCurrentDirection("NONE");
     this->setNextDirection("NONE");
-    xSpeed = double(1) / this->getWorld()->getWidth() / 8;
-    ySpeed = double(1) / this->getWorld()->getHeight() / 8;
+    xSpeed = double(1) / this->getWorld()->getWidth() / 100;
+    ySpeed = double(1) / this->getWorld()->getHeight() / 100;
     this->setTag("PacMan");
+    hasMoved = false;
+    score = 0;
 }
 
 double PacMan::getXSpeed() const {
@@ -499,4 +534,37 @@ void PacMan::moveDirection(const string &direction) {
             setNextDirection("DOWN");
         }
     }
+}
+
+bool PacMan::isHasMoved() const {
+    return hasMoved;
+}
+
+void PacMan::setHasMoved(bool hasMoved) {
+    PacMan::hasMoved = hasMoved;
+}
+
+bool PacMan::canMove(const int &row, const int &col) const {
+    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin"){
+        return true;
+    }
+    return false;
+}
+
+void PacMan::removePrevious(const int &row, const int &col) {
+    if (this->getWorld()->getItem(row, col) == nullptr){
+        return;
+    }
+    else if (this->getWorld()->getItem(row, col)->getTag() == "Coin"){
+        this->setScore(this->getScore() + 10);
+        this->getWorld()->getItem(row, col)->consume();
+    }
+}
+
+int PacMan::getScore() const {
+    return score;
+}
+
+void PacMan::setScore(int newScore) {
+    PacMan::score = newScore;
 }

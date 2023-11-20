@@ -7,7 +7,8 @@
 #include "Collectable.h"
 
 class Coin: public Collectable{
-
+public:
+    Coin(int row, int col);
 };
 
 

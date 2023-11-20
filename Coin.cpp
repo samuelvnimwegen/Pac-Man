@@ -3,3 +3,8 @@
 //
 
 #include "Coin.h"
+
+Coin::Coin(int row, int col) : Collectable(row, col) {
+    this->setTag("Coin");
+    this->setValue(10);
+}

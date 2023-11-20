@@ -4,17 +4,14 @@
 
 #include "GUIWall.h"
 
-sf::Sprite GUIWall::getSprite() {
+GUIWall::GUIWall(Wall *subject) : subject(subject) {
+    this->setCol(subject->getCol());
+    this->setRow(subject->getRow());
     sf::Texture texture;
     texture.loadFromFile("Muur2.png");
     this->setTexture(texture);
     sf::Sprite sprite(this->getTexture());
-    return sprite;
-}
-
-GUIWall::GUIWall(Wall *subject) : subject(subject) {
-    this->setCol(subject->getCol());
-    this->setRow(subject->getRow());
+    this->setSprite(sprite);
 }
 
 Subject *GUIWall::getSubject() const {

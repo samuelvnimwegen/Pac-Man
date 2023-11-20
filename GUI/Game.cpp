@@ -21,7 +21,7 @@ Game::Game(const int &wd, const int &hg) {
     assert(this->getWidth() % world->getWidth() == 0);
 
 
-    sf::RenderWindow window(sf::VideoMode(this->getWidth(), this->getHeight()), "Pac-Man");
+    sf::RenderWindow window(sf::VideoMode(this->getWidth(), this->getHeight() + 50), "Pac-Man");
 
     while (window.isOpen()){
         sf::Event event{};
@@ -38,7 +38,7 @@ Game::Game(const int &wd, const int &hg) {
         for (int r = 0; r < this->getWorld()->getHeight(); ++r){
             for (int k = 0; k < this->getWorld()->getWidth(); ++k){
                 auto viewEntity = viewMap[r][k];
-                if (viewEntity != nullptr){
+                if (viewEntity != nullptr and !viewEntity->getSubject()->isConsumed()){
                     auto pos = this->cameraToPixels(viewEntity->getSubject()->getCameraX(), viewEntity->getSubject()->getCameraY());
                     sf::Sprite sprite = viewEntity->getSprite();
                     sprite.setPosition(float(pos.first), float(pos.second));
@@ -102,13 +102,13 @@ Game::~Game() {
 }
 
 string Game::getDirection() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)){
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) or sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
         return "UP";
-    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
+    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) or sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
         return "LEFT";
-    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
+    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) or sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
         return "RIGHT";
-    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
+    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) or sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
         return "DOWN";
     }
     return "NONE";
@@ -131,5 +131,11 @@ PacMan *ConcreteFactory::createPacMan(const int &row, const int &col) {
 Wall *ConcreteFactory::createWall(const int &row, const int &col) {
     Wall* subject = AbstractFactory::createWall(row, col);
     game->setViewItem(new GUIWall(subject), row, col);
+    return subject;
+}
+
+Coin *ConcreteFactory::createCoin(const int &row, const int &col) {
+    Coin* subject = AbstractFactory::createCoin(row, col);
+    game->setViewItem(new GUICoin(subject), row, col);
     return subject;
 }

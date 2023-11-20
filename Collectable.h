@@ -4,9 +4,18 @@
 
 #ifndef PAC_MAN_COLLECTABLE_H
 #define PAC_MAN_COLLECTABLE_H
+#include "EntityModel.h"
 
+class Collectable: public EntityModel{
+    int value;
 
-class Collectable {
+public:
+    Collectable(int row, int col);
+
+    [[nodiscard]] int getValue() const;
+
+    void setValue(int value);
+
 
 };
 

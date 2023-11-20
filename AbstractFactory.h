@@ -11,6 +11,7 @@ class EntityModel;
 class PacMan;
 class World;
 class Wall;
+class Coin;
 class AbstractFactory {
     World* world;
 public:
@@ -21,6 +22,8 @@ public:
     virtual PacMan* createPacMan(const int &row, const int &col);
 
     virtual Wall* createWall(const int&row, const int &col);
+
+    virtual Coin* createCoin(const int&row, const int &col);
 };
 
 

@@ -14,6 +14,8 @@ class PacMan: public EntityModel{
     string nextDirection;
     double xSpeed;
     double ySpeed;
+    bool hasMoved;
+    int score;
 public:
     /*
      * De constructor van de PacMan class
@@ -24,10 +26,14 @@ public:
      */
     void move(const int &ticks);
 
+    void removePrevious(const int &row, const int &col);
+
     /*
     * Verandert de richting afhankelijk van de volgende richting
     */
     void moveDirection(const string &direction);
+
+    [[nodiscard]] bool canMove(const int &row, const int &col) const;
 
     [[nodiscard]] const string &getCurrentDirection() const;
 
@@ -48,6 +54,14 @@ public:
     [[nodiscard]] const string &getNextDirection() const;
 
     void setNextDirection(const string &direction);
+
+    [[nodiscard]] bool isHasMoved() const;
+
+    void setHasMoved(bool hasMoved);
+
+    [[nodiscard]] int getScore() const;
+
+    void setScore(int newScore);
 };
 
 

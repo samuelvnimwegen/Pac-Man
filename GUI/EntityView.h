@@ -11,12 +11,15 @@ class EntityView: public Observer{
     int col;
     int row;
     sf::Texture texture;
+    sf::Sprite sprite;
 public:
     const sf::Texture &getTexture() const;
 
+    void removeSprite();
+
     void setTexture(const sf::Texture &entityTexture);
 
-    int getCol() const;
+     int getCol() const;
 
     void setCol(int c);
 
@@ -27,6 +30,8 @@ public:
     explicit EntityView();
 
     virtual sf::Sprite getSprite();
+
+    void setSprite(const sf::Sprite &entitySprite);
 };
 
 

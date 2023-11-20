@@ -16,6 +16,8 @@ public:
     PacMan * createPacMan(const int &row, const int &col) override;
 
     Wall * createWall(const int &row, const int &col) override;
+
+    Coin * createCoin(const int &row, const int &col) override;
 };
 
 
