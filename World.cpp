@@ -143,9 +143,6 @@ void World::setPacMan(PacMan *pMan) {
 }
 
 void World::setItem(EntityModel* item, const int &row, const int &col) {
-    if (row == 6 and col == 5){
-        cout << "yup";
-    }
     world[row][col] = item;
 }
 
@@ -187,9 +184,6 @@ EntityModel *AbstractFactory::createEntity(const string &tag, const int &row, co
 }
 
 void PacMan::move(const int &ticks) {
-    if (this->getRow() == 6 and this->getCol() == 5){
-        cout << "yup";
-    }
     if (this->getCurrentDirection() == "UP"){
         double yCoord = this->getCameraY();
         yCoord -= ticks * this->getYSpeed();
@@ -425,8 +419,8 @@ void PacMan::move(const int &ticks) {
 PacMan::PacMan(int row, int col, World *world) : EntityModel(row, col), world(world) {
     this->setCurrentDirection("NONE");
     this->setNextDirection("NONE");
-    xSpeed = double(1) / this->getWorld()->getWidth() / 11;
-    ySpeed = double(1) / this->getWorld()->getHeight() / 11;
+    xSpeed = double(1) / this->getWorld()->getWidth() / 8;
+    ySpeed = double(1) / this->getWorld()->getHeight() / 8;
 }
 
 double PacMan::getXSpeed() const {

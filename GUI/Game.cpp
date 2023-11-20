@@ -32,7 +32,6 @@ Game::Game(const int &wd, const int &hg) {
         string direction = getDirection();
         this->getWorld()->getPacMan()->moveDirection(direction);
         this->getWorld()->getPacMan()->move(steps);
-        cout << world->getItem(6, 5)->getTag() << endl;
         window.clear();
         for (int r = 0; r < this->getWorld()->getHeight(); ++r){
             for (int k = 0; k < this->getWorld()->getWidth(); ++k){
