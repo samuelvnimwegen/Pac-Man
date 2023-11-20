@@ -26,3 +26,20 @@ double Subject::getCameraY() const {
 void Subject::setCameraY(double y) {
     Subject::cameraY = y;
 }
+
+int Subject::getRow() const {
+    return row;
+
+}
+
+void Subject::setRow(int r) {
+    Subject::row = r;
+}
+
+int Subject::getCol() const {
+    return col;
+}
+
+void Subject::setCol(int c) {
+    Subject::col = c;
+}

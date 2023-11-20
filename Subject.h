@@ -23,6 +23,14 @@ public:
     [[nodiscard]] double getCameraY() const;
 
     void setCameraY(double y);
+
+    int getRow() const;
+
+    void setRow(int row);
+
+    int getCol() const;
+
+    void setCol(int c);
 };
 
 

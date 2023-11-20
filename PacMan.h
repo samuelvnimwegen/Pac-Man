@@ -11,12 +11,23 @@ class World;
 class PacMan: public EntityModel{
     World* world;
     string currentDirection;
+    string nextDirection;
     double xSpeed;
     double ySpeed;
 public:
+    /*
+     * De constructor van de PacMan class
+     */
     PacMan(int row, int col, World *world);
-
+    /*
+     * Beweegt Pac-Man
+     */
     void move(const int &ticks);
+
+    /*
+    * Verandert de richting afhankelijk van de volgende richting
+    */
+    void moveDirection(const string &direction);
 
     [[nodiscard]] const string &getCurrentDirection() const;
 
@@ -33,6 +44,10 @@ public:
     [[nodiscard]] double getYSpeed() const;
 
     void setYSpeed(double speed);
+
+    [[nodiscard]] const string &getNextDirection() const;
+
+    void setNextDirection(const string &direction);
 };
 
 
