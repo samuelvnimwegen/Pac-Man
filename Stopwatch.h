@@ -12,7 +12,7 @@ class Stopwatch {
 public:
     explicit Stopwatch();
 
-    int getSteps();
+    int getTicks();
 };
 
 

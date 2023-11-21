@@ -11,6 +11,8 @@ class GUICoin: public EntityView{
 public:
     explicit GUICoin(Coin *subject);
 
+    ~GUICoin() override;
+
     Coin* getSubject() const override;
 };
 

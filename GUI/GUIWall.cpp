@@ -18,6 +18,8 @@ Subject *GUIWall::getSubject() const {
     return subject;
 }
 
+GUIWall::~GUIWall() = default;
+
 
 
 

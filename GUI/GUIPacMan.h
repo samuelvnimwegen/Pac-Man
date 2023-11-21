@@ -13,6 +13,8 @@ class GUIPacMan: public EntityView{
 public:
     explicit GUIPacMan(PacMan *subject);
 
+    ~GUIPacMan() override;
+
     void updateTextureNr();
 
     sf::Sprite getSprite() override;

@@ -11,6 +11,7 @@ Game::Game(const int &wd, const int &hg) {
     width = wd;
     height = hg;
     stopwatch = new Stopwatch();
+    pacMan = nullptr;
 
     world = new World();
     this->generateMap();
@@ -88,23 +89,42 @@ Game::Game(const int &wd, const int &hg) {
             if (input == "ESCAPE"){
                 this->getStateManager()->pauze();
             }
-            int steps = stopwatch->getSteps();
+            int ticks = stopwatch->getTicks();
             string direction = getDirection();
-            this->getWorld()->getPacMan()->moveDirection(direction);
-            this->getWorld()->getPacMan()->move(steps);
-            text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));
-            window.clear();
-            for (int r = 0; r < this->getWorld()->getHeight(); ++r){
-                for (int k = 0; k < this->getWorld()->getWidth(); ++k){
-                    auto viewEntity = viewMap[r][k];
-                    if (viewEntity != nullptr and !viewEntity->getSubject()->isConsumed()){
-                        auto pos = this->cameraToPixels(viewEntity->getSubject()->getCameraX(), viewEntity->getSubject()->getCameraY());
-                        sf::Sprite sprite = viewEntity->getSprite();
-                        sprite.setPosition(float(pos.first), float(pos.second));
-                        window.draw(sprite);
-                    }
+            if (this->getWorld()->getPacMan()->getCurrentDirection() != "NONE"){
+                for (auto ghost: this->getWorld()->getGhosts()){
+                    ghost->move(ticks);
                 }
             }
+            this->getWorld()->getPacMan()->moveDirection(direction);
+            this->getWorld()->getPacMan()->move(ticks);
+            text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));
+            window.clear();
+            for (auto wall:this->walls){
+                auto pos = this->cameraToPixels(wall->getSubject()->getCameraX(), wall->getSubject()->getCameraY());
+                sf::Sprite sprite = wall->getSprite();
+                sprite.setPosition(float(pos.first), float(pos.second));
+                window.draw(sprite);
+            }
+            for (auto coin: this->coins){
+                if (!coin->getSubject()->isConsumed()){
+                    auto pos = this->cameraToPixels(coin->getSubject()->getCameraX(), coin->getSubject()->getCameraY());
+                    sf::Sprite sprite = coin->getSprite();
+                    sprite.setPosition(float(pos.first), float(pos.second));
+                    window.draw(sprite);
+                }
+            }
+            for (auto ghost: this->ghosts){
+                auto pos = this->cameraToPixels(ghost->getSubject()->getCameraX(), ghost->getSubject()->getCameraY());
+                sf::Sprite sprite = ghost->getSprite();
+                sprite.setPosition(float(pos.first), float(pos.second));
+                window.draw(sprite);
+            }
+            auto pacManPos = this->cameraToPixels(pacMan->getSubject()->getCameraX(), pacMan->getSubject()->getCameraY());
+            sf::Sprite pacManSprite = pacMan->getSprite();
+            pacManSprite.setPosition(float(pacManPos.first), float(pacManPos.second));
+            window.draw(pacManSprite);
+
             if (this->getWorld()->getCoinsLeft() == 0){
                 this->getStateManager()->push();
             }
@@ -115,7 +135,7 @@ Game::Game(const int &wd, const int &hg) {
             string input = getInput();
             if (input == "SPACE"){
                 this->getStateManager()->pop();
-                this->stopwatch->getSteps();
+                this->stopwatch->getTicks();
             }
             else if (input == "BACKSPACE"){
                 window.clear();
@@ -256,22 +276,95 @@ string Game::getInput() {
     return "NONE";
 }
 
+Stopwatch *Game::getStopwatch() const {
+    return stopwatch;
+}
+
+void Game::setStopwatch(Stopwatch *newStopwatch) {
+    Game::stopwatch = newStopwatch;
+}
+
+const vector<GUIGhost *> &Game::getGhosts() const {
+    return ghosts;
+}
+
+void Game::setGhosts(const vector<GUIGhost *> &ghostVector) {
+    Game::ghosts = ghostVector;
+}
+
+const vector<GUIWall *> &Game::getWalls() const {
+    return walls;
+}
+
+void Game::setWalls(const vector<GUIWall *> &wallsVector) {
+    Game::walls = wallsVector;
+}
+
+const vector<GUICoin *> &Game::getCoins() const {
+    return coins;
+}
+
+void Game::setCoins(const vector<GUICoin *> &coinVector) {
+    Game::coins = coinVector;
+}
+
+GUIPacMan *Game::getPacMan() const {
+    return pacMan;
+}
+
+void Game::setPacMan(GUIPacMan *guiPacMan) {
+    Game::pacMan = guiPacMan;
+}
+
+void Game::addWall(GUIWall *wall) {
+    auto currWalls = this->getWalls();
+    currWalls.push_back(wall);
+    this->setWalls(currWalls);
+}
+
+void Game::addCoin(GUICoin *coin) {
+    auto currCoins = this->getCoins();
+    currCoins.push_back(coin);
+    this->setCoins(currCoins);
+}
+
+void Game::addGhost(GUIGhost *ghost) {
+    auto currGhosts = this->getGhosts();
+    currGhosts.push_back(ghost);
+    this->setGhosts(currGhosts);
+}
+
+
 ConcreteFactory::ConcreteFactory(World *world, Game *game) : AbstractFactory(world), game(game) {}
 
 PacMan *ConcreteFactory::createPacMan(const int &row, const int &col) {
     PacMan* subject = AbstractFactory::createPacMan(row, col);
-    game->setViewItem(new GUIPacMan(subject), row, col);
+    auto viewItem = new GUIPacMan(subject);
+    game->setViewItem(viewItem, row, col);
+    game->setPacMan(viewItem);
     return subject;
 }
 
 Wall *ConcreteFactory::createWall(const int &row, const int &col) {
     Wall* subject = AbstractFactory::createWall(row, col);
-    game->setViewItem(new GUIWall(subject), row, col);
+    auto viewItem = new GUIWall(subject);
+    game->setViewItem(viewItem, row, col);
+    game->addWall(viewItem);
     return subject;
 }
 
 Coin *ConcreteFactory::createCoin(const int &row, const int &col) {
     Coin* subject = AbstractFactory::createCoin(row, col);
-    game->setViewItem(new GUICoin(subject), row, col);
+    auto viewItem = new GUICoin(subject);
+    game->setViewItem(viewItem, row, col);
+    game->addCoin(viewItem);
+    return subject;
+}
+
+Ghost *ConcreteFactory::createGhost(const int &row, const int &col) {
+    Ghost* subject = AbstractFactory::createGhost(row, col);
+    auto viewItem = new GUIGhost(subject);
+    game->setViewItem(viewItem, row, col);
+    game->addGhost(viewItem);
     return subject;
 }

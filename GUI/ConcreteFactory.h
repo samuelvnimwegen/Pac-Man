@@ -18,6 +18,8 @@ public:
     Wall * createWall(const int &row, const int &col) override;
 
     Coin * createCoin(const int &row, const int &col) override;
+
+    Ghost * createGhost(const int &row, const int &col) override;
 };
 
 

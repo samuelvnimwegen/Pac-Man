@@ -8,7 +8,7 @@ Stopwatch::Stopwatch(){
     tickTime = sf::milliseconds(1);
 }
 
-int Stopwatch::getSteps() {
+int Stopwatch::getTicks() {
     auto elapsedTime = clock.getElapsedTime();
     int steps = int(elapsedTime / tickTime);
     if (steps == 0){

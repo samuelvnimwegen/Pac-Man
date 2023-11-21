@@ -5,6 +5,7 @@
 #include "World.h"
 #include "PacMan.h"
 #include "AbstractFactory.h"
+#include "Ghost.h"
 
 
 World::World() {
@@ -128,6 +129,8 @@ void World::buildWorld() {
 
     this->getFactory()->createEntity("PacMan", 1, 1);
 
+    this->getFactory()->createEntity("Ghost", 5, 1);
+
     for (int i = 0; i < this->getHeight(); ++i){
         for (int j = 0; j < this->getWidth(); ++j){
             if (this->getItem(i, j) == nullptr){
@@ -136,6 +139,7 @@ void World::buildWorld() {
             }
         }
     }
+
 }
 
 World::~World() {
@@ -181,6 +185,27 @@ void World::setCoinsLeft(int coins) {
     World::coinsLeft = coins;
 }
 
+void World::addGhost(Ghost *ghost) {
+    ghosts.push_back(ghost);
+    if (ghosts.size() == 1){
+        ghost->setColor("RED");
+    }else if (ghosts.size() == 2){
+        ghost->setColor("PINK");
+    }else if (ghosts.size() == 3){
+        ghost->setColor("BLUE");
+    }else{
+        ghost->setColor("YELLOW");
+    }
+}
+
+const vector<Ghost *> &World::getGhosts() const {
+    return ghosts;
+}
+
+void World::setGhosts(const vector<Ghost *> &ghostVector) {
+    World::ghosts = ghostVector;
+}
+
 AbstractFactory::AbstractFactory(World *world) : world(world) {}
 
 EntityModel *AbstractFactory::createEntity(const string &tag, const int &row, const int &col) {
@@ -192,6 +217,9 @@ EntityModel *AbstractFactory::createEntity(const string &tag, const int &row, co
     }
     else if (tag == "Coin"){
         return this->createCoin(row, col);
+    }
+    else if (tag == "Ghost"){
+        return this->createGhost(row, col);
     }
     return nullptr;
 }
@@ -218,6 +246,15 @@ Coin *AbstractFactory::createCoin(const int &row, const int &col) {
     entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
     entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
     world->addItem(entity);
+    return entity;
+}
+
+Ghost *AbstractFactory::createGhost(const int &row, const int &col) {
+    auto* entity = new Ghost(row, col, world);
+    entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
+    entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
+    world->addItem(entity);
+    world->addGhost(entity);
     return entity;
 }
 
@@ -579,3 +616,184 @@ int PacMan::getScore() const {
 void PacMan::setScore(int newScore) {
     PacMan::score = newScore;
 }
+
+int Ghost::getManhattanDistance(const string& direction) {
+    int pacManRow = this->getWorld()->getPacMan()->getRow();
+    int pacManCol = this->getWorld()->getPacMan()->getCol();
+    if (direction == "UP"){
+        return abs(this->getRow() - 1 - pacManRow) + abs(this->getCol() - pacManCol);
+    }
+    else if (direction == "DOWN"){
+        return abs(this->getRow() + 1 - pacManRow) + abs(this->getCol() - pacManCol);
+    }
+    else if (direction == "LEFT"){
+        return abs(this->getRow() - pacManRow) + abs(this->getCol() - 1 - pacManCol);
+    }
+    else {
+        assert(direction == "RIGHT");
+        return abs(this->getRow() - pacManRow) + abs(this->getCol() + 1 - pacManCol);
+    }
+}
+
+bool Ghost::canMove(const int &row, const int &col) const {
+    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin"){
+        return true;
+    }
+    return false;
+}
+
+void Ghost::move(const int &ticks) {
+    // Case 1: De richting is omhoog:
+    if (this->getCurrentDirection() == "UP"){
+        double yCoord = this->getCameraY();
+        yCoord -= ticks * this->getYSpeed();
+        // Als de volgende tile een muur is of hij naar links of rechts kan:
+        if (!isJustTurned() and (world->getItem(this->getRow() - 1, this->getCol()) != nullptr and world->getItem(this->getRow() - 1, this->getCol())->getTag() == "Wall")
+        or (canMove(this->getRow(), this->getCol() + 1) or canMove(this->getRow(), this->getCol() - 1))){
+            double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
+            if (yCoord < wallYCoord){
+                this->setCameraY(wallYCoord);
+                this->changeDirection();
+            }
+            else{
+                this->setCameraY(yCoord);
+            }
+        }
+
+        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (abs(world->getCamera()->getCameraCoords(this->getRow() - 1, this->getCol()).first - yCoord) <
+                 abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - yCoord)){
+            // Als het volgende vakje geen muur is: gaan
+            if (canMove(this->getRow() - 1, this->getCol())){
+                this->setCameraY(yCoord);
+                auto tempItem = world->getItem(this->getRow() - 1, this->getCol());
+                world->setItem(tempItem, this->getRow(), this->getCol());
+                world->setItem(this, this->getRow() - 1, this->getCol());
+                this->setRow(this->getRow() - 1);
+                this->changeDirection();
+                this->setJustTurned(false);
+            }
+        }
+        else{
+            this->setCameraY(yCoord);
+        }
+    }
+
+    // Case 2: De richting is omlaag:
+    else if (this->getCurrentDirection() == "DOWN"){
+        double yCoord = this->getCameraY();
+        yCoord += ticks * this->getYSpeed();
+        // Als de volgende tile een muur is of als hij naar rechts of links kan:
+        if ((world->getItem(this->getRow() + 1, this->getCol()) != nullptr and world->getItem(this->getRow() + 1, this->getCol())->getTag() == "Wall")
+        or canMove(this->getRow(), this->getCol() + 1) or canMove(this->getRow(), this->getCol() - 1)){
+            double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
+            if (yCoord > wallYCoord){
+                this->setCameraY(wallYCoord);
+                this->changeDirection();
+            }
+            else{
+                this->setCameraY(yCoord);
+            }
+        }
+
+        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (abs(world->getCamera()->getCameraCoords(this->getRow() + 1, this->getCol()).first - yCoord) <
+                 abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - yCoord)){
+            // Als het volgende vakje geen muur is: gaan
+            if (canMove(this->getRow() + 1, this->getCol())){
+                this->setCameraY(yCoord);
+                auto tempItem = world->getItem(this->getRow() + 1, this->getCol());
+                world->setItem(tempItem, this->getRow(), this->getCol());
+                world->setItem(this, this->getRow() + 1, this->getCol());
+                this->setRow(this->getRow() + 1);
+            }
+        }
+        else{
+            this->setCameraY(yCoord);
+        }
+    }
+
+    // Case 3: De richting is naar rechts:
+    else if (this->getCurrentDirection() == "RIGHT"){
+        double xCoord = this->getCameraX();
+        xCoord += ticks * this->getXSpeed();
+        // Als de volgende tile een muur is:
+        if ((world->getItem(this->getRow(), this->getCol() + 1) != nullptr and world->getItem(this->getRow(), this->getCol() + 1)->getTag() == "Wall")
+        or (canMove(this->getRow() + 1, this->getCol()) or canMove(this->getRow() - 1, this->getCol()))){
+            double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
+            if (xCoord > wallXCoord){
+                this->setCameraX(wallXCoord);
+                this->changeDirection();
+            }
+            else{
+                this->setCameraX(xCoord);
+            }
+        }
+
+        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() + 1).second - xCoord) <
+                 abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - xCoord)){
+            // Als het volgende vakje geen muur is: gaan
+            if (canMove(this->getRow(), this->getCol() + 1)){
+                this->setCameraX(xCoord);
+                auto tempItem = world->getItem(this->getRow(), this->getCol() + 1);
+                world->setItem(tempItem, this->getRow(), this->getCol());
+                world->setItem(this, this->getRow(), this->getCol() + 1);
+                this->setCol(this->getCol() + 1);
+                this->changeDirection();
+            }
+        }
+        else{
+            this->setCameraX(xCoord);
+        }
+    }
+
+    // Case 3: De richting is naar rechts:
+    else if (this->getCurrentDirection() == "LEFT"){
+        double xCoord = this->getCameraX();
+        xCoord -= ticks * this->getXSpeed();
+        // Als de volgende tile een muur is:
+        if ((world->getItem(this->getRow(), this->getCol() - 1) != nullptr and world->getItem(this->getRow(), this->getCol() - 1)->getTag() == "Wall")
+        or (canMove(this->getRow() + 1, this->getCol()) or canMove(this->getRow() - 1, this->getCol()))){
+            double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
+            if (xCoord < wallXCoord){
+                this->setCameraX(wallXCoord);
+                this->changeDirection();
+            }
+            else{
+                this->setCameraX(xCoord);
+            }
+        }
+
+        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() - 1).second - xCoord) <
+                 abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - xCoord)){
+            // Als het volgende vakje geen muur is: gaan
+            if (canMove(this->getRow(), this->getCol() - 1)){
+                this->setCameraX(xCoord);
+                auto tempItem = world->getItem(this->getRow(), this->getCol() - 1);
+                world->setItem(tempItem, this->getRow(), this->getCol());
+                world->setItem(this, this->getRow(), this->getCol() - 1);
+                this->setCol(this->getCol() - 1);
+                this->changeDirection();
+            }
+        }
+        else{
+            this->setCameraX(xCoord);
+        }
+    }
+    else{
+        assert(false);
+    }
+}
+Ghost::Ghost(int row, int col, World *world) : EntityModel(row, col), world(world) {
+    this->setTag("Ghost");
+    color = "NONE";
+    currentDirection = "UP";
+    currentState = "WAITING";
+    xSpeed = double(1) / this->getWorld()->getWidth() / 100;
+    ySpeed = double(1) / this->getWorld()->getHeight() / 100;
+    justTurned = true;
+}
+
+

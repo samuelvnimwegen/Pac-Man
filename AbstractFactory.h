@@ -12,6 +12,7 @@ class PacMan;
 class World;
 class Wall;
 class Coin;
+class Ghost;
 class AbstractFactory {
     World* world;
 public:
@@ -24,6 +25,8 @@ public:
     virtual Wall* createWall(const int&row, const int &col);
 
     virtual Coin* createCoin(const int&row, const int &col);
+
+    virtual Ghost* createGhost(const int &row, const int &col);
 };
 
 

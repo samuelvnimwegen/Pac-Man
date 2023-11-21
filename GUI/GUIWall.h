@@ -11,6 +11,8 @@ class GUIWall: public EntityView {
 public:
     explicit GUIWall(Wall *subject);
 
+    ~GUIWall() override;
+
     Subject * getSubject() const override;
 
 };

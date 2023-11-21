@@ -29,6 +29,7 @@ add_executable(Pac-Man main.cpp
         GUI/LevelState.cpp
         GUI/VictoryState.cpp
         GUI/PausedState.cpp
+        GUI/GUIGhost.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

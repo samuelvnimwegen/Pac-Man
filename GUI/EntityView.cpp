@@ -50,3 +50,7 @@ void EntityView::removeSprite() {
     this->setSprite(spr);
 }
 
+EntityView::~EntityView() {
+
+}
+

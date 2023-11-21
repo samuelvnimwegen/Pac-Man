@@ -13,6 +13,7 @@
 #include "Wall.h"
 #include "Camera.h"
 #include "Coin.h"
+#include "Ghost.h"
 using namespace std;
 
 class World {
@@ -24,6 +25,7 @@ class World {
     PacMan* pacMan;
     Camera* camera;
     int coinsLeft;
+    vector<Ghost*> ghosts;
 public:
     explicit World();
 
@@ -61,9 +63,15 @@ public:
 
     void setCamera(Camera *cam);
 
-    int getCoinsLeft() const;
+    [[nodiscard]] int getCoinsLeft() const;
 
     void setCoinsLeft(int coins);
+
+    void addGhost(Ghost* ghost);
+
+    [[nodiscard]] const vector<Ghost *> &getGhosts() const;
+
+    void setGhosts(const vector<Ghost *> &ghostVector);
 };
 
 

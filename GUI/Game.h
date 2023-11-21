@@ -20,6 +20,7 @@
 #include "StateManager.h"
 #include "chrono"
 #include "thread"
+#include "GUIGhost.h"
 using namespace std;
 
 class Game {
@@ -31,6 +32,10 @@ class Game {
     World* world;
     Stopwatch *stopwatch;
     StateManager* stateManager;
+    vector<GUIGhost*> ghosts;
+    vector<GUIWall*> walls;
+    vector<GUICoin*> coins;
+    GUIPacMan* pacMan;
 
 public:
     Game(const int &width, const int &height);
@@ -59,9 +64,35 @@ public:
 
     void setViewItem(EntityView* entity, const int &row, const int &col);
 
-    StateManager *getStateManager() const;
+    [[nodiscard]] StateManager *getStateManager() const;
 
     void setStateManager(StateManager *state);
+
+    [[nodiscard]] Stopwatch *getStopwatch() const;
+
+    void setStopwatch(Stopwatch *newStopwatch);
+
+    [[nodiscard]] const vector<GUIGhost *> &getGhosts() const;
+
+    void setGhosts(const vector<GUIGhost *> &ghostVector);
+
+    [[nodiscard]] const vector<GUIWall *> &getWalls() const;
+
+    void setWalls(const vector<GUIWall *> &wallsVector);
+
+    [[nodiscard]] const vector<GUICoin *> &getCoins() const;
+
+    void setCoins(const vector<GUICoin *> &coinVector);
+
+    [[nodiscard]] GUIPacMan *getPacMan() const;
+
+    void setPacMan(GUIPacMan *guiPacMan);
+
+    void addWall(GUIWall* wall);
+
+    void addCoin(GUICoin* coin);
+
+    void addGhost(GUIGhost* ghost);
 
 
 };

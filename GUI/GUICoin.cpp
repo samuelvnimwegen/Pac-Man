@@ -19,3 +19,5 @@ GUICoin::GUICoin(Coin *subject) : subject(subject) {
     this->setSprite(sprite);
 }
 
+GUICoin::~GUICoin() = default;
+

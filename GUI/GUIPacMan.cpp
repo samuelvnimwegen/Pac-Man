@@ -53,7 +53,7 @@ sf::Sprite GUIPacMan::getSprite() {
 GUIPacMan::GUIPacMan(PacMan *subject) : subject(subject) {
     this->setRow(subject->getRow());
     this->setCol(subject->getCol());
-    this->setTextureNr(0);
+    textureNr = 0;
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
     this->setTexture(texture);
@@ -78,4 +78,8 @@ void GUIPacMan::updateTextureNr() {
     else{
         textureNr = 0;
     }
+}
+
+GUIPacMan::~GUIPacMan() {
+
 }

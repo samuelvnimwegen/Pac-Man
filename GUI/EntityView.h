@@ -13,6 +13,8 @@ class EntityView: public Observer{
     sf::Texture texture;
     sf::Sprite sprite;
 public:
+    virtual ~EntityView();
+
     const sf::Texture &getTexture() const;
 
     void removeSprite();
