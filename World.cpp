@@ -129,7 +129,7 @@ void World::buildWorld() {
 
     this->getFactory()->createEntity("PacMan", 1, 1);
 
-    this->getFactory()->createEntity("Ghost", 5, 1);
+    this->getFactory()->createEntity("Ghost", 5, 9);
 
     for (int i = 0; i < this->getHeight(); ++i){
         for (int j = 0; j < this->getWidth(); ++j){
@@ -204,6 +204,13 @@ const vector<Ghost *> &World::getGhosts() const {
 
 void World::setGhosts(const vector<Ghost *> &ghostVector) {
     World::ghosts = ghostVector;
+}
+
+void World::die() {
+    this->getPacMan()->die();
+    for (auto ghost: this->getGhosts()){
+        ghost->reset();
+    }
 }
 
 AbstractFactory::AbstractFactory(World *world) : world(world) {}
@@ -308,8 +315,12 @@ void PacMan::move(const int &ticks) {
         // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow() - 1, this->getCol()).first - yCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - yCoord)){
+            // Als het vakje een ghost bevat:
+            if (world->getItem(this->getRow() - 1, this->getCol()) != nullptr and world->getItem(this->getRow() - 1, this->getCol())->getTag() == "Ghost"){
+                this->getWorld()->die();
+            }
             // Als het volgende vakje geen muur is: gaan
-            if (canMove(this->getRow() - 1, this->getCol())){
+            else if (canMove(this->getRow() - 1, this->getCol())){
                 this->setCameraY(yCoord);
                 if (this->getWorld()->getItem(this->getRow() - 1, this->getCol()) != nullptr){
                     this->removePrevious(this->getRow() - 1, this->getCol());
@@ -367,8 +378,12 @@ void PacMan::move(const int &ticks) {
         // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow() + 1, this->getCol()).first - yCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - yCoord)){
+            // Als het vakje een ghost bevat:
+            if (world->getItem(this->getRow() + 1, this->getCol()) != nullptr and world->getItem(this->getRow() + 1, this->getCol())->getTag() == "Ghost"){
+                this->getWorld()->die();
+            }
             // Als het volgende vakje geen muur is: gaan
-            if (canMove(getRow() + 1, getCol())){
+            else if (canMove(getRow() + 1, getCol())){
                 this->setCameraY(yCoord);
                 if (this->getWorld()->getItem(this->getRow() + 1, this->getCol()) != nullptr){
                     this->removePrevious(this->getRow() + 1, this->getCol());
@@ -427,8 +442,12 @@ void PacMan::move(const int &ticks) {
             // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() + 1).second - xCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - xCoord)){
+            // Als het vakje een ghost bevat:
+            if (world->getItem(this->getRow(), this->getCol() + 1) != nullptr and world->getItem(this->getRow(), this->getCol() + 1)->getTag() == "Ghost"){
+                this->getWorld()->die();
+            }
             // Als het volgende vakje geen muur is: gaan
-            if (canMove(this->getRow(), this->getCol() + 1)){
+            else if (canMove(this->getRow(), this->getCol() + 1)){
                 this->setCameraX(xCoord);
                 if (this->getWorld()->getItem(this->getRow(), this->getCol() + 1) != nullptr){
                     this->removePrevious(this->getRow(), this->getCol() + 1);
@@ -485,8 +504,12 @@ void PacMan::move(const int &ticks) {
             // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() - 1).second - xCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - xCoord)){
+            // Als het vakje een ghost bevat:
+            if (world->getItem(this->getRow(), this->getCol() - 1) != nullptr and world->getItem(this->getRow(), this->getCol() - 1)->getTag() == "Ghost"){
+                this->getWorld()->die();
+            }
             // Als het volgende vakje geen muur is: gaan
-            if (canMove(this->getRow(), this->getCol() - 1)){
+            else if (canMove(this->getRow(), this->getCol() - 1)){
                 this->setCameraX(xCoord);
                 if (this->getWorld()->getItem(this->getRow(), this->getCol() - 1) != nullptr){
                     this->removePrevious(this->getRow(), this->getCol() - 1);
@@ -513,31 +536,11 @@ PacMan::PacMan(int row, int col, World *world) : EntityModel(row, col), world(wo
     this->setTag("PacMan");
     hasMoved = false;
     score = 0;
+    startRow = row;
+    startCol = col;
 }
 
-double PacMan::getXSpeed() const {
-    return xSpeed;
-}
 
-void PacMan::setXSpeed(double speed) {
-    PacMan::xSpeed = speed;
-}
-
-double PacMan::getYSpeed() const {
-    return ySpeed;
-}
-
-void PacMan::setYSpeed(double speed) {
-    PacMan::ySpeed = speed;
-}
-
-const string &PacMan::getNextDirection() const {
-    return nextDirection;
-}
-
-void PacMan::setNextDirection(const string &direction) {
-    PacMan::nextDirection = direction;
-}
 /*
  * Verandert de richting afhankelijk van de volgende richting
  */
@@ -583,16 +586,10 @@ void PacMan::moveDirection(const string &direction) {
     }
 }
 
-bool PacMan::isHasMoved() const {
-    return hasMoved;
-}
 
-void PacMan::setHasMoved(bool hasMoved) {
-    PacMan::hasMoved = hasMoved;
-}
 
 bool PacMan::canMove(const int &row, const int &col) const {
-    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin"){
+    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin" or this->getWorld()->getItem(row, col)->getTag() == "Ghost"){
         return true;
     }
     return false;
@@ -609,13 +606,21 @@ void PacMan::removePrevious(const int &row, const int &col) {
     }
 }
 
-int PacMan::getScore() const {
-    return score;
+
+
+void PacMan::die() {
+    this->getWorld()->setItem(nullptr, getRow(), getCol());
+    this->getWorld()->setItem(this->getWorld()->getPacMan(), getStartRow(), getStartCol());
+    this->setHasMoved(false);
+    this->setCurrentDirection("NONE");
+    this->setNextDirection("NONE");
+    this->setCol(getStartCol());
+    this->setRow(getStartRow());
+    this->setCameraX(this->getWorld()->getCamera()->getCameraCoords(getStartRow(), getStartCol()).second);
+    this->setCameraY(this->getWorld()->getCamera()->getCameraCoords(getStartRow(), getStartCol()).first);
 }
 
-void PacMan::setScore(int newScore) {
-    PacMan::score = newScore;
-}
+
 
 int Ghost::getManhattanDistance(const string& direction) {
     int pacManRow = this->getWorld()->getPacMan()->getRow();
@@ -636,24 +641,52 @@ int Ghost::getManhattanDistance(const string& direction) {
 }
 
 bool Ghost::canMove(const int &row, const int &col) const {
-    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin"){
+    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin" or this->getWorld()->getItem(row, col)->getTag() == "PacMan"){
         return true;
     }
     return false;
 }
 
 void Ghost::move(const int &ticks) {
-    // Case 1: De richting is omhoog:
+    this->changeDirection();
     if (this->getCurrentDirection() == "UP"){
         double yCoord = this->getCameraY();
         yCoord -= ticks * this->getYSpeed();
-        // Als de volgende tile een muur is of hij naar links of rechts kan:
-        if (!isJustTurned() and (world->getItem(this->getRow() - 1, this->getCol()) != nullptr and world->getItem(this->getRow() - 1, this->getCol())->getTag() == "Wall")
-        or (canMove(this->getRow(), this->getCol() + 1) or canMove(this->getRow(), this->getCol() - 1))){
+        // Als volgende direction naar rechts is en hij kan naar rechts:
+        if (this->getNextDirection() == "RIGHT" and canMove(this->getRow(), this->getCol() + 1)){
             double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
-                this->changeDirection();
+                // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
+                this->setCameraX(this->getCameraX() + this->getXSpeed());
+                this->setCurrentDirection("RIGHT");
+                this->setNextDirection("NONE");
+            }
+            else{
+                this->setCameraY(yCoord);
+            }
+        }
+
+        // Als volgende direction naar links is en hij kan naar links:
+        else if (this->getNextDirection() == "LEFT" and canMove(this->getRow(), this->getCol() - 1)){
+            double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
+            if (yCoord < wallYCoord){
+                this->setCameraY(wallYCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setCameraX(this->getCameraX() - this->getXSpeed());
+                this->setCurrentDirection("LEFT");
+                this->setNextDirection("NONE");
+            }
+            else{
+                this->setCameraY(yCoord);
+            }
+        }
+
+        // Als de volgende tile een muur is:
+        else if (world->getItem(this->getRow() - 1, this->getCol()) != nullptr and world->getItem(this->getRow() - 1, this->getCol())->getTag() == "Wall"){
+            double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
+            if (yCoord < wallYCoord){
+                this->setCameraY(wallYCoord);
             }
             else{
                 this->setCameraY(yCoord);
@@ -663,44 +696,72 @@ void Ghost::move(const int &ticks) {
         // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow() - 1, this->getCol()).first - yCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - yCoord)){
+            // Als het vakje een ghost bevat:
+            if (world->getItem(this->getRow() + 1, this->getCol()) != nullptr and world->getItem(this->getRow() + 1, this->getCol())->getTag() == "PacMan"){
+                this->getWorld()->die();
+            }
             // Als het volgende vakje geen muur is: gaan
-            if (canMove(this->getRow() - 1, this->getCol())){
+            else if (canMove(this->getRow() - 1, this->getCol())){
                 this->setCameraY(yCoord);
                 auto tempItem = world->getItem(this->getRow() - 1, this->getCol());
                 world->setItem(tempItem, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow() - 1, this->getCol());
                 this->setRow(this->getRow() - 1);
-                this->changeDirection();
-                this->setJustTurned(false);
             }
-        }
-        else{
+        }else{
             this->setCameraY(yCoord);
         }
     }
-
-    // Case 2: De richting is omlaag:
     else if (this->getCurrentDirection() == "DOWN"){
         double yCoord = this->getCameraY();
         yCoord += ticks * this->getYSpeed();
-        // Als de volgende tile een muur is of als hij naar rechts of links kan:
-        if ((world->getItem(this->getRow() + 1, this->getCol()) != nullptr and world->getItem(this->getRow() + 1, this->getCol())->getTag() == "Wall")
-        or canMove(this->getRow(), this->getCol() + 1) or canMove(this->getRow(), this->getCol() - 1)){
+        // Als volgende direction naar rechts is en hij kan naar rechts:
+        if (this->getNextDirection() == "RIGHT" and canMove(getRow(), getCol() + 1)){
             double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord > wallYCoord){
                 this->setCameraY(wallYCoord);
-                this->changeDirection();
+                // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
+                this->setCameraX(this->getCameraX() + this->getXSpeed());
+                this->setCurrentDirection("RIGHT");
+                this->setNextDirection("NONE");
             }
             else{
                 this->setCameraY(yCoord);
             }
         }
-
-        // Checken of hij dichter bij een ander vakje staat dan het huidige
+            // Als volgende direction naar links is en hij kan naar links:
+        else if (this->getNextDirection() == "LEFT" and canMove(getRow(), getCol() - 1)){
+            double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
+            if (yCoord > wallYCoord){
+                this->setCameraY(wallYCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setCameraX(this->getCameraX() - this->getXSpeed());
+                this->setCurrentDirection("LEFT");
+                this->setNextDirection("NONE");
+            }
+            else{
+                this->setCameraY(yCoord);
+            }
+        }
+            // Als de volgende tile een muur is:
+        else if (world->getItem(this->getRow() + 1, this->getCol()) != nullptr and world->getItem(this->getRow() + 1, this->getCol())->getTag() == "Wall"){
+            double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
+            if (yCoord > wallYCoord){
+                this->setCameraY(wallYCoord);
+            }
+            else{
+                this->setCameraY(yCoord);
+            }
+        }
+            // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow() + 1, this->getCol()).first - yCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - yCoord)){
+            // Als het vakje een ghost bevat:
+            if (world->getItem(this->getRow() + 1, this->getCol()) != nullptr and world->getItem(this->getRow() + 1, this->getCol())->getTag() == "PacMan"){
+                this->getWorld()->die();
+            }
             // Als het volgende vakje geen muur is: gaan
-            if (canMove(this->getRow() + 1, this->getCol())){
+            else if (canMove(getRow() + 1, getCol())){
                 this->setCameraY(yCoord);
                 auto tempItem = world->getItem(this->getRow() + 1, this->getCol());
                 world->setItem(tempItem, this->getRow(), this->getCol());
@@ -712,73 +773,121 @@ void Ghost::move(const int &ticks) {
             this->setCameraY(yCoord);
         }
     }
-
-    // Case 3: De richting is naar rechts:
     else if (this->getCurrentDirection() == "RIGHT"){
         double xCoord = this->getCameraX();
         xCoord += ticks * this->getXSpeed();
-        // Als de volgende tile een muur is:
-        if ((world->getItem(this->getRow(), this->getCol() + 1) != nullptr and world->getItem(this->getRow(), this->getCol() + 1)->getTag() == "Wall")
-        or (canMove(this->getRow() + 1, this->getCol()) or canMove(this->getRow() - 1, this->getCol()))){
+        // Als volgende direction naar links is en hij kan naar links:
+        if (this->getNextDirection() == "UP" and canMove(this->getRow() - 1, this->getCol())){
             double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
             if (xCoord > wallXCoord){
                 this->setCameraX(wallXCoord);
-                this->changeDirection();
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setCameraY(this->getCameraY() - this->getYSpeed());
+                this->setCurrentDirection("UP");
+                this->setNextDirection("NONE");
             }
             else{
                 this->setCameraX(xCoord);
             }
         }
-
-        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (this->getNextDirection() == "DOWN" and canMove(this->getRow() + 1, this->getCol())){
+            double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
+            if (xCoord > wallXCoord){
+                this->setCameraX(wallXCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setCameraY(this->getCameraY() + this->getYSpeed());
+                this->setCurrentDirection("DOWN");
+                this->setNextDirection("NONE");
+            }
+            else{
+                this->setCameraX(xCoord);
+            }
+        }
+        // Als de volgende tile een muur is:
+        else if (world->getItem(this->getRow(), this->getCol() + 1) != nullptr and world->getItem(this->getRow(), this->getCol() + 1)->getTag() == "Wall"){
+            double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
+            if (xCoord > wallXCoord){
+                this->setCameraX(wallXCoord);
+            }
+            else{
+                this->setCameraX(xCoord);
+            }
+        }
+            // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() + 1).second - xCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - xCoord)){
+            // Als het vakje een ghost bevat:
+            if (world->getItem(this->getRow(), this->getCol() + 1) != nullptr and world->getItem(this->getRow(), this->getCol() + 1)->getTag() == "PacMan"){
+                this->getWorld()->die();
+            }
             // Als het volgende vakje geen muur is: gaan
-            if (canMove(this->getRow(), this->getCol() + 1)){
+            else if (canMove(this->getRow(), this->getCol() + 1)){
                 this->setCameraX(xCoord);
                 auto tempItem = world->getItem(this->getRow(), this->getCol() + 1);
                 world->setItem(tempItem, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow(), this->getCol() + 1);
                 this->setCol(this->getCol() + 1);
-                this->changeDirection();
             }
-        }
-        else{
+        }else{
             this->setCameraX(xCoord);
         }
     }
-
-    // Case 3: De richting is naar rechts:
     else if (this->getCurrentDirection() == "LEFT"){
         double xCoord = this->getCameraX();
         xCoord -= ticks * this->getXSpeed();
-        // Als de volgende tile een muur is:
-        if ((world->getItem(this->getRow(), this->getCol() - 1) != nullptr and world->getItem(this->getRow(), this->getCol() - 1)->getTag() == "Wall")
-        or (canMove(this->getRow() + 1, this->getCol()) or canMove(this->getRow() - 1, this->getCol()))){
+        // Als volgende direction naar links is en hij kan naar links:
+        if (this->getNextDirection() == "UP" and canMove(this->getRow() - 1, this->getCol())){
             double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
             if (xCoord < wallXCoord){
                 this->setCameraX(wallXCoord);
-                this->changeDirection();
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setCameraY(this->getCameraY() - this->getYSpeed());
+                this->setCurrentDirection("UP");
+                this->setNextDirection("NONE");
             }
             else{
                 this->setCameraX(xCoord);
             }
         }
-
-        // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (this->getNextDirection() == "DOWN" and canMove(this->getRow() + 1, this->getCol())){
+            double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
+            if (xCoord < wallXCoord){
+                this->setCameraX(wallXCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setCameraY(this->getCameraY() + this->getYSpeed());
+                this->setCurrentDirection("DOWN");
+                this->setNextDirection("NONE");
+            }
+            else{
+                this->setCameraX(xCoord);
+            }
+        }
+            // Als de volgende tile een muur is:
+        else if (world->getItem(this->getRow(), this->getCol() - 1) != nullptr and world->getItem(this->getRow(), this->getCol() - 1)->getTag() == "Wall"){
+            double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
+            if (xCoord < wallXCoord){
+                this->setCameraX(wallXCoord);
+            }
+            else{
+                this->setCameraX(xCoord);
+            }
+        }
+            // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol() - 1).second - xCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second - xCoord)){
+            // Als het vakje een ghost bevat:
+            if (world->getItem(this->getRow(), this->getCol() - 1) != nullptr and world->getItem(this->getRow(), this->getCol() - 1)->getTag() == "PacMan"){
+                this->getWorld()->die();
+            }
             // Als het volgende vakje geen muur is: gaan
-            if (canMove(this->getRow(), this->getCol() - 1)){
+            else if (canMove(this->getRow(), this->getCol() - 1)){
                 this->setCameraX(xCoord);
                 auto tempItem = world->getItem(this->getRow(), this->getCol() - 1);
                 world->setItem(tempItem, this->getRow(), this->getCol());
                 world->setItem(this, this->getRow(), this->getCol() - 1);
                 this->setCol(this->getCol() - 1);
-                this->changeDirection();
             }
-        }
-        else{
+        }else{
             this->setCameraX(xCoord);
         }
     }
@@ -791,9 +900,24 @@ Ghost::Ghost(int row, int col, World *world) : EntityModel(row, col), world(worl
     color = "NONE";
     currentDirection = "UP";
     currentState = "WAITING";
-    xSpeed = double(1) / this->getWorld()->getWidth() / 100;
-    ySpeed = double(1) / this->getWorld()->getHeight() / 100;
+    xSpeed = double(1) / this->getWorld()->getWidth() / 150;
+    ySpeed = double(1) / this->getWorld()->getHeight() / 150;
     justTurned = true;
+    startRow = row;
+    startCol = col;
+}
+
+
+
+void Ghost::reset() {
+    this->getWorld()->setItem(nullptr, getRow(), getCol());
+    this->getWorld()->setItem(this, getStartRow(), getStartCol());
+    this->setCurrentDirection("UP");
+    this->setNextDirection("NONE");
+    this->setCol(getStartCol());
+    this->setRow(getStartRow());
+    this->setCameraX(this->getWorld()->getCamera()->getCameraCoords(getStartRow(), getStartCol()).second);
+    this->setCameraY(this->getWorld()->getCamera()->getCameraCoords(getStartRow(), getStartCol()).first);
 }
 
 

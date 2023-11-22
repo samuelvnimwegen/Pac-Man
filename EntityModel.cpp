@@ -4,14 +4,6 @@
 
 #include "EntityModel.h"
 
-void EntityModel::setPosX(int x) {
-    EntityModel::row = x;
-}
-
-void EntityModel::setPosY(int y) {
-    EntityModel::col = y;
-}
-
 const string &EntityModel::getTag() const {
     return tag;
 }

@@ -33,6 +33,8 @@ public:
 
     void buildWorld();
 
+    void die();
+
     [[nodiscard]] int getHeight() const;
 
     void setHeight(int hg);

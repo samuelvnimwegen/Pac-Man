@@ -16,6 +16,8 @@ class PacMan: public EntityModel{
     double ySpeed;
     bool hasMoved;
     int score;
+    int startRow;
+    int startCol;
 public:
     /*
      * De constructor van de PacMan class
@@ -25,6 +27,11 @@ public:
      * Beweegt Pac-Man
      */
     void move(const int &ticks);
+
+    /*
+     * Sterven van pacman
+     */
+    void die();
 
     void removePrevious(const int &row, const int &col);
 
@@ -57,11 +64,19 @@ public:
 
     [[nodiscard]] bool isHasMoved() const;
 
-    void setHasMoved(bool hasMoved);
+    void setHasMoved(bool moved);
 
     [[nodiscard]] int getScore() const;
 
     void setScore(int newScore);
+
+    int getStartRow() const;
+
+    void setStartRow(int row);
+
+    int getStartCol() const;
+
+    void setStartCol(int col);
 };
 
 

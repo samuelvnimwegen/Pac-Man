@@ -12,10 +12,6 @@ class EntityModel: public Subject{
 public:
     EntityModel(int row, int col);
 
-    void setPosX(int x);
-
-    void setPosY(int y);
-
     [[nodiscard]] const string &getTag() const;
 
     void setTag(const string &tg);

@@ -10,16 +10,22 @@ class Ghost: public EntityModel{
     World* world;
     string color;
     string currentDirection;
+    string nextDirection;
     string currentState;
     double xSpeed;
     double ySpeed;
     bool justTurned;
+    int startRow;
+    int startCol;
+
 public:
     Ghost(int row, int col, World *world);
 
     void move(const int &steps);
 
     void changeDirection();
+
+    void reset();
 
     [[nodiscard]] bool canMove(const int &row, const int &col) const;
 
@@ -46,6 +52,24 @@ public:
     [[nodiscard]] bool isJustTurned() const;
 
     void setJustTurned(bool turned);
+
+    [[nodiscard]] const string &getNextDirection() const;
+
+    void setNextDirection(const string &direction);
+
+    void setWorld(World *gWorld);
+
+    [[nodiscard]] const string &getCurrentState() const;
+
+    void setCurrentState(const string &state);
+
+    [[nodiscard]] int getStartRow() const;
+
+    void setStartRow(int row);
+
+    [[nodiscard]] int getStartCol() const;
+
+    void setStartCol(int col);
 };
 
 
