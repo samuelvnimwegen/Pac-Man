@@ -5,11 +5,11 @@
 #include "GUICoin.h"
 
 
-Coin *GUICoin::getSubject() const {
+Coin *GUI::GUICoin::getSubject() const {
     return subject;
 }
 
-GUICoin::GUICoin(Coin *subject) : subject(subject) {
+GUI::GUICoin::GUICoin(Coin *subject) : subject(subject) {
     this->setCol(subject->getCol());
     this->setRow(subject->getRow());
     sf::Texture texture;
@@ -19,5 +19,5 @@ GUICoin::GUICoin(Coin *subject) : subject(subject) {
     this->setSprite(sprite);
 }
 
-GUICoin::~GUICoin() = default;
+GUI::GUICoin::~GUICoin() = default;
 

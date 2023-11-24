@@ -5,7 +5,7 @@
 #include "GUIPacMan.h"
 
 
-sf::Sprite GUIPacMan::getSprite() {
+sf::Sprite GUI::GUIPacMan::getSprite() {
     sf::Sprite sprite;
     string direction = this->getSubject()->getCurrentDirection();
     if (direction == "NONE"){
@@ -50,7 +50,7 @@ sf::Sprite GUIPacMan::getSprite() {
     return sprite;
 }
 
-GUIPacMan::GUIPacMan(PacMan *subject) : subject(subject) {
+GUI::GUIPacMan::GUIPacMan(PacMan *subject) : subject(subject) {
     this->setRow(subject->getRow());
     this->setCol(subject->getCol());
     textureNr = 0;
@@ -59,19 +59,19 @@ GUIPacMan::GUIPacMan(PacMan *subject) : subject(subject) {
     this->setTexture(texture);
 }
 
-PacMan *GUIPacMan::getSubject() const {
+PacMan *GUI::GUIPacMan::getSubject() const {
     return subject;
 }
 
-int GUIPacMan::getTextureNr() const {
+int GUI::GUIPacMan::getTextureNr() const {
     return textureNr;
 }
 
-void GUIPacMan::setTextureNr(int nr) {
+void GUI::GUIPacMan::setTextureNr(int nr) {
     GUIPacMan::textureNr = nr;
 }
 
-void GUIPacMan::updateTextureNr() {
+void GUI::GUIPacMan::updateTextureNr() {
     if (textureNr < 1){
         ++textureNr;
     }
@@ -80,6 +80,6 @@ void GUIPacMan::updateTextureNr() {
     }
 }
 
-GUIPacMan::~GUIPacMan() {
+GUI::GUIPacMan::~GUIPacMan() {
 
 }

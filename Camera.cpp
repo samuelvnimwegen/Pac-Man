@@ -7,12 +7,12 @@
 
 
 
-pair<float, float> Camera::getCameraCoords(int row, int col) const {
+pair<float, float> GUI::Camera::getCameraCoords(int row, int col) const {
     float height = float(row) / float(modelHeight) * 2 - 1;
     float width = float(col) / float(modelWidth) * 2 - 1;
     return make_pair(height, width);
 }
 
-Camera::Camera(int modelWidth, int modelHeight) : modelWidth(modelWidth), modelHeight(modelHeight) {}
+GUI::Camera::Camera(int modelWidth, int modelHeight) : modelWidth(modelWidth), modelHeight(modelHeight) {}
 
 

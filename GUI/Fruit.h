@@ -6,7 +6,7 @@
 #define PAC_MAN_FRUIT_H
 #include "EntityView.h"
 
-class Fruit: public EntityView{
+class GUI::Fruit: public GUI::EntityView{
 
 };
 

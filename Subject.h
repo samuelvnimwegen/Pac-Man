@@ -6,23 +6,46 @@
 #define PAC_MAN_SUBJECT_H
 #include "iostream"
 #include "vector"
-using namespace std;
+namespace Model{
+    class Subject;
+    class EntityModel;
+    class Coin;
+    class Collectable;
+    class Fruit;
+    class Ghost;
+    class Wall;
+    class PacMan;
+    class World;
+    class Observer;
+    class Score;
+    class Random;
+    class Stopwatch;
+    class AbstractFactory;
+}
+namespace GUI{
+    class ConcreteFactory;
+    class EntityView;
+    class Fruit;
+    class Camera;
+    class Game;
+    class GUICoin;
+    class GUIGhost;
+    class GUIPacMan;
+    class GUIWall;
+    class LevelState;
+    class MenuState;
+    class PausedState;
+    class State;
+    class StateManager;
+    class VictoryState;
+}
+enum direction {up, down, left, right};
 
-class Subject {
-public:
+class Model::Subject {
     int row;
     int col;
-    double cameraX;
-    double cameraY;
+public:
     Subject(int row, int col);
-
-    [[nodiscard]] double getCameraX() const;
-
-    void setCameraX(double x);
-
-    [[nodiscard]] double getCameraY() const;
-
-    void setCameraY(double y);
 
     [[nodiscard]] int getRow() const;
 

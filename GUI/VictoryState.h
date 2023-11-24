@@ -6,7 +6,7 @@
 #define PAC_MAN_VICTORYSTATE_H
 #include "State.h"
 
-class VictoryState: public State {
+class GUI::VictoryState: public GUI::State {
 public:
     VictoryState();
 

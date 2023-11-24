@@ -4,9 +4,9 @@
 
 #ifndef PAC_MAN_RANDOM_H
 #define PAC_MAN_RANDOM_H
+#include "Subject.h"
 
-
-class Random {
+class Model::Random {
 
 };
 

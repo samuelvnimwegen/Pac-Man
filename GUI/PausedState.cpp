@@ -4,12 +4,12 @@
 
 #include "PausedState.h"
 
-PausedState::PausedState() {
+GUI::PausedState::PausedState() {
     this->setTag("PausedState");
 }
 
-State *PausedState::getNext() {
+GUI::State *GUI::PausedState::getNext() {
     return new MenuState();
 }
 
-PausedState::~PausedState() = default;
+GUI::PausedState::~PausedState() = default;

@@ -6,9 +6,9 @@
 #include "PacMan.h"
 #include "AbstractFactory.h"
 #include "Ghost.h"
+using namespace std;
 
-
-World::World() {
+Model::World::World() {
     width = 20;
     height = 11;
     factory = nullptr;
@@ -16,47 +16,49 @@ World::World() {
     coinsLeft = 0;
 }
 
-int World::getHeight() const {
+int Model::World::getHeight() const {
     return height;
 }
 
-void World::setHeight(int hg) {
+void Model::World::setHeight(int hg) {
     World::height = hg;
 }
 
-int World::getWidth() const {
+int Model::World::getWidth() const {
     return width;
 }
 
-void World::setWidth(int wd) {
+void Model::World::setWidth(int wd) {
     World::width = wd;
 }
 
-EntityModel *World::getItem(const int &row, const int &col) {
+Model::EntityModel *Model::World::getItem(const int &row, const int &col) {
     return world[row][col];
 }
 
-void World::addItem(EntityModel *item) {
+void Model::World::addItem(EntityModel *item) {
     world[item->getRow()][item->getCol()] = item;
-    entities.push_back(item);
 }
 
-AbstractFactory *World::getFactory() const {
+Model::AbstractFactory *Model::World::getFactory() const {
     return factory;
 }
 
-void World::setFactory(AbstractFactory *fac) {
+void Model::World::setFactory(AbstractFactory *fac) {
     World::factory = fac;
 }
 
-void World::buildWorld() {
+void Model::World::buildWorld() {
     assert(this->getFactory() != nullptr);
     // Lege map met null-pointers maken:
-    for (auto & i : world){
-        for (auto & j : i){
-            j = nullptr;
+    for (int i = 0; i < this->getHeight(); ++i){
+        vector<EntityModel*> row;
+        for (int j = 0; j < this->getWidth(); ++j){
+            row.push_back(nullptr);
         }
+        this->world.push_back(row);
     }
+
     // Muren om level heen
     for (int i = 0; i < width; ++i){
         this->getFactory()->createEntity("Wall", 0, i);
@@ -142,50 +144,39 @@ void World::buildWorld() {
 
 }
 
-World::~World() {
-    int entitySize = int(entities.size());
-    for (int i = 0; i < entitySize; ++i){
-        delete entities[i];
-    }
+Model::World::~World() {
+
 }
 
-PacMan *World::getPacMan() const {
+Model::PacMan *Model::World::getPacMan() const {
     return pacMan;
 }
 
-void World::setPacMan(PacMan *pMan) {
+void Model::World::setPacMan(PacMan *pMan) {
     World::pacMan = pMan;
 }
 
-void World::setItem(EntityModel* item, const int &row, const int &col) {
+void Model::World::setItem(EntityModel* item, const int &row, const int &col) {
     world[row][col] = item;
 }
 
-const vector<EntityModel *> &World::getEntities() const {
-    return entities;
-}
-
-void World::setEntities(const vector<EntityModel *> &ent) {
-    World::entities = ent;
-}
-
-Camera *World::getCamera() const {
+Camera *Model::World::getCamera() const {
     return camera;
 }
 
-void World::setCamera(Camera *cam) {
+void Model::World::setCamera(Camera *cam) {
     World::camera = cam;
 }
 
-int World::getCoinsLeft() const {
+int Model::World::getCoinsLeft() const {
     return coinsLeft;
 }
 
-void World::setCoinsLeft(int coins) {
+void Model::World::setCoinsLeft(int coins) {
     World::coinsLeft = coins;
 }
 
-void World::addGhost(Ghost *ghost) {
+void Model::World::addGhost(Ghost *ghost) {
     ghosts.push_back(ghost);
     if (ghosts.size() == 1){
         ghost->setColor("RED");
@@ -198,49 +189,25 @@ void World::addGhost(Ghost *ghost) {
     }
 }
 
-const vector<Ghost *> &World::getGhosts() const {
+const vector<Model::Ghost *> &Model::World::getGhosts() const {
     return ghosts;
 }
 
-void World::setGhosts(const vector<Ghost *> &ghostVector) {
+void Model::World::setGhosts(const vector<Ghost *> &ghostVector) {
     World::ghosts = ghostVector;
 }
 
-void World::die() {
+void Model::World::die() {
     this->getPacMan()->die();
     for (auto ghost: this->getGhosts()){
         ghost->reset();
     }
 }
 
-AbstractFactory::AbstractFactory(World *world) : world(world) {}
+Model::AbstractFactory::AbstractFactory(World *world) : world(world) {}
 
-EntityModel *AbstractFactory::createEntity(const string &tag, const int &row, const int &col) {
-    if (tag == "Wall"){
-        return this->createWall(row, col);
-    }
-    else if (tag == "PacMan"){
-        return this->createPacMan(row, col);
-    }
-    else if (tag == "Coin"){
-        return this->createCoin(row, col);
-    }
-    else if (tag == "Ghost"){
-        return this->createGhost(row, col);
-    }
-    return nullptr;
-}
 
-PacMan *AbstractFactory::createPacMan(const int &row, const int &col) {
-    auto* entity = new PacMan(row, col, world);
-    entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
-    entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
-    world->addItem(entity);
-    world->setPacMan(entity);
-    return entity;
-}
-
-Wall *AbstractFactory::createWall(const int &row, const int &col) {
+Model::Wall *Model::AbstractFactory::createWall(const int &row, const int &col) {
     auto entity = new Wall(row, col);
     entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
     entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
@@ -248,7 +215,7 @@ Wall *AbstractFactory::createWall(const int &row, const int &col) {
     return entity;
 }
 
-Coin *AbstractFactory::createCoin(const int &row, const int &col) {
+Model::Coin *Model::AbstractFactory::createCoin(const int &row, const int &col) {
     auto entity = new Coin(row, col);
     entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
     entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
@@ -256,8 +223,8 @@ Coin *AbstractFactory::createCoin(const int &row, const int &col) {
     return entity;
 }
 
-Ghost *AbstractFactory::createGhost(const int &row, const int &col) {
-    auto* entity = new Ghost(row, col, world);
+Model::Ghost *Model::AbstractFactory::createGhost(const int &row, const int &col) {
+    auto* entity = new Model::Ghost(row, col, world);
     entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
     entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
     world->addItem(entity);
@@ -265,7 +232,15 @@ Ghost *AbstractFactory::createGhost(const int &row, const int &col) {
     return entity;
 }
 
-void PacMan::move(const int &ticks) {
+Model::World *Model::AbstractFactory::getWorld() const {
+    return world;
+}
+
+void Model::AbstractFactory::setWorld(Model::World *newWorld) {
+    AbstractFactory::world = newWorld;
+}
+
+void Model::PacMan::move(const int &ticks) {
     this->setHasMoved(true);
     if (this->getCurrentDirection() == "UP"){
         double yCoord = this->getCameraY();
@@ -528,7 +503,7 @@ void PacMan::move(const int &ticks) {
 
 }
 
-PacMan::PacMan(int row, int col, World *world) : EntityModel(row, col), world(world) {
+Model::PacMan::PacMan(int row, int col, Model::World *world) : EntityModel(row, col), world(world) {
     this->setCurrentDirection("NONE");
     this->setNextDirection("NONE");
     xSpeed = double(1) / this->getWorld()->getWidth() / 100;
@@ -544,7 +519,7 @@ PacMan::PacMan(int row, int col, World *world) : EntityModel(row, col), world(wo
 /*
  * Verandert de richting afhankelijk van de volgende richting
  */
-void PacMan::moveDirection(const string &direction) {
+void Model::PacMan::moveDirection(const string &direction) {
     if (this->getCurrentDirection() == "NONE"){
         this->setCurrentDirection(direction);
     }
@@ -588,14 +563,14 @@ void PacMan::moveDirection(const string &direction) {
 
 
 
-bool PacMan::canMove(const int &row, const int &col) const {
+bool Model::PacMan::canMove(const int &row, const int &col) const {
     if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin" or this->getWorld()->getItem(row, col)->getTag() == "Ghost"){
         return true;
     }
     return false;
 }
 
-void PacMan::removePrevious(const int &row, const int &col) {
+void Model::PacMan::removePrevious(const int &row, const int &col) {
     if (this->getWorld()->getItem(row, col) == nullptr){
         return;
     }
@@ -608,7 +583,7 @@ void PacMan::removePrevious(const int &row, const int &col) {
 
 
 
-void PacMan::die() {
+void Model::PacMan::die() {
     this->getWorld()->setItem(nullptr, getRow(), getCol());
     this->getWorld()->setItem(this->getWorld()->getPacMan(), getStartRow(), getStartCol());
     this->setHasMoved(false);
@@ -622,7 +597,7 @@ void PacMan::die() {
 
 
 
-int Ghost::getManhattanDistance(const string& direction) {
+int Model::Ghost::getManhattanDistance(const string& direction) {
     int pacManRow = this->getWorld()->getPacMan()->getRow();
     int pacManCol = this->getWorld()->getPacMan()->getCol();
     if (direction == "UP"){
@@ -640,14 +615,14 @@ int Ghost::getManhattanDistance(const string& direction) {
     }
 }
 
-bool Ghost::canMove(const int &row, const int &col) const {
+bool Model::Ghost::canMove(const int &row, const int &col) const {
     if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin" or this->getWorld()->getItem(row, col)->getTag() == "PacMan"){
         return true;
     }
     return false;
 }
 
-void Ghost::move(const int &ticks) {
+void Model::Ghost::move(const int &ticks) {
     this->changeDirection();
     if (this->getCurrentDirection() == "UP"){
         double yCoord = this->getCameraY();
@@ -895,7 +870,7 @@ void Ghost::move(const int &ticks) {
         assert(false);
     }
 }
-Ghost::Ghost(int row, int col, World *world) : EntityModel(row, col), world(world) {
+Model::Ghost::Ghost(int row, int col, Model::World *world) : EntityModel(row, col), world(world) {
     this->setTag("Ghost");
     color = "NONE";
     currentDirection = "UP";
@@ -909,7 +884,7 @@ Ghost::Ghost(int row, int col, World *world) : EntityModel(row, col), world(worl
 
 
 
-void Ghost::reset() {
+void Model::Ghost::reset() {
     this->getWorld()->setItem(nullptr, getRow(), getCol());
     this->getWorld()->setItem(this, getStartRow(), getStartCol());
     this->setCurrentDirection("UP");

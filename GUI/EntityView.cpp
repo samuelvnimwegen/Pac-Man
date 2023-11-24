@@ -5,44 +5,44 @@
 #include "EntityView.h"
 
 
-sf::Sprite EntityView::getSprite() {
+sf::Sprite GUI::EntityView::getSprite() {
     return sprite;
 }
 
-EntityView::EntityView(){
+GUI::EntityView::EntityView(){
     col = 0;
     row = 0;
 }
 
-int EntityView::getCol() const {
+int GUI::EntityView::getCol() const {
     return col;
 }
 
-void EntityView::setCol(int c) {
+void GUI::EntityView::setCol(int c) {
     EntityView::col = c;
 }
 
-int EntityView::getRow() const {
+int GUI::EntityView::getRow() const {
     return row;
 }
 
-void EntityView::setRow(int r) {
+void GUI::EntityView::setRow(int r) {
     EntityView::row = r;
 }
 
-const sf::Texture &EntityView::getTexture() const {
+const sf::Texture &GUI::EntityView::getTexture() const {
     return texture;
 }
 
-void EntityView::setTexture(const sf::Texture &entityTexture) {
+void GUI::EntityView::setTexture(const sf::Texture &entityTexture) {
     EntityView::texture = entityTexture;
 }
 
-void EntityView::setSprite(const sf::Sprite &entitySprite) {
+void GUI::EntityView::setSprite(const sf::Sprite &entitySprite) {
     EntityView::sprite = entitySprite;
 }
 
-void EntityView::removeSprite() {
+void GUI::EntityView::removeSprite() {
     sf::Texture tex;
     tex.loadFromFile("Sprites.png");
     this->setTexture(tex);
@@ -50,7 +50,7 @@ void EntityView::removeSprite() {
     this->setSprite(spr);
 }
 
-EntityView::~EntityView() {
+GUI::EntityView::~EntityView() {
 
 }
 

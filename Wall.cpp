@@ -6,6 +6,9 @@
 
 
 
-Wall::Wall(int row, int col) : EntityModel(row, col) {
+
+Model::Wall::Wall(int row, int col) : EntityModel(row, col) {
     this->setTag("Wall");
 }
+
+

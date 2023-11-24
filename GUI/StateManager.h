@@ -7,7 +7,7 @@
 #include "State.h"
 #include "MenuState.h"
 #include "PausedState.h"
-class StateManager {
+class GUI::StateManager {
     vector<State*> stack;
 public:
     StateManager();

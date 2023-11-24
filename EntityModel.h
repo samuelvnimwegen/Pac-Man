@@ -6,19 +6,24 @@
 #define PAC_MAN_ENTITYMODEL_H
 #include "Subject.h"
 
-class EntityModel: public Subject{
-    string tag;
+class Model::EntityModel: public  Model::Subject{
+    std::string tag;
     bool consumed;
+    std::vector<Model::Observer*> observers;
 public:
     EntityModel(int row, int col);
 
-    [[nodiscard]] const string &getTag() const;
+    [[nodiscard]] const std::string &getTag() const;
 
-    void setTag(const string &tg);
+    void setTag(const std::string &tg);
 
     [[nodiscard]] bool isConsumed() const override;
 
     void consume();
+
+    void addObserver(Model::Observer* observer);
+
+    [[nodiscard]] const std::vector<Model::Observer *> &getObservers() const;
 };
 
 

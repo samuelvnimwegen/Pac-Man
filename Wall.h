@@ -4,10 +4,9 @@
 #ifndef PAC_MAN_GUIPACMAN_H
 #define PAC_MAN_PACMAN_H
 #include "EntityModel.h"
+#include "Subject.h"
 
-using namespace std;
-
-class Wall: public EntityModel{
+class Model::Wall: public Model::EntityModel{
 public:
     Wall(int row, int col);
 };

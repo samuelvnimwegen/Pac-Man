@@ -10,13 +10,10 @@
 Game::Game(const int &wd, const int &hg) {
     width = wd;
     height = hg;
-    stopwatch = new Stopwatch();
     pacMan = nullptr;
 
     world = new World();
     this->generateMap();
-    factory = new ConcreteFactory(world, this);
-    this->getWorld()->setFactory(factory);
     world->buildWorld();
     stateManager = new StateManager();
 
@@ -142,8 +139,6 @@ Game::Game(const int &wd, const int &hg) {
                 window.draw(pauzeText);
                 window.display();
                 this->getStateManager()->push();
-
-                stopwatch = new Stopwatch();
                 delete world;
                 for (auto entity: this->viewEntities){
                     delete entity;
@@ -163,7 +158,6 @@ Game::Game(const int &wd, const int &hg) {
             if (input == "ESCAPE"){
                 this->getStateManager()->push();
 
-                stopwatch = new Stopwatch();
                 delete world;
                 for (auto entity: this->viewEntities){
                     delete entity;
@@ -187,35 +181,35 @@ Game::Game(const int &wd, const int &hg) {
     }
 }
 
-int Game::getWidth() const {
+int GUI::Game::getWidth() const {
     return width;
 }
 
-void Game::setWidth(int wd) {
+void GUI::Game::setWidth(int wd) {
     Game::width = wd;
 }
 
-int Game::getHeight() const {
+int GUI::Game::getHeight() const {
     return height;
 }
 
-void Game::setHeight(int hg) {
+void GUI::Game::setHeight(int hg) {
     Game::height = hg;
 }
 
 
 
-World *Game::getWorld() const {
+World *GUI::Game::getWorld() const {
     return world;
 }
 
-void Game::setWorld(World *sWorld) {
+void GUI::Game::setWorld(World *sWorld) {
     Game::world = sWorld;
 }
 
 
 
-void Game::generateMap() {
+void GUI::Game::generateMap() {
     for (int i = 0; i < this->getWorld()->getHeight(); ++i){
         for (int j = 0; j < this->getWorld()->getWidth(); ++j){
             this->viewMap[i][j] = nullptr;
@@ -223,12 +217,12 @@ void Game::generateMap() {
     }
 }
 
-void Game::setViewItem(EntityView *entity, const int &row, const int &col) {
+void GUI::Game::setViewItem(GUI::EntityView *entity, const int &row, const int &col) {
     viewMap[row][col] = entity;
     viewEntities.push_back(entity);
 }
 
-Game::~Game() {
+GUI::Game::~Game() {
     int entitySize = int(this->viewEntities.size());
     for (int i = 0; i < entitySize; ++i){
         delete viewEntities[i];
@@ -238,7 +232,7 @@ Game::~Game() {
 
 }
 
-string Game::getDirection() {
+string GUI::Game::getDirection() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) or sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
         return "UP";
     }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) or sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
@@ -251,21 +245,21 @@ string Game::getDirection() {
     return "NONE";
 }
 
-pair<int, int> Game::cameraToPixels(double xCamera, double yCamera) const {
+pair<int, int> GUI::Game::cameraToPixels(double xCamera, double yCamera) const {
     int x = int((xCamera + 1) / 2 * float(this->getWidth()));
     int y = int((yCamera + 1) / 2 * float(this->getHeight()));
     return make_pair(x, y);
 }
 
-StateManager *Game::getStateManager() const {
+GUI::StateManager *GUI::Game::getStateManager() const {
     return stateManager;
 }
 
-void Game::setStateManager(StateManager *state) {
+void GUI::Game::setStateManager(GUI::StateManager *state) {
     Game::stateManager = state;
 }
 
-string Game::getInput() {
+string GUI::Game::getInput() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
         return "ESCAPE";
     }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
@@ -276,76 +270,81 @@ string Game::getInput() {
     return "NONE";
 }
 
-Stopwatch *Game::getStopwatch() const {
+Stopwatch *GUI::Game::getStopwatch() const {
     return stopwatch;
 }
 
-void Game::setStopwatch(Stopwatch *newStopwatch) {
+void GUI::Game::setStopwatch(Stopwatch *newStopwatch) {
     Game::stopwatch = newStopwatch;
 }
 
-const vector<GUIGhost *> &Game::getGhosts() const {
+const vector<GUI::GUIGhost *> &GUI::Game::getGhosts() const {
     return ghosts;
 }
 
-void Game::setGhosts(const vector<GUIGhost *> &ghostVector) {
+void GUI::Game::setGhosts(const vector<GUI::GUIGhost *> &ghostVector) {
     Game::ghosts = ghostVector;
 }
 
-const vector<GUIWall *> &Game::getWalls() const {
+const vector<GUI::GUIWall *> &GUI::Game::getWalls() const {
     return walls;
 }
 
-void Game::setWalls(const vector<GUIWall *> &wallsVector) {
+void GUI::Game::setWalls(const vector<GUI::GUIWall *> &wallsVector) {
     Game::walls = wallsVector;
 }
 
-const vector<GUICoin *> &Game::getCoins() const {
+const vector<GUI::GUICoin *> &GUI::Game::getCoins() const {
     return coins;
 }
 
-void Game::setCoins(const vector<GUICoin *> &coinVector) {
+void GUI::Game::setCoins(const vector<GUICoin *> &coinVector) {
     Game::coins = coinVector;
 }
 
-GUIPacMan *Game::getPacMan() const {
+GUI::GUIPacMan *GUI::Game::getPacMan() const {
     return pacMan;
 }
 
-void Game::setPacMan(GUIPacMan *guiPacMan) {
+void GUI::Game::setPacMan(GUI::GUIPacMan *guiPacMan) {
     Game::pacMan = guiPacMan;
 }
 
-void Game::addWall(GUIWall *wall) {
+void GUI::Game::addWall(GUI::GUIWall *wall) {
     auto currWalls = this->getWalls();
     currWalls.push_back(wall);
     this->setWalls(currWalls);
 }
 
-void Game::addCoin(GUICoin *coin) {
+void GUI::Game::addCoin(GUI::GUICoin *coin) {
     auto currCoins = this->getCoins();
     currCoins.push_back(coin);
     this->setCoins(currCoins);
 }
 
-void Game::addGhost(GUIGhost *ghost) {
+void GUI::Game::addGhost(GUI::GUIGhost *ghost) {
     auto currGhosts = this->getGhosts();
     currGhosts.push_back(ghost);
     this->setGhosts(currGhosts);
 }
 
 
-ConcreteFactory::ConcreteFactory(World *world, Game *game) : AbstractFactory(world), game(game) {}
+GUI::ConcreteFactory::ConcreteFactory(World *world, Game *game) : AbstractFactory(world), game(game) {}
 
-PacMan *ConcreteFactory::createPacMan(const int &row, const int &col) {
-    PacMan* subject = AbstractFactory::createPacMan(row, col);
-    auto viewItem = new GUIPacMan(subject);
+Model::PacMan *GUI::ConcreteFactory::createPacMan(const int &row, const int &col) {
+    auto* entity = new Model::PacMan(row, col, this->getWorld());
+    auto observer = new GUI::GUIPacMan(entity);
+    entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
+    entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
+    world->addItem(entity);
+    world->setPacMan(entity);
+    auto viewItem = new GUI::GUIPacMan(subject);
     game->setViewItem(viewItem, row, col);
     game->setPacMan(viewItem);
     return subject;
 }
 
-Wall *ConcreteFactory::createWall(const int &row, const int &col) {
+Wall *GUI::ConcreteFactory::createWall(const int &row, const int &col) {
     Wall* subject = AbstractFactory::createWall(row, col);
     auto viewItem = new GUIWall(subject);
     game->setViewItem(viewItem, row, col);
@@ -353,7 +352,7 @@ Wall *ConcreteFactory::createWall(const int &row, const int &col) {
     return subject;
 }
 
-Coin *ConcreteFactory::createCoin(const int &row, const int &col) {
+Coin *GUI::ConcreteFactory::createCoin(const int &row, const int &col) {
     Coin* subject = AbstractFactory::createCoin(row, col);
     auto viewItem = new GUICoin(subject);
     game->setViewItem(viewItem, row, col);
@@ -361,7 +360,7 @@ Coin *ConcreteFactory::createCoin(const int &row, const int &col) {
     return subject;
 }
 
-Ghost *ConcreteFactory::createGhost(const int &row, const int &col) {
+Ghost *GUI::ConcreteFactory::createGhost(const int &row, const int &col) {
     Ghost* subject = AbstractFactory::createGhost(row, col);
     auto viewItem = new GUIGhost(subject);
     game->setViewItem(viewItem, row, col);

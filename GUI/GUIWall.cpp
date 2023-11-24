@@ -4,7 +4,7 @@
 
 #include "GUIWall.h"
 
-GUIWall::GUIWall(Wall *subject) : subject(subject) {
+GUI::GUIWall::GUIWall(Wall *subject) : subject(subject) {
     this->setCol(subject->getCol());
     this->setRow(subject->getRow());
     sf::Texture texture;
@@ -14,11 +14,11 @@ GUIWall::GUIWall(Wall *subject) : subject(subject) {
     this->setSprite(sprite);
 }
 
-Subject *GUIWall::getSubject() const {
+Subject *GUI::GUIWall::getSubject() const {
     return subject;
 }
 
-GUIWall::~GUIWall() = default;
+GUI::GUIWall::~GUIWall() = default;
 
 
 

@@ -6,7 +6,7 @@
 #define PAC_MAN_GUICOIN_H
 #include "EntityView.h"
 
-class GUICoin: public EntityView{
+class GUI::GUICoin: public GUI::EntityView{
     Coin* subject;
 public:
     explicit GUICoin(Coin *subject);

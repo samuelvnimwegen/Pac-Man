@@ -4,27 +4,27 @@
 
 #include "StateManager.h"
 
-StateManager::StateManager() {
+GUI::StateManager::StateManager() {
     stack.push_back(new MenuState());
 }
 
-State *StateManager::getCurrentState() {
+GUI::State *GUI::StateManager::getCurrentState() {
     return stack.at(stack.size() - 1);
 }
 
-void StateManager::pop() {
+void GUI::StateManager::pop() {
     if (stack.size() != 1){
         delete stack.at(stack.size() - 1);
         stack.pop_back();
     }
 }
 
-void StateManager::push() {
+void GUI::StateManager::push() {
     if (this->getCurrentState()->getNext() != nullptr){
         stack.push_back(this->getCurrentState()->getNext());
     }
 }
 
-void StateManager::pauze() {
+void GUI::StateManager::pauze() {
     stack.push_back(new PausedState());
 }

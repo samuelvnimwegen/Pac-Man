@@ -14,17 +14,17 @@
 #include "Camera.h"
 #include "Coin.h"
 #include "Ghost.h"
-using namespace std;
 
-class World {
-    EntityModel* world[11][20]{};
+
+class Model::World {
+    vector<vector<Model::EntityModel*>> world;
     int height;
     int width;
-    AbstractFactory* factory;
-    vector<EntityModel*> entities;
-    PacMan* pacMan;
+    Model::AbstractFactory* factory;
+    Model::PacMan* pacMan;
     Camera* camera;
     int coinsLeft;
+    vector<Coin*> coins;
     vector<Ghost*> ghosts;
 public:
     explicit World();
@@ -56,10 +56,6 @@ public:
     [[nodiscard]] PacMan *getPacMan() const;
 
     void setPacMan(PacMan *pMan);
-
-    [[nodiscard]] const vector<EntityModel *> &getEntities() const;
-
-    void setEntities(const vector<EntityModel *> &ent);
 
     [[nodiscard]] Camera *getCamera() const;
 

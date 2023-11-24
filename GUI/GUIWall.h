@@ -6,7 +6,7 @@
 #define PAC_MAN_GUIWALL_H
 #include "EntityView.h"
 
-class GUIWall: public EntityView {
+class GUI::GUIWall: public GUI::EntityView {
     Wall* subject;
 public:
     explicit GUIWall(Wall *subject);

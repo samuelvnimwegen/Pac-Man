@@ -6,7 +6,7 @@
 #define PAC_MAN_GUIGHOST_H
 #include "EntityView.h"
 
-class GUIGhost: public EntityView{
+class GUI::GUIGhost: public GUI::EntityView{
     Ghost* subject;
     int textureNr;
     int spriteX;

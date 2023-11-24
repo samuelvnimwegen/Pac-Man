@@ -3,23 +3,32 @@
 //
 
 #include "EntityModel.h"
+using namespace std;
 
-const string &EntityModel::getTag() const {
+const string &Model::EntityModel::getTag() const {
     return tag;
 }
 
-void EntityModel::setTag(const string &tg) {
+void Model::EntityModel::setTag(const string &tg) {
     EntityModel::tag = tg;
 }
 
-EntityModel::EntityModel(int row, int col) : Subject(row, col) {
+Model::EntityModel::EntityModel(int row, int col) : Subject(row, col) {
     consumed = false;
 }
 
-bool EntityModel::isConsumed() const {
+bool Model::EntityModel::isConsumed() const {
     return consumed;
 }
 
-void EntityModel::consume() {
+void Model::EntityModel::consume() {
     consumed = true;
+}
+
+void Model::EntityModel::addObserver(Model::Observer *observer) {
+    observers.push_back(observer);
+}
+
+const vector<Model::Observer *> &Model::EntityModel::getObservers() const {
+    return observers;
 }

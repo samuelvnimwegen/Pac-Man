@@ -6,7 +6,7 @@
 #define PAC_MAN_FRUIT_H
 #include "Collectable.h"
 
-class Fruit: public Collectable{
+class Model::Fruit: public Model::Collectable{
 
 };
 

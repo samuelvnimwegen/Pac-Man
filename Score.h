@@ -4,9 +4,9 @@
 
 #ifndef PAC_MAN_SCORE_H
 #define PAC_MAN_SCORE_H
+#include "Subject.h"
 
-
-class Score {
+class Model::Score {
 
 };
 

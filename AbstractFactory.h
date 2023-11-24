@@ -6,27 +6,24 @@
 #define PAC_MAN_ABSTRACTFACTORY_H
 
 #include "iostream"
-using namespace std;
-class EntityModel;
-class PacMan;
-class World;
-class Wall;
-class Coin;
-class Ghost;
-class AbstractFactory {
-    World* world;
+#include "Subject.h"
+
+class Model::AbstractFactory {
+    Model::World* world;
 public:
-    explicit AbstractFactory(World *world);
+    explicit AbstractFactory(Model::World *world);
 
-    EntityModel* createEntity(const string &tag, const int &row, const int &col);
+    virtual Model::PacMan* createPacMan(const int &row, const int &col) = 0;
 
-    virtual PacMan* createPacMan(const int &row, const int &col);
+    virtual Model::Wall* createWall(const int&row, const int &col) = 0;
 
-    virtual Wall* createWall(const int&row, const int &col);
+    virtual Model::Coin* createCoin(const int&row, const int &col) = 0;
 
-    virtual Coin* createCoin(const int&row, const int &col);
+    virtual Model::Ghost* createGhost(const int &row, const int &col) = 0;
 
-    virtual Ghost* createGhost(const int &row, const int &col);
+    World *getWorld() const;
+
+    void setWorld(World *newWorld);
 };
 
 

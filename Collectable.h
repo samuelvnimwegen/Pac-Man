@@ -6,7 +6,7 @@
 #define PAC_MAN_COLLECTABLE_H
 #include "EntityModel.h"
 
-class Collectable: public EntityModel{
+class Model::Collectable: public Model::EntityModel{
     int value;
 
 public:
@@ -14,7 +14,7 @@ public:
 
     [[nodiscard]] int getValue() const;
 
-    void setValue(int value);
+    void setValue(int val);
 
 
 };

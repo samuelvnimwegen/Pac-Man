@@ -4,44 +4,44 @@
 
 #include "Ghost.h"
 
-World *Ghost::getWorld() const {
+Model::World *Model::Ghost::getWorld() const {
     return world;
 }
 
 
 
-const string &Ghost::getColor() const {
+const string &Model::Ghost::getColor() const {
     return color;
 }
 
-void Ghost::setColor(const string &ghostColor) {
+void Model::Ghost::setColor(const string &ghostColor) {
     Ghost::color = ghostColor;
 }
 
-const string &Ghost::getCurrentDirection() const {
+const string &Model::Ghost::getCurrentDirection() const {
     return currentDirection;
 }
 
-void Ghost::setCurrentDirection(const string &direction) {
+void Model::Ghost::setCurrentDirection(const string &direction) {
     Ghost::currentDirection = direction;
 }
 
-double Ghost::getXSpeed() const {
+double Model::Ghost::getXSpeed() const {
     return xSpeed;
 }
 
-void Ghost::setXSpeed(double speed) {
+void Model::Ghost::setXSpeed(double speed) {
     Ghost::xSpeed = speed;
 }
 
-double Ghost::getYSpeed() const {
+double Model::Ghost::getYSpeed() const {
     return ySpeed;
 }
 
-void Ghost::setYSpeed(double speed) {
+void Model::Ghost::setYSpeed(double speed) {
     Ghost::ySpeed = speed;
 }
-void Ghost::changeDirection() {
+void Model::Ghost::changeDirection() {
     int minDistance = 1000000;
     string direction = "NONE";
     // Als hij omhoog kan:
@@ -123,46 +123,46 @@ void Ghost::changeDirection() {
     }
 }
 
-bool Ghost::isJustTurned() const {
+bool Model::Ghost::isJustTurned() const {
     return justTurned;
 }
 
-void Ghost::setJustTurned(bool turned) {
+void Model::Ghost::setJustTurned(bool turned) {
     Ghost::justTurned = turned;
 }
 
-const string &Ghost::getNextDirection() const {
+const string &Model::Ghost::getNextDirection() const {
     return nextDirection;
 }
 
-void Ghost::setNextDirection(const string &direction) {
+void Model::Ghost::setNextDirection(const string &direction) {
     Ghost::nextDirection = direction;
 }
-void Ghost::setWorld(World *gWorld) {
+void Model::Ghost::setWorld(World *gWorld) {
     Ghost::world = gWorld;
 }
 
-const string &Ghost::getCurrentState() const {
+const string &Model::Ghost::getCurrentState() const {
     return currentState;
 }
 
-void Ghost::setCurrentState(const string &state) {
+void Model::Ghost::setCurrentState(const string &state) {
     Ghost::currentState = state;
 }
 
-int Ghost::getStartRow() const {
+int Model::Ghost::getStartRow() const {
     return startRow;
 }
 
-void Ghost::setStartRow(int row) {
+void Model::Ghost::setStartRow(int row) {
     Ghost::startRow = row;
 }
 
-int Ghost::getStartCol() const {
+int Model::Ghost::getStartCol() const {
     return startCol;
 }
 
-void Ghost::setStartCol(int col) {
+void Model::Ghost::setStartCol(int col) {
     Ghost::startCol = col;
 }
 

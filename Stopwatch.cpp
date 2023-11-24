@@ -4,11 +4,11 @@
 
 #include "Stopwatch.h"
 
-Stopwatch::Stopwatch(){
+Model::Stopwatch::Stopwatch(){
     tickTime = sf::milliseconds(1);
 }
 
-int Stopwatch::getTicks() {
+int Model::Stopwatch::getTicks() {
     auto elapsedTime = clock.getElapsedTime();
     int steps = int(elapsedTime / tickTime);
     if (steps == 0){
@@ -16,4 +16,11 @@ int Stopwatch::getTicks() {
     }
     clock.restart();
     return steps;
+}
+
+Model::Stopwatch *Model::Stopwatch::Instance() {
+    if (m_pStopwatch == nullptr){
+        m_pStopwatch = new Stopwatch();
+    }
+    return m_pStopwatch;
 }

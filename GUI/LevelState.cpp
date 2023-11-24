@@ -4,14 +4,14 @@
 
 #include "LevelState.h"
 
-LevelState::LevelState(){
+GUI::LevelState::LevelState(){
    this->setTag("LevelState");
 }
 
-VictoryState *LevelState::getNext() {
+GUI::VictoryState *GUI::LevelState::getNext() {
     return new VictoryState();
 }
 
-LevelState::~LevelState() = default;
+GUI::LevelState::~LevelState() = default;
 
-VictoryState::~VictoryState() = default;
+GUI::VictoryState::~VictoryState() = default;

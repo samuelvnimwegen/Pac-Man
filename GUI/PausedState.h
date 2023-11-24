@@ -6,7 +6,7 @@
 #define PAC_MAN_PAUSEDSTATE_H
 #include "State.h"
 #include "MenuState.h"
-class PausedState: public State {
+class GUI::PausedState: public GUI::State {
 public:
     PausedState();
 

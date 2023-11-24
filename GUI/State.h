@@ -6,9 +6,10 @@
 #define PAC_MAN_STATE_H
 #include "iostream"
 #include "vector"
+#include "../Subject.h"
 using namespace std;
 
-class State {
+class GUI::State {
     string tag;
 public:
     State();

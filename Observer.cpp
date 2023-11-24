@@ -4,4 +4,4 @@
 
 #include "Observer.h"
 
-Observer::Observer() = default;
+Model::Observer::Observer() = default;

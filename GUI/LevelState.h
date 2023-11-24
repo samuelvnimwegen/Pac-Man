@@ -6,7 +6,7 @@
 #define PAC_MAN_LEVELSTATE_H
 #include "State.h"
 #include "VictoryState.h"
-class LevelState: public State {
+class GUI::LevelState: public GUI::State {
 public:
     LevelState();
 

@@ -4,16 +4,16 @@
 
 #include "MenuState.h"
 
-MenuState::MenuState() {
+GUI::MenuState::MenuState() {
     this->setTag("MenuState");
 }
 
-LevelState *MenuState::getNext() {
+GUI::LevelState *GUI::MenuState::getNext() {
     return new LevelState();
 }
 
-MenuState::~MenuState() = default;
+GUI::MenuState::~MenuState() = default;
 
-State *VictoryState::getNext() {
+GUI::State *GUI::VictoryState::getNext() {
     return new MenuState();
 }

@@ -6,7 +6,7 @@
 #define PAC_MAN_COIN_H
 #include "Collectable.h"
 
-class Coin: public Collectable{
+class Model::Coin: public Model::Collectable{
 public:
     Coin(int row, int col);
 };

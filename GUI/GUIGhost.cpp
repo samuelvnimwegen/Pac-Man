@@ -4,7 +4,7 @@
 
 #include "GUIGhost.h"
 
-GUIGhost::GUIGhost(Ghost *subject) : subject(subject) {
+GUI::GUIGhost::GUIGhost(Ghost *subject) : subject(subject) {
     textureNr = 0;
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
@@ -20,11 +20,11 @@ GUIGhost::GUIGhost(Ghost *subject) : subject(subject) {
     }
 }
 
-Ghost* GUIGhost::getSubject() const {
+Ghost* GUI::GUIGhost::getSubject() const {
     return subject;
 }
 
-sf::Sprite GUIGhost::getSprite() {
+sf::Sprite GUI::GUIGhost::getSprite() {
     sf::Sprite sprite;
 
     sprite = sf::Sprite(this->getTexture(), sf::IntRect(spriteX, 0, 40, 40));

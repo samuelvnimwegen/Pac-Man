@@ -4,7 +4,7 @@
 
 #include "VictoryState.h"
 
-VictoryState::VictoryState() {
+GUI::VictoryState::VictoryState() {
     this->setTag("VictoryState");
 }
 

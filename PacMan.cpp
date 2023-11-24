@@ -5,73 +5,73 @@
 #include "PacMan.h"
 
 
-const string &PacMan::getCurrentDirection() const {
+const string &Model::PacMan::getCurrentDirection() const {
     return currentDirection;
 }
 
-void PacMan::setCurrentDirection(const string &direction) {
+void Model::PacMan::setCurrentDirection(const string &direction) {
     PacMan::currentDirection = direction;
 }
 
 
-World *PacMan::getWorld() const {
+Model::World *Model::PacMan::getWorld() const {
     return world;
 }
 
-void PacMan::setWorld(World *pWorld) {
+void Model::PacMan::setWorld(World *pWorld) {
     PacMan::world = pWorld;
 }
 
-int PacMan::getStartRow() const {
+int Model::PacMan::getStartRow() const {
     return startRow;
 }
 
-void PacMan::setStartRow(int row) {
+void Model::PacMan::setStartRow(int row) {
     PacMan::startRow = row;
 }
 
-int PacMan::getStartCol() const {
+int Model::PacMan::getStartCol() const {
     return startCol;
 }
 
-void PacMan::setStartCol(int col) {
+void Model::PacMan::setStartCol(int col) {
     PacMan::startCol = col;
 }
 
-int PacMan::getScore() const {
+int Model::PacMan::getScore() const {
     return score;
 }
 
-void PacMan::setScore(int newScore) {
+void Model::PacMan::setScore(int newScore) {
     PacMan::score = newScore;
 }
-bool PacMan::isHasMoved() const {
+bool Model::PacMan::isHasMoved() const {
     return hasMoved;
 }
 
-void PacMan::setHasMoved(bool moved) {
+void Model::PacMan::setHasMoved(bool moved) {
     PacMan::hasMoved = moved;
 }
-double PacMan::getXSpeed() const {
+double Model::PacMan::getXSpeed() const {
     return xSpeed;
 }
 
-void PacMan::setXSpeed(double speed) {
+void Model::PacMan::setXSpeed(double speed) {
     PacMan::xSpeed = speed;
 }
 
-double PacMan::getYSpeed() const {
+double Model::PacMan::getYSpeed() const {
     return ySpeed;
 }
 
-void PacMan::setYSpeed(double speed) {
+void Model::PacMan::setYSpeed(double speed) {
     PacMan::ySpeed = speed;
 }
 
-const string &PacMan::getNextDirection() const {
+const string &Model::PacMan::getNextDirection() const {
     return nextDirection;
 }
 
-void PacMan::setNextDirection(const string &direction) {
+void Model::PacMan::setNextDirection(const string &direction) {
     PacMan::nextDirection = direction;
 }

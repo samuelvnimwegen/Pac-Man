@@ -5,14 +5,20 @@
 #ifndef PAC_MAN_STOPWATCH_H
 #define PAC_MAN_STOPWATCH_H
 #include "SFML/Graphics.hpp"
+#include "Subject.h"
 
-class Stopwatch {
+class Model::Stopwatch {
+private:
     sf::Time tickTime;
     sf::Clock clock;
-public:
+    static Stopwatch* m_pStopwatch;
+protected:
     explicit Stopwatch();
+public:
+    static Stopwatch* Instance();
 
     int getTicks();
+
 };
 
 

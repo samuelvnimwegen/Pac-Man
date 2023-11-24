@@ -5,9 +5,10 @@
 #ifndef PAC_MAN_GHOST_H
 #define PAC_MAN_GHOST_H
 #include "EntityModel.h"
-class World;
-class Ghost: public EntityModel{
-    World* world;
+#include "Subject.h"
+
+class Model::Ghost: public Model::EntityModel{
+    Model::World* world;
     string color;
     string currentDirection;
     string nextDirection;

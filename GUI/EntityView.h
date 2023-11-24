@@ -7,12 +7,13 @@
 #include "../Observer.h"
 #include "SFML/Graphics.hpp"
 
-class EntityView: public Observer{
-    int col;
-    int row;
+class GUI::EntityView: public Model::Observer{
     sf::Texture texture;
     sf::Sprite sprite;
+    double cameraX;
+    double cameraY;
 public:
+
     virtual ~EntityView();
 
     const sf::Texture &getTexture() const;

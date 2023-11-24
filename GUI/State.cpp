@@ -4,16 +4,16 @@
 
 #include "State.h"
 
-const string &State::getTag() const {
+const string &GUI::State::getTag() const {
     return tag;
 }
 
-void State::setTag(const string &tag) {
+void GUI::State::setTag(const string &tag) {
     State::tag = tag;
 }
 
-State::State() {}
+GUI::State::State() {}
 
-State::~State() {
+GUI::State::~State() {
 
 }

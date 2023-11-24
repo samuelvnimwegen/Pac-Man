@@ -7,13 +7,13 @@
 #include "EntityView.h"
 #include "GUIWall.h"
 #include "../AbstractFactory.h"
-class Game;
-class ConcreteFactory: public AbstractFactory{
-    Game* game;
+
+class GUI::ConcreteFactory: public Model::AbstractFactory{
+    GUI::Game* game;
 public:
     ConcreteFactory(World *world, Game *game);
 
-    PacMan * createPacMan(const int &row, const int &col) override;
+    Model::PacMan * createPacMan(const int &row, const int &col) override;
 
     Wall * createWall(const int &row, const int &col) override;
 

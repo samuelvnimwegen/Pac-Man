@@ -6,11 +6,9 @@
 #define PAC_MAN_OBSERVER_H
 #include "World.h"
 
-class Observer {
+class Model::Observer {
 public:
     Observer();
-
-    [[nodiscard]] virtual Subject *getSubject() const = 0;
 };
 
 

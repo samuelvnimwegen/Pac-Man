@@ -21,21 +21,18 @@
 #include "chrono"
 #include "thread"
 #include "GUIGhost.h"
-using namespace std;
 
-class Game {
+class GUI::Game {
     int width;
     int height;
-    EntityView* viewMap[11][20];
     vector<EntityView*> viewEntities;
-    ConcreteFactory* factory;
-    World* world;
-    Stopwatch *stopwatch;
+    Model::World* world;
+    Model::Stopwatch *stopwatch;
     StateManager* stateManager;
-    vector<GUIGhost*> ghosts;
-    vector<GUIWall*> walls;
-    vector<GUICoin*> coins;
-    GUIPacMan* pacMan;
+    vector<GUI::GUIGhost*> ghosts;
+    vector<GUI::GUIWall*> walls;
+    vector<GUI::GUICoin*> coins;
+    GUI::GUIPacMan* pacMan;
 
 public:
     Game(const int &width, const int &height);
@@ -44,9 +41,9 @@ public:
 
     void generateMap();
 
-    static string getDirection();
+    static std::string getDirection();
 
-    static string getInput();
+    static std::string getInput();
 
     [[nodiscard]] pair<int, int> cameraToPixels(double xCamera, double yCamera) const;
 

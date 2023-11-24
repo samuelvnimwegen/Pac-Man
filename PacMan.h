@@ -3,15 +3,14 @@
 //
 
 #ifndef PAC_MAN_PACMAN_H
-#include "EntityModel.h"
 #define PAC_MAN_PACMAN_H
+#include "EntityModel.h"
+#include "Subject.h"
 
-
-class World;
-class PacMan: public EntityModel{
-    World* world;
-    string currentDirection;
-    string nextDirection;
+class Model::PacMan: public Model::EntityModel{
+    Model::World* world;
+    direction currentDirection;
+    direction nextDirection;
     double xSpeed;
     double ySpeed;
     bool hasMoved;
@@ -46,7 +45,7 @@ public:
 
     void setCurrentDirection(const string &direction);
 
-    [[nodiscard]] World *getWorld() const;
+    [[nodiscard]] Model::World *getWorld() const;
 
     void setWorld(World *pWorld);
 

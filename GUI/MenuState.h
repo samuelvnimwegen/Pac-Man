@@ -6,7 +6,7 @@
 #define PAC_MAN_MENUSTATE_H
 #include "State.h"
 #include "LevelState.h"
-class MenuState: public State{
+class GUI::MenuState: public GUI::State{
 public:
     MenuState();
 

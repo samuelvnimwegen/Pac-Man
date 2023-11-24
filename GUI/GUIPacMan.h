@@ -7,8 +7,7 @@
 #include "EntityView.h"
 #include "iostream"
 using namespace std;
-class GUIPacMan: public EntityView{
-    PacMan* subject;
+class GUI::GUIPacMan: public GUI::EntityView{
     int textureNr;
 public:
     explicit GUIPacMan(PacMan *subject);
