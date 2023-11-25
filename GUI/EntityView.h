@@ -22,19 +22,19 @@ public:
 
     void setTexture(const sf::Texture &entityTexture);
 
-     int getCol() const;
-
-    void setCol(int c);
-
-    int getRow() const;
-
-    void setRow(int r);
-
     explicit EntityView();
 
     virtual sf::Sprite getSprite();
 
     void setSprite(const sf::Sprite &entitySprite);
+
+    double getCameraX() const;
+
+    void setCameraX(double x);
+
+    double getCameraY() const;
+
+    void setCameraY(double y);
 };
 
 

@@ -3,7 +3,9 @@
 //
 
 #include "Camera.h"
+using namespace std;
 
+GUI::Camera* GUI::Camera::cameraPointer = nullptr;
 
 
 
@@ -13,6 +15,34 @@ pair<float, float> GUI::Camera::getCameraCoords(int row, int col) const {
     return make_pair(height, width);
 }
 
-GUI::Camera::Camera(int modelWidth, int modelHeight) : modelWidth(modelWidth), modelHeight(modelHeight) {}
+GUI::Camera *GUI::Camera::instance() {
+    if (cameraPointer == nullptr){
+        cameraPointer = new GUI::Camera();
+        return cameraPointer;
+    }
+}
+
+int GUI::Camera::getModelWidth() const {
+    return modelWidth;
+}
+
+void GUI::Camera::setModelWidth(int width) {
+    Camera::modelWidth = width;
+}
+
+int GUI::Camera::getModelHeight() const {
+    return modelHeight;
+}
+
+void GUI::Camera::setModelHeight(int height) {
+    Camera::modelHeight = height;
+}
+
+GUI::Camera::Camera(){
+    this->modelWidth = 0;
+    this->modelHeight = 0;
+};
+
+GUI::Camera::~Camera() = default;
 
 

@@ -4,25 +4,7 @@
 
 #include "GUIGhost.h"
 
-GUI::GUIGhost::GUIGhost(Ghost *subject) : subject(subject) {
-    textureNr = 0;
-    sf::Texture texture;
-    texture.loadFromFile("Sprites.png");
-    this->setTexture(texture);
-    if (this->getSubject()->getColor() == "RED"){
-        spriteX = 0;
-    }else if (this->getSubject()->getColor() == "PINK"){
-        spriteX = 50;
-    }else if (this->getSubject()->getColor() == "BLUE"){
-        spriteX = 100;
-    }else {
-        spriteX = 150;
-    }
-}
 
-Ghost* GUI::GUIGhost::getSubject() const {
-    return subject;
-}
 
 sf::Sprite GUI::GUIGhost::getSprite() {
     sf::Sprite sprite;
@@ -32,3 +14,21 @@ sf::Sprite GUI::GUIGhost::getSprite() {
 
     return sprite;
 }
+
+GUI::GUIGhost::GUIGhost(color ghostColor) : ghostColor(ghostColor) {
+    textureNr = 0;
+    sf::Texture texture;
+    texture.loadFromFile("Sprites.png");
+    this->setTexture(texture);
+    if (ghostColor == color::red){
+        spriteX = 0;
+    }else if (ghostColor == color::pink){
+        spriteX = 50;
+    }else if (ghostColor == color::blue){
+        spriteX = 100;
+    }else {
+        spriteX = 150;
+    }
+}
+
+

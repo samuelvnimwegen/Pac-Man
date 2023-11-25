@@ -3,11 +3,12 @@
 //
 
 #include "GUIPacMan.h"
+using namespace std;
 
 
 sf::Sprite GUI::GUIPacMan::getSprite() {
     sf::Sprite sprite;
-    string direction = this->getSubject()->getCurrentDirection();
+    string direction = this->getPacMan()->getCurrentDirection();
     if (direction == "NONE"){
         sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 1, 40, 40));
     }
@@ -44,24 +45,21 @@ sf::Sprite GUI::GUIPacMan::getSprite() {
             sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 551, 40, 40));
         }
     }
-    if (this->getSubject()->isHasMoved()){
+    if (this->getPacMan()->isHasMoved()){
         this->updateTextureNr();
     }
     return sprite;
 }
 
-GUI::GUIPacMan::GUIPacMan(PacMan *subject) : subject(subject) {
-    this->setRow(subject->getRow());
-    this->setCol(subject->getCol());
+GUI::GUIPacMan::GUIPacMan(Model::PacMan *subject){
+    pacMan = subject;
     textureNr = 0;
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
     this->setTexture(texture);
 }
 
-PacMan *GUI::GUIPacMan::getSubject() const {
-    return subject;
-}
+
 
 int GUI::GUIPacMan::getTextureNr() const {
     return textureNr;
@@ -83,3 +81,12 @@ void GUI::GUIPacMan::updateTextureNr() {
 GUI::GUIPacMan::~GUIPacMan() {
 
 }
+
+Model::PacMan *GUI::GUIPacMan::getPacMan() const {
+    return pacMan;
+}
+
+void GUI::GUIPacMan::setPacMan(Model::PacMan *pMan) {
+    GUIPacMan::pacMan = pMan;
+}
+

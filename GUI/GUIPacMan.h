@@ -6,11 +6,12 @@
 #define PAC_MAN_GUIPACMAN_H
 #include "EntityView.h"
 #include "iostream"
-using namespace std;
+
 class GUI::GUIPacMan: public GUI::EntityView{
+    Model::PacMan* pacMan;
     int textureNr;
 public:
-    explicit GUIPacMan(PacMan *subject);
+    explicit GUIPacMan(Model::PacMan *pacMan);
 
     ~GUIPacMan() override;
 
@@ -18,11 +19,13 @@ public:
 
     sf::Sprite getSprite() override;
 
-    PacMan * getSubject() const override;
-
     int getTextureNr() const;
 
     void setTextureNr(int nr);
+
+    Model::PacMan *getPacMan() const;
+
+    void setPacMan(Model::PacMan *pMan);
 };
 
 

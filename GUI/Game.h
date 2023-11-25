@@ -28,6 +28,7 @@ class GUI::Game {
     vector<EntityView*> viewEntities;
     Model::World* world;
     Model::Stopwatch *stopwatch;
+    GUI::Camera* camera;
     StateManager* stateManager;
     vector<GUI::GUIGhost*> ghosts;
     vector<GUI::GUIWall*> walls;
@@ -55,9 +56,9 @@ public:
 
     void setHeight(int hg);
 
-    [[nodiscard]] World *getWorld() const;
+    [[nodiscard]] Model::World *getWorld() const;
 
-    void setWorld(World *sWorld);
+    void setWorld(Model::World *sWorld);
 
     void setViewItem(EntityView* entity, const int &row, const int &col);
 
@@ -65,9 +66,9 @@ public:
 
     void setStateManager(StateManager *state);
 
-    [[nodiscard]] Stopwatch *getStopwatch() const;
+    [[nodiscard]] Model::Stopwatch *getStopwatch() const;
 
-    void setStopwatch(Stopwatch *newStopwatch);
+    void setStopwatch(Model::Stopwatch *newStopwatch);
 
     [[nodiscard]] const vector<GUIGhost *> &getGhosts() const;
 

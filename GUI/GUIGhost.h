@@ -7,13 +7,11 @@
 #include "EntityView.h"
 
 class GUI::GUIGhost: public GUI::EntityView{
-    Ghost* subject;
     int textureNr;
     int spriteX;
+    color ghostColor;
 public:
-    explicit GUIGhost(Ghost *subject);
-
-    Ghost * getSubject() const override;
+    explicit GUIGhost(color ghostColor);
 
     sf::Sprite getSprite() override;
 };

@@ -9,27 +9,6 @@ sf::Sprite GUI::EntityView::getSprite() {
     return sprite;
 }
 
-GUI::EntityView::EntityView(){
-    col = 0;
-    row = 0;
-}
-
-int GUI::EntityView::getCol() const {
-    return col;
-}
-
-void GUI::EntityView::setCol(int c) {
-    EntityView::col = c;
-}
-
-int GUI::EntityView::getRow() const {
-    return row;
-}
-
-void GUI::EntityView::setRow(int r) {
-    EntityView::row = r;
-}
-
 const sf::Texture &GUI::EntityView::getTexture() const {
     return texture;
 }
@@ -50,7 +29,26 @@ void GUI::EntityView::removeSprite() {
     this->setSprite(spr);
 }
 
-GUI::EntityView::~EntityView() {
+GUI::EntityView::~EntityView() = default;
 
+GUI::EntityView::EntityView() {
+    cameraX = 0;
+    cameraY = 0;
+}
+
+double GUI::EntityView::getCameraX() const {
+    return cameraX;
+}
+
+void GUI::EntityView::setCameraX(double x) {
+    EntityView::cameraX = x;
+}
+
+double GUI::EntityView::getCameraY() const {
+    return cameraY;
+}
+
+void GUI::EntityView::setCameraY(double y) {
+    EntityView::cameraY = y;
 }
 

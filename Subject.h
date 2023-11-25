@@ -41,6 +41,8 @@ namespace GUI{
 }
 enum direction {up, down, left, right};
 
+enum color{red, pink, blue, orange, green, purple};
+
 class Model::Subject {
     int row;
     int col;

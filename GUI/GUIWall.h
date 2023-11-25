@@ -7,13 +7,11 @@
 #include "EntityView.h"
 
 class GUI::GUIWall: public GUI::EntityView {
-    Wall* subject;
 public:
-    explicit GUIWall(Wall *subject);
+    GUIWall();
 
     ~GUIWall() override;
 
-    Subject * getSubject() const override;
 
 };
 

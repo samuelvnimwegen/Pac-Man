@@ -7,12 +7,15 @@
 
 
 
-Game::Game(const int &wd, const int &hg) {
+GUI::Game::Game(const int &wd, const int &hg) {
     width = wd;
     height = hg;
     pacMan = nullptr;
+    camera = GUI::Camera::instance();
+    camera->setModelHeight(this->getHeight());
+    camera->setModelWidth(this->getWidth());
 
-    world = new World();
+    world = new Model::World();
     this->generateMap();
     world->buildWorld();
     stateManager = new StateManager();
@@ -334,14 +337,10 @@ GUI::ConcreteFactory::ConcreteFactory(World *world, Game *game) : AbstractFactor
 Model::PacMan *GUI::ConcreteFactory::createPacMan(const int &row, const int &col) {
     auto* entity = new Model::PacMan(row, col, this->getWorld());
     auto observer = new GUI::GUIPacMan(entity);
-    entity->setCameraX(world->getCamera()->getCameraCoords(row, col).second);
-    entity->setCameraY(world->getCamera()->getCameraCoords(row, col).first);
-    world->addItem(entity);
-    world->setPacMan(entity);
-    auto viewItem = new GUI::GUIPacMan(subject);
-    game->setViewItem(viewItem, row, col);
-    game->setPacMan(viewItem);
-    return subject;
+    entity->addObserver(observer);
+    this->getWorld()->addItem(entity);
+    this->getWorld()->setPacMan(entity);
+    return entity;
 }
 
 Wall *GUI::ConcreteFactory::createWall(const int &row, const int &col) {

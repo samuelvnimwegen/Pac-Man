@@ -7,13 +7,10 @@
 #include "EntityView.h"
 
 class GUI::GUICoin: public GUI::EntityView{
-    Coin* subject;
 public:
-    explicit GUICoin(Coin *subject);
+    explicit GUICoin();
 
     ~GUICoin() override;
-
-    Coin* getSubject() const override;
 };
 
 

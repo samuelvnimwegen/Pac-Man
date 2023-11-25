@@ -11,15 +11,15 @@
 class GUI::ConcreteFactory: public Model::AbstractFactory{
     GUI::Game* game;
 public:
-    ConcreteFactory(World *world, Game *game);
+    ConcreteFactory(Model::World *world, Game *game);
 
     Model::PacMan * createPacMan(const int &row, const int &col) override;
 
-    Wall * createWall(const int &row, const int &col) override;
+    Model::Wall * createWall(const int &row, const int &col) override;
 
-    Coin * createCoin(const int &row, const int &col) override;
+    Model::Coin * createCoin(const int &row, const int &col) override;
 
-    Ghost * createGhost(const int &row, const int &col) override;
+    Model::Ghost * createGhost(const int &row, const int &col) override;
 };
 
 

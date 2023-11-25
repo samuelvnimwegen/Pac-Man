@@ -8,12 +8,25 @@
 #include "Subject.h"
 
 class GUI::Camera {
-    int modelWidth;
-    int modelHeight;
+    int modelWidth{};
+    int modelHeight{};
+    static GUI::Camera* cameraPointer;
 public:
-    Camera(int modelWidth, int modelHeight);
+    virtual ~Camera();
+    static  GUI::Camera *instance();
+
+    [[nodiscard]] int getModelWidth() const;
+
+    void setModelWidth(int width);
+
+    [[nodiscard]] int getModelHeight() const;
+
+    void setModelHeight(int height);
 
     [[nodiscard]] std::pair<float,float> getCameraCoords(int row, int col) const;
+protected:
+    Camera();
+
 };
 
 

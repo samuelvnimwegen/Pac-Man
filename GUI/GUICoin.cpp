@@ -5,13 +5,8 @@
 #include "GUICoin.h"
 
 
-Coin *GUI::GUICoin::getSubject() const {
-    return subject;
-}
 
-GUI::GUICoin::GUICoin(Coin *subject) : subject(subject) {
-    this->setCol(subject->getCol());
-    this->setRow(subject->getRow());
+GUI::GUICoin::GUICoin(){
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
     this->setTexture(texture);
