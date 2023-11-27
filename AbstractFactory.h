@@ -5,7 +5,6 @@
 #ifndef PAC_MAN_ABSTRACTFACTORY_H
 #define PAC_MAN_ABSTRACTFACTORY_H
 
-#include "iostream"
 #include "Subject.h"
 
 class Model::AbstractFactory {
@@ -21,7 +20,7 @@ public:
 
     virtual Model::Ghost* createGhost(const int &row, const int &col) = 0;
 
-    World *getWorld() const;
+    [[nodiscard]] Model::World *getWorld() const;
 
     void setWorld(World *newWorld);
 };

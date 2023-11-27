@@ -12,8 +12,8 @@ Model::World::World() {
     width = 20;
     height = 11;
     factory = nullptr;
-    camera = new Camera(width, height);
     coinsLeft = 0;
+    pacMan = nullptr;
 }
 
 int Model::World::getHeight() const {
@@ -60,78 +60,78 @@ void Model::World::buildWorld() {
     }
 
     // Muren om level heen
-    for (int i = 0; i < width; ++i){
-        this->getFactory()->createEntity("Wall", 0, i);
-        this->getFactory()->createEntity("Wall", height - 1, i);
+    for (int i = 0; i < this->getWidth(); ++i){
+        this->getFactory()->createWall(0, i);
+        this->getFactory()->createWall(this->getHeight() - 1, i);
     }
-    for (int i = 0; i < height; ++i){
-        this->getFactory()->createEntity("Wall", i, 0);
-        this->getFactory()->createEntity("Wall", i, width - 1);
+    for (int i = 0; i < this->getHeight(); ++i){
+        this->getFactory()->createWall(i, 0);
+        this->getFactory()->createWall(i, this->getWidth() - 1);
     }
 
     // Links muren:
-    this->getFactory()->createEntity("Wall", 2, 2);
-    this->getFactory()->createEntity("Wall", 2, 3);
-    this->getFactory()->createEntity("Wall", 3, 2);
-    this->getFactory()->createEntity("Wall", 4, 2);
+    this->getFactory()->createWall(2, 2);
+    this->getFactory()->createWall(2, 3);
+    this->getFactory()->createWall(3, 2);
+    this->getFactory()->createWall(4, 2);
 
-    this->getFactory()->createEntity("Wall", 6, 2);
-    this->getFactory()->createEntity("Wall", 7, 2);
-    this->getFactory()->createEntity("Wall", 8, 2);
-    this->getFactory()->createEntity("Wall", 8, 3);
+    this->getFactory()->createWall(6, 2);
+    this->getFactory()->createWall(7, 2);
+    this->getFactory()->createWall(8, 2);
+    this->getFactory()->createWall(8, 3);
 
-    this->getFactory()->createEntity("Wall", 4, 4);
-    this->getFactory()->createEntity("Wall", 4, 5);
+    this->getFactory()->createWall(4, 4);
+    this->getFactory()->createWall(4, 5);
 
-    this->getFactory()->createEntity("Wall", 6, 4);
-    this->getFactory()->createEntity("Wall", 6, 5);
+    this->getFactory()->createWall(6, 4);
+    this->getFactory()->createWall(6, 5);
 
-    this->getFactory()->createEntity("Wall", 1, 5);
-    this->getFactory()->createEntity("Wall", 2, 5);
+    this->getFactory()->createWall(1, 5);
+    this->getFactory()->createWall(2, 5);
 
-    this->getFactory()->createEntity("Wall", 8, 5);
-    this->getFactory()->createEntity("Wall", 9, 5);
+    this->getFactory()->createWall(8, 5);
+    this->getFactory()->createWall(9, 5);
 
     for (int i = 7; i < 13; ++i){
-        this->getFactory()->createEntity("Wall", 2, i);
-        this->getFactory()->createEntity("Wall", 6, i);
-        this->getFactory()->createEntity("Wall", 8, i);
+        this->getFactory()->createWall(2, i);
+        this->getFactory()->createWall(6, i);
+        this->getFactory()->createWall(8, i);
     }
 
-    this->getFactory()->createEntity("Wall", 5, 7);
-    this->getFactory()->createEntity("Wall", 5, 12);
+    this->getFactory()->createWall(5, 7);
+    this->getFactory()->createWall(5, 12);
 
-    this->getFactory()->createEntity("Wall", 4, 7);
-    this->getFactory()->createEntity("Wall", 4, 8);
-    this->getFactory()->createEntity("Wall", 4, 11);
-    this->getFactory()->createEntity("Wall", 4, 12);
+    this->getFactory()->createWall(4, 7);
+    this->getFactory()->createWall(4, 8);
+    this->getFactory()->createWall(4, 11);
+    this->getFactory()->createWall(4, 12);
 
     // Rechts
-    this->getFactory()->createEntity("Wall", 2, this->getWidth() - 1 - 2);
-    this->getFactory()->createEntity("Wall", 2, this->getWidth() - 1 - 3);
-    this->getFactory()->createEntity("Wall", 3, this->getWidth() - 1 - 2);
-    this->getFactory()->createEntity("Wall", 4, this->getWidth() - 1 - 2);
+    this->getFactory()->createWall(2, this->getWidth() - 1 - 2);
+    this->getFactory()->createWall(2, this->getWidth() - 1 - 3);
+    this->getFactory()->createWall(3, this->getWidth() - 1 - 2);
+    this->getFactory()->createWall(4, this->getWidth() - 1 - 2);
 
-    this->getFactory()->createEntity("Wall", 6, this->getWidth() - 1 - 2);
-    this->getFactory()->createEntity("Wall", 7, this->getWidth() - 1 - 2);
-    this->getFactory()->createEntity("Wall", 8, this->getWidth() - 1 - 2);
-    this->getFactory()->createEntity("Wall", 8, this->getWidth() - 1 - 3);
+    this->getFactory()->createWall(6, this->getWidth() - 1 - 2);
+    this->getFactory()->createWall(7, this->getWidth() - 1 - 2);
+    this->getFactory()->createWall(8, this->getWidth() - 1 - 2);
+    this->getFactory()->createWall(8, this->getWidth() - 1 - 3);
 
-    this->getFactory()->createEntity("Wall", 4, this->getWidth() - 1 - 4);
-    this->getFactory()->createEntity("Wall", 4, this->getWidth() - 1 - 5);
+    this->getFactory()->createWall(4, this->getWidth() - 1 - 4);
+    this->getFactory()->createWall(4, this->getWidth() - 1 - 5);
 
-    this->getFactory()->createEntity("Wall", 6, this->getWidth() - 1 - 4);
-    this->getFactory()->createEntity("Wall", 6, this->getWidth() - 1 - 5);
+    this->getFactory()->createWall(6, this->getWidth() - 1 - 4);
+    this->getFactory()->createWall(6, this->getWidth() - 1 - 5);
 
-    this->getFactory()->createEntity("Wall", 1, this->getWidth() - 1 - 5);
-    this->getFactory()->createEntity("Wall", 2, this->getWidth() - 1 - 5);
+    this->getFactory()->createWall(1, this->getWidth() - 1 - 5);
+    this->getFactory()->createWall(2, this->getWidth() - 1 - 5);
 
-    this->getFactory()->createEntity("Wall", 8, this->getWidth() - 1 - 5);
-    this->getFactory()->createEntity("Wall", 9, this->getWidth() - 1 - 5);
+    this->getFactory()->createWall(8, this->getWidth() - 1 - 5);
+    this->getFactory()->createWall(9, this->getWidth() - 1 - 5);
 
-    this->getFactory()->createEntity("PacMan", 1, 1);
+    this->getFactory()->createPacMan(1, 1);
 
-    this->getFactory()->createEntity("Ghost", 5, 9);
+    this->getFactory()->createGhost(5, 9);
 
     for (int i = 0; i < this->getHeight(); ++i){
         for (int j = 0; j < this->getWidth(); ++j){
@@ -513,6 +513,8 @@ Model::PacMan::PacMan(int row, int col, Model::World *world) : EntityModel(row, 
     score = 0;
     startRow = row;
     startCol = col;
+    currentDirection = direction::none;
+    nextDirection = direction::none;
 }
 
 
@@ -591,26 +593,24 @@ void Model::PacMan::die() {
     this->setNextDirection("NONE");
     this->setCol(getStartCol());
     this->setRow(getStartRow());
-    this->setCameraX(this->getWorld()->getCamera()->getCameraCoords(getStartRow(), getStartCol()).second);
-    this->setCameraY(this->getWorld()->getCamera()->getCameraCoords(getStartRow(), getStartCol()).first);
 }
 
 
 
-int Model::Ghost::getManhattanDistance(const string& direction) {
+int Model::Ghost::getManhattanDistance(const direction &direction) {
     int pacManRow = this->getWorld()->getPacMan()->getRow();
     int pacManCol = this->getWorld()->getPacMan()->getCol();
-    if (direction == "UP"){
+    if (direction == direction::up){
         return abs(this->getRow() - 1 - pacManRow) + abs(this->getCol() - pacManCol);
     }
-    else if (direction == "DOWN"){
+    else if (direction == direction::down){
         return abs(this->getRow() + 1 - pacManRow) + abs(this->getCol() - pacManCol);
     }
-    else if (direction == "LEFT"){
+    else if (direction == direction::left){
         return abs(this->getRow() - pacManRow) + abs(this->getCol() - 1 - pacManCol);
     }
     else {
-        assert(direction == "RIGHT");
+        assert(direction == direction::right);
         return abs(this->getRow() - pacManRow) + abs(this->getCol() + 1 - pacManCol);
     }
 }
@@ -622,29 +622,41 @@ bool Model::Ghost::canMove(const int &row, const int &col) const {
     return false;
 }
 
+Model::Ghost::Ghost(int row, int col, Model::World *world) : EntityModel(row, col), world(world) {
+    this->setTag("Ghost");
+    currentDirection = direction::up;
+    currentState = "WAITING";
+    justTurned = true;
+    startRow = row;
+    startCol = col;
+    ghostColor = color::blue;
+    nextDirection = direction::none;
+}
+
+
 void Model::Ghost::move(const int &ticks) {
     this->changeDirection();
-    if (this->getCurrentDirection() == "UP"){
-        double yCoord = this->getCameraY();
-        yCoord -= ticks * this->getYSpeed();
+    if (this->getCurrentDirection() == up){
+        double yCoord = this->getObservers().at(0)->getCameraY();
+        yCoord -= ticks * this->getObservers().at(0)->getYSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
-        if (this->getNextDirection() == "RIGHT" and canMove(this->getRow(), this->getCol() + 1)){
-            double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
+        if (this->getNextDirection() == direction::right and canMove(this->getRow(), this->getCol() + 1)){
+            double wallYCoord = this->getWorld()->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord < wallYCoord){
-                this->setCameraY(wallYCoord);
+                this->getObservers().at(0)->setCameraY(wallYCoord);
                 // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
-                this->setCameraX(this->getCameraX() + this->getXSpeed());
-                this->setCurrentDirection("RIGHT");
-                this->setNextDirection("NONE");
+                this->getObservers().at(0)->setCameraX(this->getCameraX() + this->getXSpeed());
+                this->setCurrentDirection(direction::right);
+                this->setNextDirection(direction::none);
             }
             else{
                 this->setCameraY(yCoord);
             }
         }
 
-        // Als volgende direction naar links is en hij kan naar links:
+            // Als volgende direction naar links is en hij kan naar links:
         else if (this->getNextDirection() == "LEFT" and canMove(this->getRow(), this->getCol() - 1)){
-            double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
+            double wallYCoord = this->getWorld()->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
@@ -657,7 +669,7 @@ void Model::Ghost::move(const int &ticks) {
             }
         }
 
-        // Als de volgende tile een muur is:
+            // Als de volgende tile een muur is:
         else if (world->getItem(this->getRow() - 1, this->getCol()) != nullptr and world->getItem(this->getRow() - 1, this->getCol())->getTag() == "Wall"){
             double wallYCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first;
             if (yCoord < wallYCoord){
@@ -668,14 +680,14 @@ void Model::Ghost::move(const int &ticks) {
             }
         }
 
-        // Checken of hij dichter bij een ander vakje staat dan het huidige
+            // Checken of hij dichter bij een ander vakje staat dan het huidige
         else if (abs(world->getCamera()->getCameraCoords(this->getRow() - 1, this->getCol()).first - yCoord) <
                  abs(world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).first - yCoord)){
             // Als het vakje een ghost bevat:
             if (world->getItem(this->getRow() + 1, this->getCol()) != nullptr and world->getItem(this->getRow() + 1, this->getCol())->getTag() == "PacMan"){
                 this->getWorld()->die();
             }
-            // Als het volgende vakje geen muur is: gaan
+                // Als het volgende vakje geen muur is: gaan
             else if (canMove(this->getRow() - 1, this->getCol())){
                 this->setCameraY(yCoord);
                 auto tempItem = world->getItem(this->getRow() - 1, this->getCol());
@@ -735,7 +747,7 @@ void Model::Ghost::move(const int &ticks) {
             if (world->getItem(this->getRow() + 1, this->getCol()) != nullptr and world->getItem(this->getRow() + 1, this->getCol())->getTag() == "PacMan"){
                 this->getWorld()->die();
             }
-            // Als het volgende vakje geen muur is: gaan
+                // Als het volgende vakje geen muur is: gaan
             else if (canMove(getRow() + 1, getCol())){
                 this->setCameraY(yCoord);
                 auto tempItem = world->getItem(this->getRow() + 1, this->getCol());
@@ -778,7 +790,7 @@ void Model::Ghost::move(const int &ticks) {
                 this->setCameraX(xCoord);
             }
         }
-        // Als de volgende tile een muur is:
+            // Als de volgende tile een muur is:
         else if (world->getItem(this->getRow(), this->getCol() + 1) != nullptr and world->getItem(this->getRow(), this->getCol() + 1)->getTag() == "Wall"){
             double wallXCoord = world->getCamera()->getCameraCoords(this->getRow(), this->getCol()).second;
             if (xCoord > wallXCoord){
@@ -795,7 +807,7 @@ void Model::Ghost::move(const int &ticks) {
             if (world->getItem(this->getRow(), this->getCol() + 1) != nullptr and world->getItem(this->getRow(), this->getCol() + 1)->getTag() == "PacMan"){
                 this->getWorld()->die();
             }
-            // Als het volgende vakje geen muur is: gaan
+                // Als het volgende vakje geen muur is: gaan
             else if (canMove(this->getRow(), this->getCol() + 1)){
                 this->setCameraX(xCoord);
                 auto tempItem = world->getItem(this->getRow(), this->getCol() + 1);
@@ -854,7 +866,7 @@ void Model::Ghost::move(const int &ticks) {
             if (world->getItem(this->getRow(), this->getCol() - 1) != nullptr and world->getItem(this->getRow(), this->getCol() - 1)->getTag() == "PacMan"){
                 this->getWorld()->die();
             }
-            // Als het volgende vakje geen muur is: gaan
+                // Als het volgende vakje geen muur is: gaan
             else if (canMove(this->getRow(), this->getCol() - 1)){
                 this->setCameraX(xCoord);
                 auto tempItem = world->getItem(this->getRow(), this->getCol() - 1);
@@ -870,29 +882,6 @@ void Model::Ghost::move(const int &ticks) {
         assert(false);
     }
 }
-Model::Ghost::Ghost(int row, int col, Model::World *world) : EntityModel(row, col), world(world) {
-    this->setTag("Ghost");
-    color = "NONE";
-    currentDirection = "UP";
-    currentState = "WAITING";
-    xSpeed = double(1) / this->getWorld()->getWidth() / 150;
-    ySpeed = double(1) / this->getWorld()->getHeight() / 150;
-    justTurned = true;
-    startRow = row;
-    startCol = col;
-}
 
-
-
-void Model::Ghost::reset() {
-    this->getWorld()->setItem(nullptr, getRow(), getCol());
-    this->getWorld()->setItem(this, getStartRow(), getStartCol());
-    this->setCurrentDirection("UP");
-    this->setNextDirection("NONE");
-    this->setCol(getStartCol());
-    this->setRow(getStartRow());
-    this->setCameraX(this->getWorld()->getCamera()->getCameraCoords(getStartRow(), getStartCol()).second);
-    this->setCameraY(this->getWorld()->getCamera()->getCameraCoords(getStartRow(), getStartCol()).first);
-}
 
 

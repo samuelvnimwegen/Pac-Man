@@ -9,12 +9,10 @@
 
 class Model::Ghost: public Model::EntityModel{
     Model::World* world;
-    string color;
-    string currentDirection;
-    string nextDirection;
-    string currentState;
-    double xSpeed;
-    double ySpeed;
+    color ghostColor;
+    direction currentDirection;
+    direction nextDirection;
+    std::string currentState;
     bool justTurned;
     int startRow;
     int startCol;
@@ -30,39 +28,19 @@ public:
 
     [[nodiscard]] bool canMove(const int &row, const int &col) const;
 
-    [[nodiscard]] int getManhattanDistance(const string& direction);
+    [[nodiscard]] int getManhattanDistance(const direction &direction);
 
     [[nodiscard]] World *getWorld() const;
-
-    [[nodiscard]] const string &getColor() const;
-
-    void setColor(const string &color);
-
-    [[nodiscard]] const string &getCurrentDirection() const;
-
-    void setCurrentDirection(const string &direction);
-
-    [[nodiscard]] double getXSpeed() const;
-
-    void setXSpeed(double speed);
-
-    [[nodiscard]] double getYSpeed() const;
-
-    void setYSpeed(double speed);
 
     [[nodiscard]] bool isJustTurned() const;
 
     void setJustTurned(bool turned);
 
-    [[nodiscard]] const string &getNextDirection() const;
-
-    void setNextDirection(const string &direction);
-
     void setWorld(World *gWorld);
 
-    [[nodiscard]] const string &getCurrentState() const;
+    [[nodiscard]] const std::string &getCurrentState() const;
 
-    void setCurrentState(const string &state);
+    void setCurrentState(const std::string &state);
 
     [[nodiscard]] int getStartRow() const;
 
@@ -71,6 +49,18 @@ public:
     [[nodiscard]] int getStartCol() const;
 
     void setStartCol(int col);
+
+    color getColor() const;
+
+    void setColor(color col);
+
+    direction getCurrentDirection() const;
+
+    void setCurrentDirection(direction direction);
+
+    direction getNextDirection() const;
+
+    void setNextDirection(direction direction);
 };
 
 

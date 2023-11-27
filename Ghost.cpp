@@ -3,61 +3,28 @@
 //
 
 #include "Ghost.h"
-
+using namespace std;
 Model::World *Model::Ghost::getWorld() const {
     return world;
 }
 
-
-
-const string &Model::Ghost::getColor() const {
-    return color;
-}
-
-void Model::Ghost::setColor(const string &ghostColor) {
-    Ghost::color = ghostColor;
-}
-
-const string &Model::Ghost::getCurrentDirection() const {
-    return currentDirection;
-}
-
-void Model::Ghost::setCurrentDirection(const string &direction) {
-    Ghost::currentDirection = direction;
-}
-
-double Model::Ghost::getXSpeed() const {
-    return xSpeed;
-}
-
-void Model::Ghost::setXSpeed(double speed) {
-    Ghost::xSpeed = speed;
-}
-
-double Model::Ghost::getYSpeed() const {
-    return ySpeed;
-}
-
-void Model::Ghost::setYSpeed(double speed) {
-    Ghost::ySpeed = speed;
-}
 void Model::Ghost::changeDirection() {
     int minDistance = 1000000;
     string direction = "NONE";
     // Als hij omhoog kan:
     if (this->canMove(this->getRow() - 1, this->getCol())){
-        int distance = this->getManhattanDistance("UP");
+        int distance = this->getManhattanDistance(direction::up);
         if (distance < minDistance){
             minDistance = distance;
-            direction = "UP";
+            direction = direction::up;
         }
     }
     // Als hij naar beneden kan:
     if (this->canMove(this->getRow() + 1, this->getCol())){
-        int distance = this->getManhattanDistance("DOWN");
+        int distance = this->getManhattanDistance(down);
         if (distance < minDistance){
             minDistance = distance;
-            direction = "DOWN";
+            direction = down;
         }
     }
     // Als hij naar rechts kan:
@@ -131,13 +98,6 @@ void Model::Ghost::setJustTurned(bool turned) {
     Ghost::justTurned = turned;
 }
 
-const string &Model::Ghost::getNextDirection() const {
-    return nextDirection;
-}
-
-void Model::Ghost::setNextDirection(const string &direction) {
-    Ghost::nextDirection = direction;
-}
 void Model::Ghost::setWorld(World *gWorld) {
     Ghost::world = gWorld;
 }
@@ -167,3 +127,34 @@ void Model::Ghost::setStartCol(int col) {
 }
 
 
+color Model::Ghost::getColor() const {
+    return ghostColor;
+}
+
+void Model::Ghost::setColor(color col) {
+    Ghost::ghostColor = col;
+}
+
+direction Model::Ghost::getCurrentDirection() const {
+    return currentDirection;
+}
+
+void Model::Ghost::setCurrentDirection(direction direction) {
+    Ghost::currentDirection = direction;
+}
+
+direction Model::Ghost::getNextDirection() const {
+    return nextDirection;
+}
+
+void Model::Ghost::setNextDirection(direction direction) {
+    Ghost::nextDirection = direction;
+}
+
+
+void Model::Ghost::reset() {
+    this->setCurrentDirection(up);
+    this->setNextDirection(none);
+    this->setCol(getStartCol());
+    this->setRow(getStartRow());
+}

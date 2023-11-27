@@ -8,8 +8,10 @@
 #include "Subject.h"
 
 class GUI::Camera {
-    int modelWidth{};
-    int modelHeight{};
+    int modelWidth;
+    int modelHeight;
+    double xSpeed;
+    double ySpeed;
     static GUI::Camera* cameraPointer;
 public:
     virtual ~Camera();
@@ -24,6 +26,15 @@ public:
     void setModelHeight(int height);
 
     [[nodiscard]] std::pair<float,float> getCameraCoords(int row, int col) const;
+
+    [[nodiscard]] double getXSpeed() const;
+
+    void setXSpeed(double speed);
+
+    [[nodiscard]] double getYSpeed() const;
+
+    void setYSpeed(double speed);
+
 protected:
     Camera();
 

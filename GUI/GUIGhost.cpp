@@ -31,4 +31,8 @@ GUI::GUIGhost::GUIGhost(color ghostColor) : ghostColor(ghostColor) {
     }
 }
 
+void GUI::GUIGhost::move(const int &ticks) {
+
+}
+
 

@@ -20,6 +20,7 @@ GUI::Camera *GUI::Camera::instance() {
         cameraPointer = new GUI::Camera();
         return cameraPointer;
     }
+    return cameraPointer;
 }
 
 int GUI::Camera::getModelWidth() const {
@@ -27,6 +28,9 @@ int GUI::Camera::getModelWidth() const {
 }
 
 void GUI::Camera::setModelWidth(int width) {
+    if (this->getModelWidth() != 0){
+        xSpeed =  double(1) / double(this->getModelWidth()) / 100;
+    }
     Camera::modelWidth = width;
 }
 
@@ -35,13 +39,35 @@ int GUI::Camera::getModelHeight() const {
 }
 
 void GUI::Camera::setModelHeight(int height) {
+    if (this->getModelHeight() != 0){
+        ySpeed =  double(1) / double(this->getModelHeight()) / 100;
+    }
     Camera::modelHeight = height;
 }
 
 GUI::Camera::Camera(){
-    this->modelWidth = 0;
-    this->modelHeight = 0;
-};
+    modelWidth = 0;
+    modelHeight = 0;
+    xSpeed = 0;
+    ySpeed = 0;
+}
+
+double GUI::Camera::getXSpeed() const {
+    return xSpeed;
+}
+
+void GUI::Camera::setXSpeed(double speed) {
+    Camera::xSpeed = speed;
+}
+
+double GUI::Camera::getYSpeed() const {
+    return ySpeed;
+}
+
+void GUI::Camera::setYSpeed(double speed) {
+    Camera::ySpeed = speed;
+}
+
 
 GUI::Camera::~Camera() = default;
 

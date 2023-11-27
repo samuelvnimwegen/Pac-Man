@@ -8,11 +8,11 @@ using namespace std;
 
 sf::Sprite GUI::GUIPacMan::getSprite() {
     sf::Sprite sprite;
-    string direction = this->getPacMan()->getCurrentDirection();
-    if (direction == "NONE"){
+    direction dir = this->getDirection();
+    if (dir == direction::none){
         sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 1, 40, 40));
     }
-    else if (direction == "RIGHT"){
+    else if (dir == direction::right){
         if (this->getTextureNr() == 0){
            sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 51, 40, 40));
         }
@@ -20,7 +20,7 @@ sf::Sprite GUI::GUIPacMan::getSprite() {
             sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 101, 40, 40));
         }
     }
-    else if (direction == "DOWN"){
+    else if (dir == direction::left){
         if (this->getTextureNr() == 0){
             sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 201, 40, 40));
         }
@@ -28,7 +28,7 @@ sf::Sprite GUI::GUIPacMan::getSprite() {
             sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 251, 40, 40));
         }
     }
-    else if (direction == "LEFT"){
+    else if (dir == direction::up){
         if (this->getTextureNr() == 0){
             sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 351, 40, 40));
         }
@@ -37,7 +37,7 @@ sf::Sprite GUI::GUIPacMan::getSprite() {
         }
     }
     else{
-        assert(direction == "UP");
+        assert(dir == direction::up);
         if (this->getTextureNr() == 0){
             sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 501, 40, 40));
         }
@@ -45,18 +45,20 @@ sf::Sprite GUI::GUIPacMan::getSprite() {
             sprite = sf::Sprite(this->getTexture(), sf::IntRect(850, 551, 40, 40));
         }
     }
-    if (this->getPacMan()->isHasMoved()){
+    if (this->isHasMoved()){
         this->updateTextureNr();
     }
     return sprite;
 }
 
-GUI::GUIPacMan::GUIPacMan(Model::PacMan *subject){
-    pacMan = subject;
+GUI::GUIPacMan::GUIPacMan(){
     textureNr = 0;
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
     this->setTexture(texture);
+    currentDirection = direction::none;
+    hasMoved = false;
+    pacMan = nullptr;
 }
 
 
@@ -78,15 +80,32 @@ void GUI::GUIPacMan::updateTextureNr() {
     }
 }
 
-GUI::GUIPacMan::~GUIPacMan() {
-
+direction GUI::GUIPacMan::getDirection() const {
+    return currentDirection;
 }
 
-Model::PacMan *GUI::GUIPacMan::getPacMan() const {
-    return pacMan;
+void GUI::GUIPacMan::setDirection(direction dir) {
+    GUIPacMan::currentDirection = dir;
 }
 
-void GUI::GUIPacMan::setPacMan(Model::PacMan *pMan) {
-    GUIPacMan::pacMan = pMan;
+GUI::GUIPacMan::~GUIPacMan() = default;
+
+direction GUI::GUIPacMan::getCurrentDirection() const {
+    return currentDirection;
 }
 
+void GUI::GUIPacMan::setCurrentDirection(direction direction) {
+    GUIPacMan::currentDirection = direction;
+}
+
+bool GUI::GUIPacMan::isHasMoved() const {
+    return hasMoved;
+}
+
+void GUI::GUIPacMan::setHasMoved(bool moved) {
+    GUIPacMan::hasMoved = moved;
+}
+
+void GUI::GUIPacMan::move() {
+
+}

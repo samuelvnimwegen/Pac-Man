@@ -10,10 +10,14 @@
 class GUI::GUIPacMan: public GUI::EntityView{
     Model::PacMan* pacMan;
     int textureNr;
+    direction currentDirection;
+    bool hasMoved;
 public:
-    explicit GUIPacMan(Model::PacMan *pacMan);
+    explicit GUIPacMan();
 
     ~GUIPacMan() override;
+
+    void move();
 
     void updateTextureNr();
 
@@ -23,9 +27,17 @@ public:
 
     void setTextureNr(int nr);
 
-    Model::PacMan *getPacMan() const;
+    direction getDirection() const;
 
-    void setPacMan(Model::PacMan *pMan);
+    void setDirection(direction direction);
+
+    direction getCurrentDirection() const;
+
+    void setCurrentDirection(direction direction);
+
+    bool isHasMoved() const;
+
+    void setHasMoved(bool moved);
 };
 
 

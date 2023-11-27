@@ -13,6 +13,8 @@ class GUI::GUIGhost: public GUI::EntityView{
 public:
     explicit GUIGhost(color ghostColor);
 
+    void move(const int &ticks);
+
     sf::Sprite getSprite() override;
 };
 

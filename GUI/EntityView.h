@@ -28,13 +28,13 @@ public:
 
     void setSprite(const sf::Sprite &entitySprite);
 
-    double getCameraX() const;
+    double getCameraX() const override;
 
-    void setCameraX(double x);
+    void setCameraX(double x) override;
 
-    double getCameraY() const;
+    double getCameraY() const override;
 
-    void setCameraY(double y);
+    void setCameraY(double y) override;
 };
 
 

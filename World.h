@@ -14,18 +14,17 @@
 #include "Camera.h"
 #include "Coin.h"
 #include "Ghost.h"
-
+#include "Observer.h"
 
 class Model::World {
-    vector<vector<Model::EntityModel*>> world;
+    std::vector<std::vector<Model::EntityModel*>> world;
     int height;
     int width;
     Model::AbstractFactory* factory;
     Model::PacMan* pacMan;
-    Camera* camera;
     int coinsLeft;
-    vector<Coin*> coins;
-    vector<Ghost*> ghosts;
+    std::vector<Coin*> coins;
+    std::vector<Ghost*> ghosts;
 public:
     explicit World();
 
@@ -57,9 +56,9 @@ public:
 
     void setPacMan(PacMan *pMan);
 
-    [[nodiscard]] Camera *getCamera() const;
+    [[nodiscard]] GUI::Camera *getCamera() const;
 
-    void setCamera(Camera *cam);
+    void setCamera(GUI::Camera *cam);
 
     [[nodiscard]] int getCoinsLeft() const;
 
@@ -67,9 +66,9 @@ public:
 
     void addGhost(Ghost* ghost);
 
-    [[nodiscard]] const vector<Ghost *> &getGhosts() const;
+    [[nodiscard]] const std::vector<Ghost *> &getGhosts() const;
 
-    void setGhosts(const vector<Ghost *> &ghostVector);
+    void setGhosts(const std::vector<Ghost *> &ghostVector);
 };
 
 

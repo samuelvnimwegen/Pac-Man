@@ -10,6 +10,7 @@
 
 class GUI::ConcreteFactory: public Model::AbstractFactory{
     GUI::Game* game;
+    Camera* camera;
 public:
     ConcreteFactory(Model::World *world, Game *game);
 

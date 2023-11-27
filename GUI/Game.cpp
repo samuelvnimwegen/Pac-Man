@@ -146,11 +146,9 @@ GUI::Game::Game(const int &wd, const int &hg) {
                 for (auto entity: this->viewEntities){
                     delete entity;
                 }
-
-                world = new World();
-                this->generateMap();
-                this->getWorld()->setFactory(factory);
-                world->buildWorld();
+                /*
+                 * Hier nog wat code om level te resetten
+                 */
             }
             window.clear();
             window.draw(pauzeText);
@@ -166,9 +164,8 @@ GUI::Game::Game(const int &wd, const int &hg) {
                     delete entity;
                 }
 
-                world = new World();
+                world = new Model::World();
                 this->generateMap();
-                this->getWorld()->setFactory(factory);
                 world->buildWorld();
             }
             sf::Text introText3;
@@ -202,27 +199,12 @@ void GUI::Game::setHeight(int hg) {
 
 
 
-World *GUI::Game::getWorld() const {
+Model::World *GUI::Game::getWorld() const {
     return world;
 }
 
-void GUI::Game::setWorld(World *sWorld) {
+void GUI::Game::setWorld(Model::World *sWorld) {
     Game::world = sWorld;
-}
-
-
-
-void GUI::Game::generateMap() {
-    for (int i = 0; i < this->getWorld()->getHeight(); ++i){
-        for (int j = 0; j < this->getWorld()->getWidth(); ++j){
-            this->viewMap[i][j] = nullptr;
-        }
-    }
-}
-
-void GUI::Game::setViewItem(GUI::EntityView *entity, const int &row, const int &col) {
-    viewMap[row][col] = entity;
-    viewEntities.push_back(entity);
 }
 
 GUI::Game::~Game() {
@@ -230,7 +212,6 @@ GUI::Game::~Game() {
     for (int i = 0; i < entitySize; ++i){
         delete viewEntities[i];
     }
-    delete factory;
     delete world;
 
 }
@@ -273,11 +254,11 @@ string GUI::Game::getInput() {
     return "NONE";
 }
 
-Stopwatch *GUI::Game::getStopwatch() const {
+Model::Stopwatch *GUI::Game::getStopwatch() const {
     return stopwatch;
 }
 
-void GUI::Game::setStopwatch(Stopwatch *newStopwatch) {
+void GUI::Game::setStopwatch(Model::Stopwatch *newStopwatch) {
     Game::stopwatch = newStopwatch;
 }
 
@@ -332,37 +313,40 @@ void GUI::Game::addGhost(GUI::GUIGhost *ghost) {
 }
 
 
-GUI::ConcreteFactory::ConcreteFactory(World *world, Game *game) : AbstractFactory(world), game(game) {}
+GUI::ConcreteFactory::ConcreteFactory(Model::World *world, Game *game) : AbstractFactory(world), game(game) {
+    camera = GUI::Camera::instance();
+}
 
 Model::PacMan *GUI::ConcreteFactory::createPacMan(const int &row, const int &col) {
     auto* entity = new Model::PacMan(row, col, this->getWorld());
-    auto observer = new GUI::GUIPacMan(entity);
+    auto observer = new GUI::GUIPacMan();
     entity->addObserver(observer);
     this->getWorld()->addItem(entity);
     this->getWorld()->setPacMan(entity);
     return entity;
 }
 
-Wall *GUI::ConcreteFactory::createWall(const int &row, const int &col) {
-    Wall* subject = AbstractFactory::createWall(row, col);
-    auto viewItem = new GUIWall(subject);
-    game->setViewItem(viewItem, row, col);
-    game->addWall(viewItem);
+Model::Wall *GUI::ConcreteFactory::createWall(const int &row, const int &col) {
+    auto* subject = new Model::Wall(row, col);
+    auto viewItem = new GUI::GUIWall();
+    subject->addObserver(viewItem);
+    this->getWorld()->addItem(subject);
     return subject;
 }
 
-Coin *GUI::ConcreteFactory::createCoin(const int &row, const int &col) {
-    Coin* subject = AbstractFactory::createCoin(row, col);
-    auto viewItem = new GUICoin(subject);
-    game->setViewItem(viewItem, row, col);
-    game->addCoin(viewItem);
-    return subject;
+Model::Coin *GUI::ConcreteFactory::createCoin(const int &row, const int &col) {
+    auto entity = new Model::Coin(row, col);
+    auto observer = new GUI::GUIWall;
+    entity->addObserver(observer);
+    this->getWorld()->addItem(entity);
+    return entity;
 }
 
-Ghost *GUI::ConcreteFactory::createGhost(const int &row, const int &col) {
-    Ghost* subject = AbstractFactory::createGhost(row, col);
-    auto viewItem = new GUIGhost(subject);
-    game->setViewItem(viewItem, row, col);
-    game->addGhost(viewItem);
-    return subject;
+Model::Ghost *GUI::ConcreteFactory::createGhost(const int &row, const int &col) {
+    auto entity = new Model::Ghost(row, col, this->getWorld());
+    auto observer = new GUI::GUIWall;
+
+    entity->addObserver(observer);
+    this->getWorld()->addItem(entity);
+    return entity;
 }
