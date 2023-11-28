@@ -52,3 +52,8 @@ void GUI::EntityView::setCameraY(double y) {
     EntityView::cameraY = y;
 }
 
+void GUI::EntityView::move(const int &ticks) {
+
+}
+
+

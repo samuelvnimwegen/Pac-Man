@@ -9,10 +9,10 @@ GUI::Camera* GUI::Camera::cameraPointer = nullptr;
 
 
 
-pair<float, float> GUI::Camera::getCameraCoords(int row, int col) const {
-    float height = float(row) / float(modelHeight) * 2 - 1;
-    float width = float(col) / float(modelWidth) * 2 - 1;
-    return make_pair(height, width);
+Coordinates GUI::Camera::getCameraCoords(int row, int col) const {
+    double height = double (row) / double(modelHeight) * 2 - 1;
+    double width = double(col) / double(modelWidth) * 2 - 1;
+    return {width, height};
 }
 
 GUI::Camera *GUI::Camera::instance() {
@@ -71,4 +71,15 @@ void GUI::Camera::setYSpeed(double speed) {
 
 GUI::Camera::~Camera() = default;
 
+
+Coordinates::Coordinates(double xCoord, double yCoord) : xCoord(xCoord), yCoord(yCoord) {}
+
+double Coordinates::getXCoord() const {
+    return xCoord;
+}
+
+
+double Coordinates::getYCoord() const {
+    return yCoord;
+}
 

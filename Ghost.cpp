@@ -10,13 +10,13 @@ Model::World *Model::Ghost::getWorld() const {
 
 void Model::Ghost::changeDirection() {
     int minDistance = 1000000;
-    string direction = "NONE";
+    direction dir = direction::none;
     // Als hij omhoog kan:
     if (this->canMove(this->getRow() - 1, this->getCol())){
         int distance = this->getManhattanDistance(direction::up);
         if (distance < minDistance){
             minDistance = distance;
-            direction = direction::up;
+            dir = direction::up;
         }
     }
     // Als hij naar beneden kan:
@@ -24,68 +24,68 @@ void Model::Ghost::changeDirection() {
         int distance = this->getManhattanDistance(down);
         if (distance < minDistance){
             minDistance = distance;
-            direction = down;
+            dir = down;
         }
     }
     // Als hij naar rechts kan:
     if (this->canMove(this->getRow(), this->getCol() + 1)){
-        int distance = this->getManhattanDistance("RIGHT");
+        int distance = this->getManhattanDistance(direction::right);
         if (distance < minDistance){
             minDistance = distance;
-            direction = "RIGHT";
+            dir = direction::right;
         }
     }
     // Als hij naar links kan:
     if (this->canMove(this->getRow(), this->getCol() - 1)){
-        int distance = this->getManhattanDistance("LEFT");
+        int distance = this->getManhattanDistance(direction::left);
         if (distance < minDistance){
-            direction = "LEFT";
+            dir = direction::left;
         }
     }
 
 
-    if (this->getCurrentDirection() == "UP"){
-        if (direction == "DOWN" and !canMove(this->getRow() - 1, this->getCol())){
-            this->setCurrentDirection("DOWN");
+    if (this->getCurrentDirection() == direction::up){
+        if (dir == direction::down and !canMove(this->getRow() - 1, this->getCol())){
+            this->setCurrentDirection(direction::down);
         }
-        else if (direction == "LEFT"){
-            this->setNextDirection("LEFT");
+        else if (dir == direction::left){
+            this->setNextDirection(direction::left);
         }
-        else if (direction == "RIGHT"){
-            this->setNextDirection("RIGHT");
-        }
-    }
-    else if (this->getCurrentDirection() == "DOWN" ){
-        if (direction == "UP" and !canMove(this->getRow() + 1, this->getCol())){
-            this->setCurrentDirection("UP");
-        }
-        else if (direction == "LEFT"){
-            this->setNextDirection("LEFT");
-        }
-        else if (direction == "RIGHT"){
-            this->setNextDirection("RIGHT");
+        else if (dir == direction::right){
+            this->setNextDirection(direction::right);
         }
     }
-    else if (this->getCurrentDirection() == "LEFT"){
-        if (direction == "RIGHT" and !canMove(this->getRow(), this->getCol() - 1)){
-            this->setCurrentDirection("RIGHT");
+    else if (this->getCurrentDirection() == direction::down ){
+        if (dir == direction::up and !canMove(this->getRow() + 1, this->getCol())){
+            this->setCurrentDirection(direction::up);
         }
-        else if (direction == "UP"){
-            this->setNextDirection("UP");
+        else if (dir == direction::left){
+            this->setNextDirection(direction::left);
         }
-        else if (direction == "DOWN"){
-            this->setNextDirection("DOWN");
+        else if (dir == direction::right){
+            this->setNextDirection(direction::right);
         }
     }
-    else if (this->getCurrentDirection() == "RIGHT"){
-        if (direction == "LEFT" and !canMove(this->getRow(), this->getCol() + 1)){
-            this->setCurrentDirection("LEFT");
+    else if (this->getCurrentDirection() == direction::left){
+        if (dir == direction::right and !canMove(this->getRow(), this->getCol() - 1)){
+            this->setCurrentDirection(direction::right);
         }
-        else if (direction == "UP"){
-            this->setNextDirection("UP");
+        else if (dir == direction::up){
+            this->setNextDirection(direction::up);
         }
-        else if (direction == "DOWN"){
-            this->setNextDirection("DOWN");
+        else if (dir == direction::down){
+            this->setNextDirection(direction::down);
+        }
+    }
+    else if (this->getCurrentDirection() == direction::right){
+        if (dir == direction::left and !canMove(this->getRow(), this->getCol() + 1)){
+            this->setCurrentDirection(direction::left);
+        }
+        else if (dir == direction::up){
+            this->setNextDirection(direction::up);
+        }
+        else if (dir == direction::down){
+            this->setNextDirection(direction::down);
         }
     }
 }

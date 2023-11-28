@@ -15,10 +15,9 @@ private:
 protected:
     explicit Stopwatch();
 public:
-    static Stopwatch* Instance();
+    static Stopwatch* instance();
 
     int getTicks();
-
 };
 
 

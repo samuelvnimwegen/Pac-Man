@@ -7,6 +7,17 @@
 #include "iostream"
 #include "Subject.h"
 
+class Coordinates{
+    double xCoord;
+    double yCoord;
+public:
+    Coordinates(double xCoord, double yCoord);
+
+    [[nodiscard]] double getXCoord() const;
+
+    [[nodiscard]] double getYCoord() const;
+
+};
 class GUI::Camera {
     int modelWidth;
     int modelHeight;
@@ -15,6 +26,7 @@ class GUI::Camera {
     static GUI::Camera* cameraPointer;
 public:
     virtual ~Camera();
+
     static  GUI::Camera *instance();
 
     [[nodiscard]] int getModelWidth() const;
@@ -25,7 +37,7 @@ public:
 
     void setModelHeight(int height);
 
-    [[nodiscard]] std::pair<float,float> getCameraCoords(int row, int col) const;
+    [[nodiscard]] Coordinates getCameraCoords(int row, int col) const;
 
     [[nodiscard]] double getXSpeed() const;
 

@@ -6,6 +6,7 @@
 #define PAC_MAN_PACMAN_H
 #include "EntityModel.h"
 #include "Subject.h"
+#include "Observer.h"
 
 class Model::PacMan: public Model::EntityModel{
     Model::World* world;
@@ -37,13 +38,13 @@ public:
     /*
     * Verandert de richting afhankelijk van de volgende richting
     */
-    void moveDirection(const string &direction);
+    void moveDirection(const direction &dir);
 
     [[nodiscard]] bool canMove(const int &row, const int &col) const;
 
-    [[nodiscard]] const string &getCurrentDirection() const;
+    [[nodiscard]] const direction &getCurrentDirection() const;
 
-    void setCurrentDirection(const string &direction);
+    void setCurrentDirection(const direction &dir);
 
     [[nodiscard]] Model::World *getWorld() const;
 
@@ -57,9 +58,9 @@ public:
 
     void setYSpeed(double speed);
 
-    [[nodiscard]] const string &getNextDirection() const;
+    [[nodiscard]] const direction &getNextDirection() const;
 
-    void setNextDirection(const string &direction);
+    void setNextDirection(const direction &dir);
 
     [[nodiscard]] bool isHasMoved() const;
 
@@ -69,11 +70,11 @@ public:
 
     void setScore(int newScore);
 
-    int getStartRow() const;
+    [[nodiscard]] int getStartRow() const;
 
     void setStartRow(int row);
 
-    int getStartCol() const;
+    [[nodiscard]] int getStartCol() const;
 
     void setStartCol(int col);
 };

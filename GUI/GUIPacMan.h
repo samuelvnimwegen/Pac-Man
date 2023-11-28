@@ -8,16 +8,16 @@
 #include "iostream"
 
 class GUI::GUIPacMan: public GUI::EntityView{
-    Model::PacMan* pacMan;
+    Model::PacMan* subject;
     int textureNr;
-    direction currentDirection;
-    bool hasMoved;
+    double xSpeed;
+    double ySpeed;
 public:
-    explicit GUIPacMan();
+    explicit GUIPacMan(Model::PacMan* subject);
 
     ~GUIPacMan() override;
 
-    void move();
+    void move(const int &ticks) override;
 
     void updateTextureNr();
 
@@ -27,17 +27,11 @@ public:
 
     void setTextureNr(int nr);
 
-    direction getDirection() const;
+    Model::PacMan *getSubject() const;
 
-    void setDirection(direction direction);
+    double getXSpeed() const;
 
-    direction getCurrentDirection() const;
-
-    void setCurrentDirection(direction direction);
-
-    bool isHasMoved() const;
-
-    void setHasMoved(bool moved);
+    double getYSpeed() const;
 };
 
 

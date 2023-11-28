@@ -25,6 +25,7 @@ class Model::World {
     int coinsLeft;
     std::vector<Coin*> coins;
     std::vector<Ghost*> ghosts;
+    std::vector<Wall*> walls;
 public:
     explicit World();
 
@@ -32,7 +33,7 @@ public:
 
     void buildWorld();
 
-    void die();
+    void die() const;
 
     [[nodiscard]] int getHeight() const;
 
@@ -56,10 +57,6 @@ public:
 
     void setPacMan(PacMan *pMan);
 
-    [[nodiscard]] GUI::Camera *getCamera() const;
-
-    void setCamera(GUI::Camera *cam);
-
     [[nodiscard]] int getCoinsLeft() const;
 
     void setCoinsLeft(int coins);
@@ -69,6 +66,12 @@ public:
     [[nodiscard]] const std::vector<Ghost *> &getGhosts() const;
 
     void setGhosts(const std::vector<Ghost *> &ghostVector);
+
+    const std::vector<std::vector<Model::EntityModel *>> &getWorld() const;
+
+    const std::vector<Coin *> &getCoins() const;
+
+    const std::vector<Wall *> &getWalls() const;
 };
 
 

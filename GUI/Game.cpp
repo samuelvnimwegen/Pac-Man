@@ -16,7 +16,6 @@ GUI::Game::Game(const int &wd, const int &hg) {
     camera->setModelWidth(this->getWidth());
 
     world = new Model::World();
-    this->generateMap();
     world->buildWorld();
     stateManager = new StateManager();
 
@@ -89,9 +88,9 @@ GUI::Game::Game(const int &wd, const int &hg) {
             if (input == "ESCAPE"){
                 this->getStateManager()->pauze();
             }
-            int ticks = stopwatch->getTicks();
-            string direction = getDirection();
-            if (this->getWorld()->getPacMan()->getCurrentDirection() != "NONE"){
+            int ticks = Model::Stopwatch::instance()->getTicks();
+            direction direction = getDirection();
+            if (this->getWorld()->getPacMan()->getCurrentDirection() != direction::none){
                 for (auto ghost: this->getWorld()->getGhosts()){
                     ghost->move(ticks);
                 }
@@ -100,27 +99,27 @@ GUI::Game::Game(const int &wd, const int &hg) {
             this->getWorld()->getPacMan()->move(ticks);
             text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));
             window.clear();
-            for (auto wall:this->walls){
-                auto pos = this->cameraToPixels(wall->getSubject()->getCameraX(), wall->getSubject()->getCameraY());
-                sf::Sprite sprite = wall->getSprite();
+            for (auto wall:this->getWorld()->getWalls()){
+                auto pos = this->cameraToPixels(wall->getObservers().at(0)->getCameraX(), wall->getObservers().at(0)->getCameraY());
+                sf::Sprite sprite = wall->getObservers().at(0)->getSprite();
                 sprite.setPosition(float(pos.first), float(pos.second));
                 window.draw(sprite);
             }
-            for (auto coin: this->coins){
-                if (!coin->getSubject()->isConsumed()){
-                    auto pos = this->cameraToPixels(coin->getSubject()->getCameraX(), coin->getSubject()->getCameraY());
-                    sf::Sprite sprite = coin->getSprite();
+            for (auto coin: this->getWorld()->getCoins()){
+                if (!coin->isConsumed()){
+                    auto pos = this->cameraToPixels(coin->getObservers().at(0)->getCameraX(), coin->getObservers().at(0)->getCameraY());
+                    sf::Sprite sprite = coin->getObservers().at(0)->getSprite();
                     sprite.setPosition(float(pos.first), float(pos.second));
                     window.draw(sprite);
                 }
             }
-            for (auto ghost: this->ghosts){
-                auto pos = this->cameraToPixels(ghost->getSubject()->getCameraX(), ghost->getSubject()->getCameraY());
-                sf::Sprite sprite = ghost->getSprite();
+            for (auto ghost: this->getWorld()->getGhosts()){
+                auto pos = this->cameraToPixels(ghost->getObservers().at(0)->getCameraX(), ghost->getObservers().at(0)->getCameraY());
+                sf::Sprite sprite = ghost->getObservers().at(0)->getSprite();
                 sprite.setPosition(float(pos.first), float(pos.second));
                 window.draw(sprite);
             }
-            auto pacManPos = this->cameraToPixels(pacMan->getSubject()->getCameraX(), pacMan->getSubject()->getCameraY());
+            auto pacManPos = this->cameraToPixels(this->getWorld()->getPacMan()->getObservers().at(0)->getCameraX(), this->getWorld()->getPacMan()->getObservers().at(0)->getCameraY());
             sf::Sprite pacManSprite = pacMan->getSprite();
             pacManSprite.setPosition(float(pacManPos.first), float(pacManPos.second));
             window.draw(pacManSprite);
@@ -135,7 +134,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
             string input = getInput();
             if (input == "SPACE"){
                 this->getStateManager()->pop();
-                this->stopwatch->getTicks();
+                Model::Stopwatch::instance()->getTicks();
             }
             else if (input == "BACKSPACE"){
                 window.clear();
@@ -165,7 +164,6 @@ GUI::Game::Game(const int &wd, const int &hg) {
                 }
 
                 world = new Model::World();
-                this->generateMap();
                 world->buildWorld();
             }
             sf::Text introText3;
@@ -216,17 +214,17 @@ GUI::Game::~Game() {
 
 }
 
-string GUI::Game::getDirection() {
+direction GUI::Game::getDirection() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) or sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-        return "UP";
+        return direction::up;
     }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Q) or sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-        return "LEFT";
+        return direction::left;
     }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D) or sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-        return "RIGHT";
+        return direction::right;
     }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S) or sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-        return "DOWN";
+        return direction::down;
     }
-    return "NONE";
+    return direction::none;
 }
 
 pair<int, int> GUI::Game::cameraToPixels(double xCamera, double yCamera) const {
@@ -254,99 +252,6 @@ string GUI::Game::getInput() {
     return "NONE";
 }
 
-Model::Stopwatch *GUI::Game::getStopwatch() const {
-    return stopwatch;
-}
-
-void GUI::Game::setStopwatch(Model::Stopwatch *newStopwatch) {
-    Game::stopwatch = newStopwatch;
-}
-
-const vector<GUI::GUIGhost *> &GUI::Game::getGhosts() const {
-    return ghosts;
-}
-
-void GUI::Game::setGhosts(const vector<GUI::GUIGhost *> &ghostVector) {
-    Game::ghosts = ghostVector;
-}
-
-const vector<GUI::GUIWall *> &GUI::Game::getWalls() const {
-    return walls;
-}
-
-void GUI::Game::setWalls(const vector<GUI::GUIWall *> &wallsVector) {
-    Game::walls = wallsVector;
-}
-
-const vector<GUI::GUICoin *> &GUI::Game::getCoins() const {
-    return coins;
-}
-
-void GUI::Game::setCoins(const vector<GUICoin *> &coinVector) {
-    Game::coins = coinVector;
-}
-
-GUI::GUIPacMan *GUI::Game::getPacMan() const {
-    return pacMan;
-}
-
-void GUI::Game::setPacMan(GUI::GUIPacMan *guiPacMan) {
-    Game::pacMan = guiPacMan;
-}
-
-void GUI::Game::addWall(GUI::GUIWall *wall) {
-    auto currWalls = this->getWalls();
-    currWalls.push_back(wall);
-    this->setWalls(currWalls);
-}
-
-void GUI::Game::addCoin(GUI::GUICoin *coin) {
-    auto currCoins = this->getCoins();
-    currCoins.push_back(coin);
-    this->setCoins(currCoins);
-}
-
-void GUI::Game::addGhost(GUI::GUIGhost *ghost) {
-    auto currGhosts = this->getGhosts();
-    currGhosts.push_back(ghost);
-    this->setGhosts(currGhosts);
-}
 
 
-GUI::ConcreteFactory::ConcreteFactory(Model::World *world, Game *game) : AbstractFactory(world), game(game) {
-    camera = GUI::Camera::instance();
-}
 
-Model::PacMan *GUI::ConcreteFactory::createPacMan(const int &row, const int &col) {
-    auto* entity = new Model::PacMan(row, col, this->getWorld());
-    auto observer = new GUI::GUIPacMan();
-    entity->addObserver(observer);
-    this->getWorld()->addItem(entity);
-    this->getWorld()->setPacMan(entity);
-    return entity;
-}
-
-Model::Wall *GUI::ConcreteFactory::createWall(const int &row, const int &col) {
-    auto* subject = new Model::Wall(row, col);
-    auto viewItem = new GUI::GUIWall();
-    subject->addObserver(viewItem);
-    this->getWorld()->addItem(subject);
-    return subject;
-}
-
-Model::Coin *GUI::ConcreteFactory::createCoin(const int &row, const int &col) {
-    auto entity = new Model::Coin(row, col);
-    auto observer = new GUI::GUIWall;
-    entity->addObserver(observer);
-    this->getWorld()->addItem(entity);
-    return entity;
-}
-
-Model::Ghost *GUI::ConcreteFactory::createGhost(const int &row, const int &col) {
-    auto entity = new Model::Ghost(row, col, this->getWorld());
-    auto observer = new GUI::GUIWall;
-
-    entity->addObserver(observer);
-    this->getWorld()->addItem(entity);
-    return entity;
-}

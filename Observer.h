@@ -4,13 +4,12 @@
 
 #ifndef PAC_MAN_OBSERVER_H
 #define PAC_MAN_OBSERVER_H
-#include "World.h"
+#include "Subject.h"
+#include "SFML/Graphics.hpp"
 
 class Model::Observer {
 public:
     Observer();
-
-    virtual void changeDirection(const direction &direction);
 
     [[nodiscard]] virtual double getCameraX() const = 0;
 
@@ -19,6 +18,11 @@ public:
     [[nodiscard]] virtual double getCameraY() const = 0;
 
     virtual void setCameraY(double y) = 0;
+
+    virtual void move(const int &ticks) = 0;
+
+    virtual sf::Sprite getSprite() = 0;
+
 };
 
 

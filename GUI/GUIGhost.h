@@ -9,13 +9,27 @@
 class GUI::GUIGhost: public GUI::EntityView{
     int textureNr;
     int spriteX;
-    color ghostColor;
+    double ySpeed;
+    double xSpeed;
+    Model::Ghost* subject;
 public:
-    explicit GUIGhost(color ghostColor);
+    explicit GUIGhost(Model::Ghost* ghost);
 
-    void move(const int &ticks);
+    void move(const int &ticks) override;
 
     sf::Sprite getSprite() override;
+
+    double getYSpeed() const;
+
+    void setYSpeed(double speed);
+
+    double getXSpeed() const;
+
+    void setXSpeed(double speed);
+
+    Model::Ghost *getSubject() const;
+
+    void setSubject(Model::Ghost *sub);
 };
 
 

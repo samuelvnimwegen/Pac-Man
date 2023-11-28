@@ -6,6 +6,4 @@
 
 Model::Observer::Observer() = default;
 
-void Model::Observer::changeDirection(const direction &direction) {
 
-}

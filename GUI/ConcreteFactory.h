@@ -6,7 +6,9 @@
 #define PAC_MAN_CONCRETEFACTORY_H
 #include "EntityView.h"
 #include "GUIWall.h"
+#include "GUIPacMan.h"
 #include "../AbstractFactory.h"
+
 
 class GUI::ConcreteFactory: public Model::AbstractFactory{
     GUI::Game* game;
@@ -21,6 +23,8 @@ public:
     Model::Coin * createCoin(const int &row, const int &col) override;
 
     Model::Ghost * createGhost(const int &row, const int &col) override;
+
+    [[nodiscard]] Camera *getCamera() const;
 };
 
 

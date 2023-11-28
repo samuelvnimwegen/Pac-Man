@@ -27,7 +27,6 @@ class GUI::Game {
     int height;
     vector<EntityView*> viewEntities;
     Model::World* world;
-    Model::Stopwatch *stopwatch;
     GUI::Camera* camera;
     StateManager* stateManager;
     vector<GUI::GUIGhost*> ghosts;
@@ -40,9 +39,7 @@ public:
 
     virtual ~Game();
 
-    void generateMap();
-
-    static std::string getDirection();
+    static direction getDirection();
 
     static std::string getInput();
 
@@ -60,38 +57,9 @@ public:
 
     void setWorld(Model::World *sWorld);
 
-    void setViewItem(EntityView* entity, const int &row, const int &col);
-
     [[nodiscard]] StateManager *getStateManager() const;
 
     void setStateManager(StateManager *state);
-
-    [[nodiscard]] Model::Stopwatch *getStopwatch() const;
-
-    void setStopwatch(Model::Stopwatch *newStopwatch);
-
-    [[nodiscard]] const vector<GUIGhost *> &getGhosts() const;
-
-    void setGhosts(const vector<GUIGhost *> &ghostVector);
-
-    [[nodiscard]] const vector<GUIWall *> &getWalls() const;
-
-    void setWalls(const vector<GUIWall *> &wallsVector);
-
-    [[nodiscard]] const vector<GUICoin *> &getCoins() const;
-
-    void setCoins(const vector<GUICoin *> &coinVector);
-
-    [[nodiscard]] GUIPacMan *getPacMan() const;
-
-    void setPacMan(GUIPacMan *guiPacMan);
-
-    void addWall(GUIWall* wall);
-
-    void addCoin(GUICoin* coin);
-
-    void addGhost(GUIGhost* ghost);
-
 
 };
 

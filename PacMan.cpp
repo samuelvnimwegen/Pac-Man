@@ -5,12 +5,12 @@
 #include "PacMan.h"
 
 
-const string &Model::PacMan::getCurrentDirection() const {
+const direction &Model::PacMan::getCurrentDirection() const {
     return currentDirection;
 }
 
-void Model::PacMan::setCurrentDirection(const string &direction) {
-    PacMan::currentDirection = direction;
+void Model::PacMan::setCurrentDirection(const direction &dir) {
+    PacMan::currentDirection = dir;
 }
 
 
@@ -68,10 +68,14 @@ void Model::PacMan::setYSpeed(double speed) {
     PacMan::ySpeed = speed;
 }
 
-const string &Model::PacMan::getNextDirection() const {
+const direction &Model::PacMan::getNextDirection() const {
     return nextDirection;
 }
 
-void Model::PacMan::setNextDirection(const string &direction) {
-    PacMan::nextDirection = direction;
+void Model::PacMan::setNextDirection(const direction &dir) {
+    PacMan::nextDirection = dir;
+}
+
+void Model::PacMan::move(const int &ticks) {
+    this->getObservers().at(0)->move(ticks);
 }

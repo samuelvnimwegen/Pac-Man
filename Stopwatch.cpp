@@ -18,7 +18,7 @@ int Model::Stopwatch::getTicks() {
     return steps;
 }
 
-Model::Stopwatch *Model::Stopwatch::Instance() {
+Model::Stopwatch *Model::Stopwatch::instance() {
     if (m_pStopwatch == nullptr){
         m_pStopwatch = new Stopwatch();
     }

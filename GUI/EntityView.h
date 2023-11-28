@@ -5,6 +5,7 @@
 #ifndef PAC_MAN_ENTITYVIEW_H
 #define PAC_MAN_ENTITYVIEW_H
 #include "../Observer.h"
+#include "../World.h"
 #include "SFML/Graphics.hpp"
 
 class GUI::EntityView: public Model::Observer{
@@ -13,7 +14,6 @@ class GUI::EntityView: public Model::Observer{
     double cameraX;
     double cameraY;
 public:
-
     virtual ~EntityView();
 
     const sf::Texture &getTexture() const;
@@ -24,7 +24,7 @@ public:
 
     explicit EntityView();
 
-    virtual sf::Sprite getSprite();
+    sf::Sprite getSprite() override;
 
     void setSprite(const sf::Sprite &entitySprite);
 
@@ -35,6 +35,9 @@ public:
     double getCameraY() const override;
 
     void setCameraY(double y) override;
+
+    void move(const int &ticks) override;
+
 };
 
 
