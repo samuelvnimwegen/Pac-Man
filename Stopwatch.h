@@ -17,6 +17,11 @@ protected:
 public:
     static Stopwatch* instance();
 
+    Stopwatch(Model::Stopwatch &other) = delete;
+
+    void operator=(const Model::Stopwatch&) = delete;
+
+
     int getTicks();
 };
 

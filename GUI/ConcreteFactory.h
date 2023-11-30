@@ -11,10 +11,9 @@
 
 
 class GUI::ConcreteFactory: public Model::AbstractFactory{
-    GUI::Game* game;
     Camera* camera;
 public:
-    ConcreteFactory(Model::World *world, Game *game);
+    explicit ConcreteFactory(Model::World *world);
 
     Model::PacMan * createPacMan(const int &row, const int &col) override;
 

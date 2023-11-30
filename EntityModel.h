@@ -5,7 +5,7 @@
 #ifndef PAC_MAN_ENTITYMODEL_H
 #define PAC_MAN_ENTITYMODEL_H
 #include "Subject.h"
-
+#include "memory"
 class Model::EntityModel: public  Model::Subject{
     std::string tag;
     bool consumed;

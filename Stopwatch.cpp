@@ -3,6 +3,7 @@
 //
 
 #include "Stopwatch.h"
+Model::Stopwatch* Model::Stopwatch::m_pStopwatch = nullptr;
 
 Model::Stopwatch::Stopwatch(){
     tickTime = sf::milliseconds(1);

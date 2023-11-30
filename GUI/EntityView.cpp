@@ -32,7 +32,8 @@ void GUI::EntityView::removeSprite() {
 GUI::EntityView::~EntityView() = default;
 
 GUI::EntityView::EntityView() {
-    cameraX = 0;
+    auto camera = GUI::Camera::instance();
+    cameraX = camera->getCameraCoords(this);
     cameraY = 0;
 }
 

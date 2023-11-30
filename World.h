@@ -67,11 +67,23 @@ public:
 
     void setGhosts(const std::vector<Ghost *> &ghostVector);
 
-    const std::vector<std::vector<Model::EntityModel *>> &getWorld() const;
+    [[nodiscard]] const std::vector<std::vector<Model::EntityModel *>> &getWorld() const;
 
-    const std::vector<Coin *> &getCoins() const;
+    [[nodiscard]] const std::vector<Coin *> &getCoins() const;
 
-    const std::vector<Wall *> &getWalls() const;
+    [[nodiscard]] const std::vector<Wall *> &getWalls() const;
+
+    void setWorld(const std::vector<std::vector<Model::EntityModel *>> &newWorld);
+
+    void setCoins(const std::vector<Coin *> &coinVector);
+
+    void setWalls(const std::vector<Wall *> &wallVector);
+
+    void addWall(Model::Wall* &wall);
+
+    void addCoin(Model::Coin* &coin);
+
+    void addGhost(Model::Ghost* &ghost);
 };
 
 

@@ -13,7 +13,10 @@ class GUI::EntityView: public Model::Observer{
     sf::Sprite sprite;
     double cameraX;
     double cameraY;
+
 public:
+    explicit EntityView();
+
     virtual ~EntityView();
 
     const sf::Texture &getTexture() const;
@@ -21,8 +24,6 @@ public:
     void removeSprite();
 
     void setTexture(const sf::Texture &entityTexture);
-
-    explicit EntityView();
 
     sf::Sprite getSprite() override;
 

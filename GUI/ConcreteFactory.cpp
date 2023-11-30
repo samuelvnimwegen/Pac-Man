@@ -5,7 +5,7 @@
 #include "ConcreteFactory.h"
 
 
-GUI::ConcreteFactory::ConcreteFactory(Model::World *world, Game *game) : AbstractFactory(world), game(game) {
+GUI::ConcreteFactory::ConcreteFactory(Model::World *world) : AbstractFactory(world) {
     camera = GUI::Camera::instance();
 }
 
@@ -25,8 +25,10 @@ Model::Wall *GUI::ConcreteFactory::createWall(const int &row, const int &col) {
     auto observer = new GUI::GUIWall();
     subject->addObserver(observer);
     this->getWorld()->addItem(subject);
+    this->getWorld()->addWall(subject);
     observer->setCameraX(this->getCamera()->getCameraCoords(row, col).getXCoord());
     observer->setCameraY(this->getCamera()->getCameraCoords(row, col).getYCoord());
+
     return subject;
 }
 

@@ -206,6 +206,36 @@ const vector<Model::Wall *> &Model::World::getWalls() const {
     return walls;
 }
 
+void Model::World::addWall(Model::Wall *&wall) {
+    auto newWalls = this->getWalls();
+    newWalls.push_back(wall);
+    this->setWalls(newWalls);
+}
+
+void Model::World::setWorld(const vector<std::vector<Model::EntityModel *>> &newWorld) {
+    World::world = newWorld;
+}
+
+void Model::World::setCoins(const vector<Coin *> &coinVector) {
+    World::coins = coinVector;
+}
+
+void Model::World::setWalls(const vector<Wall *> &wallVector) {
+    World::walls = wallVector;
+}
+
+void Model::World::addCoin(Model::Coin *&coin) {
+    auto coinVector = this->getCoins();
+    coinVector.push_back(coin);
+    this->setCoins(coinVector);
+}
+
+void Model::World::addGhost(Model::Ghost *&ghost) {
+    auto ghostVector = this->getGhosts();
+    ghostVector.push_back(ghost);
+    this->setGhosts(ghostVector);
+}
+
 Model::AbstractFactory::AbstractFactory(World *world) : world(world) {}
 
 

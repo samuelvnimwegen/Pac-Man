@@ -16,6 +16,8 @@ GUI::Game::Game(const int &wd, const int &hg) {
     camera->setModelWidth(this->getWidth());
 
     world = new Model::World();
+    auto concreteFactory = new ConcreteFactory(world);
+    world->setFactory(concreteFactory);
     world->buildWorld();
     stateManager = new StateManager();
 
@@ -120,7 +122,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
                 window.draw(sprite);
             }
             auto pacManPos = this->cameraToPixels(this->getWorld()->getPacMan()->getObservers().at(0)->getCameraX(), this->getWorld()->getPacMan()->getObservers().at(0)->getCameraY());
-            sf::Sprite pacManSprite = pacMan->getSprite();
+            sf::Sprite pacManSprite =  this->getWorld()->getPacMan()->getObservers().at(0)->getSprite();
             pacManSprite.setPosition(float(pacManPos.first), float(pacManPos.second));
             window.draw(pacManSprite);
 
