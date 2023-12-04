@@ -28,10 +28,11 @@ int GUI::Camera::getModelWidth() const {
 }
 
 void GUI::Camera::setModelWidth(int width) {
+    Camera::modelWidth = width;
     if (this->getModelWidth() != 0){
         xSpeed =  double(1) / double(this->getModelWidth()) / 100;
     }
-    Camera::modelWidth = width;
+
 }
 
 int GUI::Camera::getModelHeight() const {
@@ -39,10 +40,10 @@ int GUI::Camera::getModelHeight() const {
 }
 
 void GUI::Camera::setModelHeight(int height) {
+    Camera::modelHeight = height;
     if (this->getModelHeight() != 0){
         ySpeed =  double(1) / double(this->getModelHeight()) / 100;
     }
-    Camera::modelHeight = height;
 }
 
 GUI::Camera::Camera(){

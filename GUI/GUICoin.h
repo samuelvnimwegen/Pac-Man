@@ -7,8 +7,9 @@
 #include "EntityView.h"
 
 class GUI::GUICoin: public GUI::EntityView{
+    Model::Coin* subject;
 public:
-    explicit GUICoin();
+    explicit GUICoin(Model::Coin *coin);
 
     ~GUICoin() override;
 };

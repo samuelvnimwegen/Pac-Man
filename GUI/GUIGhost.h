@@ -27,7 +27,7 @@ public:
 
     void setXSpeed(double speed);
 
-    Model::Ghost *getSubject() const;
+    Model::Ghost *getSubject() const override;
 
     void setSubject(Model::Ghost *sub);
 };

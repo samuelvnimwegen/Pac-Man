@@ -6,6 +6,8 @@
 #define PAC_MAN_SUBJECT_H
 #include "iostream"
 #include "vector"
+#include "memory"
+
 namespace Model{
     class Subject;
     class EntityModel;
@@ -25,7 +27,6 @@ namespace Model{
 namespace GUI{
     class ConcreteFactory;
     class EntityView;
-    class Fruit;
     class Camera;
     class Game;
     class GUICoin;

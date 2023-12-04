@@ -13,9 +13,9 @@ class GUI::EntityView: public Model::Observer{
     sf::Sprite sprite;
     double cameraX;
     double cameraY;
-
+    Model::EntityModel* subject;
 public:
-    explicit EntityView();
+    explicit EntityView(Model::EntityModel *subject);
 
     virtual ~EntityView();
 
@@ -38,6 +38,10 @@ public:
     void setCameraY(double y) override;
 
     void move(const int &ticks) override;
+
+    virtual Model::EntityModel *getSubject() const;
+
+    void setSubject(Model::EntityModel *sub);
 
 };
 

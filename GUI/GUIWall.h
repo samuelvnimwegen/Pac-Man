@@ -8,9 +8,10 @@
 
 class GUI::GUIWall: public GUI::EntityView {
 public:
-    GUIWall();
+    explicit GUIWall(Model::Wall *subject);
 
     ~GUIWall() override;
+
 
 
 };

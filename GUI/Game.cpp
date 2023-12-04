@@ -11,14 +11,15 @@ GUI::Game::Game(const int &wd, const int &hg) {
     width = wd;
     height = hg;
     pacMan = nullptr;
-    camera = GUI::Camera::instance();
-    camera->setModelHeight(this->getHeight());
-    camera->setModelWidth(this->getWidth());
 
     world = new Model::World();
     auto concreteFactory = new ConcreteFactory(world);
     world->setFactory(concreteFactory);
+    camera = GUI::Camera::instance();
+    camera->setModelHeight(this->getWorld()->getHeight());
+    camera->setModelWidth(this->getWorld()->getWidth());
     world->buildWorld();
+
     stateManager = new StateManager();
 
     assert(this->getHeight() % world->getHeight() == 0);
@@ -143,7 +144,6 @@ GUI::Game::Game(const int &wd, const int &hg) {
                 window.draw(pauzeText);
                 window.display();
                 this->getStateManager()->push();
-                delete world;
                 for (auto entity: this->viewEntities){
                     delete entity;
                 }
@@ -160,7 +160,6 @@ GUI::Game::Game(const int &wd, const int &hg) {
             if (input == "ESCAPE"){
                 this->getStateManager()->push();
 
-                delete world;
                 for (auto entity: this->viewEntities){
                     delete entity;
                 }

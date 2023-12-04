@@ -7,23 +7,24 @@
 #include "EntityView.h"
 #include "GUIWall.h"
 #include "GUIPacMan.h"
+#include "GUICoin.h"
+#include "GUIGhost.h"
 #include "../AbstractFactory.h"
+#include "memory"
 
 
 class GUI::ConcreteFactory: public Model::AbstractFactory{
-    Camera* camera;
 public:
     explicit ConcreteFactory(Model::World *world);
 
-    Model::PacMan * createPacMan(const int &row, const int &col) override;
+    std::unique_ptr<Model::PacMan> createPacMan(const int &row, const int &col) override;
 
-    Model::Wall * createWall(const int &row, const int &col) override;
+    std::unique_ptr<Model::Wall>  createWall(const int &row, const int &col) override;
 
-    Model::Coin * createCoin(const int &row, const int &col) override;
+    std::unique_ptr<Model::Coin>  createCoin(const int &row, const int &col) override;
 
-    Model::Ghost * createGhost(const int &row, const int &col) override;
+    std::unique_ptr<Model::Ghost> createGhost(const int &row, const int &col) override;
 
-    [[nodiscard]] Camera *getCamera() const;
 };
 
 

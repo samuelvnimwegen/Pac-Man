@@ -166,19 +166,6 @@ void Model::World::setCoinsLeft(int coins) {
     World::coinsLeft = coins;
 }
 
-void Model::World::addGhost(Ghost *ghost) {
-    ghosts.push_back(ghost);
-    if (ghosts.size() == 1){
-        ghost->setColor(color::red);
-    }else if (ghosts.size() == 2){
-        ghost->setColor(color::pink);
-    }else if (ghosts.size() == 3){
-        ghost->setColor(color::blue);
-    }else{
-        ghost->setColor(color::orange);
-    }
-}
-
 const vector<Model::Ghost *> &Model::World::getGhosts() const {
     return ghosts;
 }
@@ -230,10 +217,19 @@ void Model::World::addCoin(Model::Coin *&coin) {
     this->setCoins(coinVector);
 }
 
-void Model::World::addGhost(Model::Ghost *&ghost) {
+void Model::World::addGhost(Model::Ghost *ghost) {
     auto ghostVector = this->getGhosts();
     ghostVector.push_back(ghost);
     this->setGhosts(ghostVector);
+    if (ghosts.size() == 1){
+        ghost->setColor(color::red);
+    }else if (ghosts.size() == 2){
+        ghost->setColor(color::pink);
+    }else if (ghosts.size() == 3){
+        ghost->setColor(color::blue);
+    }else{
+        ghost->setColor(color::orange);
+    }
 }
 
 Model::AbstractFactory::AbstractFactory(World *world) : world(world) {}

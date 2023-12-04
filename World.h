@@ -15,6 +15,7 @@
 #include "Coin.h"
 #include "Ghost.h"
 #include "Observer.h"
+#include "memory"
 
 class Model::World {
     std::vector<std::vector<Model::EntityModel*>> world;
@@ -83,7 +84,6 @@ public:
 
     void addCoin(Model::Coin* &coin);
 
-    void addGhost(Model::Ghost* &ghost);
 };
 
 

@@ -31,7 +31,6 @@ add_executable(Pac-Man main.cpp
         GUI/PausedState.cpp
         GUI/GUIGhost.cpp
         Fruit.cpp
-        GUI/Fruit.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

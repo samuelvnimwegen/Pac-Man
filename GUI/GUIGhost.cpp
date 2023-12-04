@@ -15,7 +15,8 @@ sf::Sprite GUI::GUIGhost::getSprite() {
     return sprite;
 }
 
-GUI::GUIGhost::GUIGhost(Model::Ghost* ghost) {
+GUI::GUIGhost::GUIGhost(Model::Ghost* ghost) : GUI::EntityView(ghost) {
+    this->subject = ghost;
     textureNr = 0;
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
@@ -31,8 +32,8 @@ GUI::GUIGhost::GUIGhost(Model::Ghost* ghost) {
         spriteX = 150;
     }
     Camera* camera = Camera::instance();
-    xSpeed = camera->getXSpeed() / 1.5;
-    ySpeed = camera->getYSpeed() / 1.5;
+    xSpeed = camera->getXSpeed() * 0.5;
+    ySpeed = camera->getYSpeed() * 0.5;
     subject = ghost;
 }
 
@@ -43,7 +44,7 @@ void GUI::GUIGhost::move(const int &ticks) {
         double yCoord = this->getCameraY();
         yCoord -= ticks * this->getYSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
-        if (this->getSubject()->getCurrentDirection() == direction::right and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() + 1)){
+        if (this->getSubject()->getNextDirection() == direction::right and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() + 1)){
             double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
@@ -58,7 +59,7 @@ void GUI::GUIGhost::move(const int &ticks) {
         }
 
             // Als volgende direction naar links is en hij kan naar links:
-        else if (this->getSubject()->getCurrentDirection() == direction::left and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() - 1)){
+        else if (this->getSubject()->getNextDirection() == direction::left and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() - 1)){
             double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
@@ -106,7 +107,7 @@ void GUI::GUIGhost::move(const int &ticks) {
         double yCoord = this->getCameraY();
         yCoord += ticks * this->getYSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
-        if (this->getSubject()->getCurrentDirection() == direction::right and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() + 1)){
+        if (this->getSubject()->getNextDirection() == direction::right and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() + 1)){
             double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
             if (yCoord > wallYCoord){
                 this->setCameraY(wallYCoord);
@@ -120,7 +121,7 @@ void GUI::GUIGhost::move(const int &ticks) {
             }
         }
             // Als volgende direction naar links is en hij kan naar links:
-        else if (this->getSubject()->getCurrentDirection() == direction::left and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() - 1)){
+        else if (this->getSubject()->getNextDirection() == direction::left and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() - 1)){
             double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
             if (yCoord > wallYCoord){
                 this->setCameraY(wallYCoord);
@@ -167,7 +168,7 @@ void GUI::GUIGhost::move(const int &ticks) {
         double xCoord = this->getCameraX();
         xCoord += ticks * this->getXSpeed();
         // Als volgende direction naar links is en hij kan naar links:
-        if (this->getSubject()->getCurrentDirection() == direction::up and this->getSubject()->canMove(this->getSubject()->getRow() - 1, this->getSubject()->getCol())){
+        if (this->getSubject()->getNextDirection() == direction::up and this->getSubject()->canMove(this->getSubject()->getRow() - 1, this->getSubject()->getCol())){
             double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
             if (xCoord > wallXCoord){
                 this->setCameraX(wallXCoord);
@@ -180,7 +181,7 @@ void GUI::GUIGhost::move(const int &ticks) {
                 this->setCameraX(xCoord);
             }
         }
-        else if (this->getSubject()->getCurrentDirection() == direction::down and this->getSubject()->canMove(this->getSubject()->getRow() + 1, this->getSubject()->getCol())){
+        else if (this->getSubject()->getNextDirection() == direction::down and this->getSubject()->canMove(this->getSubject()->getRow() + 1, this->getSubject()->getCol())){
             double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
             if (xCoord > wallXCoord){
                 this->setCameraX(wallXCoord);
@@ -226,7 +227,7 @@ void GUI::GUIGhost::move(const int &ticks) {
         double xCoord = this->getCameraX();
         xCoord -= ticks * this->getXSpeed();
         // Als volgende direction naar links is en hij kan naar links:
-        if (this->getSubject()->getCurrentDirection() == direction::up and this->getSubject()->canMove(this->getSubject()->getRow() - 1, this->getSubject()->getCol())){
+        if (this->getSubject()->getNextDirection() == direction::up and this->getSubject()->canMove(this->getSubject()->getRow() - 1, this->getSubject()->getCol())){
             double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
             if (xCoord < wallXCoord){
                 this->setCameraX(wallXCoord);
@@ -239,7 +240,7 @@ void GUI::GUIGhost::move(const int &ticks) {
                 this->setCameraX(xCoord);
             }
         }
-        else if (this->getSubject()->getCurrentDirection() == direction::down and this->getSubject()->canMove(this->getSubject()->getRow() + 1, this->getSubject()->getCol())){
+        else if (this->getSubject()->getNextDirection() == direction::down and this->getSubject()->canMove(this->getSubject()->getRow() + 1, this->getSubject()->getCol())){
             double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
             if (xCoord < wallXCoord){
                 this->setCameraX(wallXCoord);

@@ -8,12 +8,13 @@
 #include "iostream"
 
 class GUI::GUIPacMan: public GUI::EntityView{
-    Model::PacMan* subject;
+    Model::PacMan* pacManModel;
     int textureNr;
     double xSpeed;
     double ySpeed;
 public:
-    explicit GUIPacMan(Model::PacMan* subject);
+
+    explicit GUIPacMan(Model::PacMan *subject);
 
     ~GUIPacMan() override;
 
@@ -27,11 +28,11 @@ public:
 
     void setTextureNr(int nr);
 
-    Model::PacMan *getSubject() const;
-
     double getXSpeed() const;
 
     double getYSpeed() const;
+
+    Model::PacMan *getPacManModel() const;
 };
 
 
