@@ -37,10 +37,10 @@ shared_ptr<Model::Coin> GUI::ConcreteFactory::createCoin(const int &row, const i
 
 shared_ptr<Model::Ghost> GUI::ConcreteFactory::createGhost(const int &row, const int &col) {
     shared_ptr<Model::Ghost> entity(new Model::Ghost(row, col, this->getWorld()));
-    shared_ptr<GUI::GUIGhost> observer(new GUI::GUIGhost(std::unique_ptr<Model::Ghost>()));
+    shared_ptr<GUI::GUIGhost> observer(new GUI::GUIGhost(entity));
     entity->addObserver(observer);
     this->getWorld()->addItem(entity);
-    this->getWorld()->addGhost(std::shared_ptr<Model::Ghost>());
+    this->getWorld()->addGhost(entity);
     return entity;
 }
 
