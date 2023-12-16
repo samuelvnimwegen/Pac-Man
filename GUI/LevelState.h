@@ -12,7 +12,7 @@ public:
 
     ~LevelState() override;
 
-    VictoryState* getNext() override;
+    std::shared_ptr<GUI::State> getNext() override;
 };
 
 

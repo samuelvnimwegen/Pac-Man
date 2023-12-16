@@ -9,7 +9,7 @@
 #include "Observer.h"
 
 class Model::PacMan: public Model::EntityModel{
-    Model::World* world;
+    std::weak_ptr<Model::World> world;
     direction currentDirection;
     direction nextDirection;
     double xSpeed;
@@ -22,7 +22,7 @@ public:
     /*
      * De constructor van de PacMan class
      */
-    PacMan(int row, int col, World *world);
+    PacMan(int row, int col, const std::shared_ptr<World>& world);
     /*
      * Beweegt Pac-Man
      */
@@ -40,15 +40,15 @@ public:
     */
     void moveDirection(const direction &dir);
 
-    [[nodiscard]] bool canMove(const int &row, const int &col) const;
+    [[nodiscard]] bool canMove(const int &row, const int &col);
 
     [[nodiscard]] const direction &getCurrentDirection() const;
 
     void setCurrentDirection(const direction &dir);
 
-    [[nodiscard]] Model::World *getWorld() const;
+    std::shared_ptr<Model::World> getWorld() ;
 
-    void setWorld(World *pWorld);
+    void setWorld(const std::weak_ptr<Model::World> &weakPtr);
 
     [[nodiscard]] double getXSpeed() const;
 

@@ -13,15 +13,6 @@ void Model::PacMan::setCurrentDirection(const direction &dir) {
     PacMan::currentDirection = dir;
 }
 
-
-Model::World *Model::PacMan::getWorld() const {
-    return world;
-}
-
-void Model::PacMan::setWorld(World *pWorld) {
-    PacMan::world = pWorld;
-}
-
 int Model::PacMan::getStartRow() const {
     return startRow;
 }
@@ -78,4 +69,12 @@ void Model::PacMan::setNextDirection(const direction &dir) {
 
 void Model::PacMan::move(const int &ticks) {
     this->getObservers().at(0)->move(ticks);
+}
+
+ std::shared_ptr<Model::World> Model::PacMan::getWorld()  {
+    return world.lock();
+}
+
+void Model::PacMan::setWorld(const std::weak_ptr<Model::World> &weakPtr) {
+    PacMan::world = weakPtr;
 }

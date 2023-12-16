@@ -8,7 +8,7 @@
 GUI::GUIWall::~GUIWall() = default;
 
 
-GUI::GUIWall::GUIWall(Model::Wall *wall) : EntityView(wall) {
+GUI::GUIWall::GUIWall(std::shared_ptr<Model::Wall> subject) : EntityView(subject) {
     sf::Texture texture;
     texture.loadFromFile("Muur2.png");
     this->setTexture(texture);

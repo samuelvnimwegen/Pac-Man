@@ -4,6 +4,8 @@
 
 #include "World.h"
 
+#include <utility>
+
 using namespace std;
 
 Model::World::World() {
@@ -30,29 +32,33 @@ void Model::World::setWidth(int wd) {
     World::width = wd;
 }
 
-Model::EntityModel *Model::World::getItem(const int &row, const int &col) {
-    return world[row][col];
+std::shared_ptr<Model::EntityModel> Model::World::getItem(const int &row, const int &col) {
+    return world[row][col].lock();
 }
 
-void Model::World::addItem(EntityModel *item) {
-    world[item->getRow()][item->getCol()] = item;
+void Model::World::addItem(const std::weak_ptr<Model::EntityModel>& item) {
+    if (item.lock()){
+        world[item.lock()->getRow()][item.lock()->getCol()] = item;
+    }
+
 }
 
-Model::AbstractFactory *Model::World::getFactory() const {
+std::shared_ptr<Model::AbstractFactory> Model::World::getFactory() const {
     return factory;
 }
 
-void Model::World::setFactory(AbstractFactory *fac) {
-    World::factory = fac;
+void Model::World::setFactory(std::shared_ptr<AbstractFactory> fac) {
+    World::factory = std::move(fac);
 }
 
 void Model::World::buildWorld() {
     assert(this->getFactory() != nullptr);
     // Lege map met null-pointers maken:
     for (int i = 0; i < this->getHeight(); ++i){
-        vector<EntityModel*> row;
+        vector<std::weak_ptr<Model::EntityModel>> row;
+        row.reserve(this->getWidth());
         for (int j = 0; j < this->getWidth(); ++j){
-            row.push_back(nullptr);
+            row.push_back(weak_ptr<EntityModel>());
         }
         this->world.push_back(row);
     }
@@ -142,82 +148,43 @@ void Model::World::buildWorld() {
 
 }
 
-Model::World::~World() {
+Model::World::~World() = default;
 
-}
 
-Model::PacMan *Model::World::getPacMan() const {
-    return pacMan;
-}
-
-void Model::World::setPacMan(PacMan *pMan) {
-    World::pacMan = pMan;
-}
-
-void Model::World::setItem(EntityModel* item, const int &row, const int &col) {
-    world[row][col] = item;
+void Model::World::setItem(const shared_ptr<Model::EntityModel>& item, const int &row, const int &col) {
+    world[row][col] = weak_ptr(item);
 }
 
 int Model::World::getCoinsLeft() const {
     return coinsLeft;
 }
 
-void Model::World::setCoinsLeft(int coins) {
-    World::coinsLeft = coins;
-}
-
-const vector<Model::Ghost *> &Model::World::getGhosts() const {
-    return ghosts;
-}
-
-void Model::World::setGhosts(const vector<Ghost *> &ghostVector) {
-    World::ghosts = ghostVector;
+void Model::World::setCoinsLeft(int coinsAmount) {
+    World::coinsLeft = coinsAmount;
 }
 
 void Model::World::die() const {
     this->getPacMan()->die();
-    for (auto ghost: this->getGhosts()){
+    for (const auto& ghost: this->getGhosts()){
         ghost->reset();
     }
 }
 
-const vector<std::vector<Model::EntityModel *>> &Model::World::getWorld() const {
-    return world;
-}
 
-const vector<Model::Coin *> &Model::World::getCoins() const {
-    return coins;
-}
-
-const vector<Model::Wall *> &Model::World::getWalls() const {
-    return walls;
-}
-
-void Model::World::addWall(Model::Wall *&wall) {
+void Model::World::addWall(const std::shared_ptr<Model::Wall> &wall) {
     auto newWalls = this->getWalls();
     newWalls.push_back(wall);
     this->setWalls(newWalls);
 }
 
-void Model::World::setWorld(const vector<std::vector<Model::EntityModel *>> &newWorld) {
-    World::world = newWorld;
-}
 
-void Model::World::setCoins(const vector<Coin *> &coinVector) {
-    World::coins = coinVector;
-}
-
-void Model::World::setWalls(const vector<Wall *> &wallVector) {
-    World::walls = wallVector;
-}
-
-void Model::World::addCoin(Model::Coin *&coin) {
+void Model::World::addCoin(const std::shared_ptr<Model::Coin> &coin) {
     auto coinVector = this->getCoins();
     coinVector.push_back(coin);
     this->setCoins(coinVector);
 }
 
-void Model::World::addGhost(Model::Ghost *ghost) {
+void Model::World::addGhost(const std::shared_ptr<Model::Ghost>& ghost) {
     auto ghostVector = this->getGhosts();
     ghostVector.push_back(ghost);
     this->setGhosts(ghostVector);
@@ -232,21 +199,59 @@ void Model::World::addGhost(Model::Ghost *ghost) {
     }
 }
 
-Model::AbstractFactory::AbstractFactory(World *world) : world(world) {}
-
-
-
-Model::World *Model::AbstractFactory::getWorld() const {
+const vector<std::vector<std::weak_ptr<Model::EntityModel>>> &Model::World::getWorld() const {
     return world;
 }
 
-void Model::AbstractFactory::setWorld(Model::World *newWorld) {
+void Model::World::setWorld(const vector<std::vector<std::weak_ptr<Model::EntityModel>>> &newWorld) {
+    World::world = newWorld;
+}
+
+const shared_ptr<Model::PacMan> &Model::World::getPacMan() const {
+    return pacMan;
+}
+
+void Model::World::setPacMan(const shared_ptr<Model::PacMan> &newPacMan) {
+    World::pacMan = newPacMan;
+}
+
+const vector<std::shared_ptr<Model::Coin>> &Model::World::getCoins() const {
+    return coins;
+}
+
+void Model::World::setCoins(const vector<std::shared_ptr<Coin>> &newCoins) {
+    World::coins = newCoins;
+}
+
+const vector<std::shared_ptr<Model::Ghost>> &Model::World::getGhosts() const {
+    return ghosts;
+}
+
+void Model::World::setGhosts(const vector<std::shared_ptr<Ghost>> &newGhosts) {
+    World::ghosts = newGhosts;
+}
+
+const vector<std::shared_ptr<Model::Wall>> &Model::World::getWalls() const {
+    return walls;
+}
+
+void Model::World::setWalls(const vector<std::shared_ptr<Wall>> &newWalls) {
+    World::walls = newWalls;
+}
+
+Model::AbstractFactory::AbstractFactory(const std::shared_ptr<Model::World>& world) : world(world) {}
+
+
+
+std::shared_ptr<Model::World> Model::AbstractFactory::getWorld() const {
+    return world.lock();
+}
+
+void Model::AbstractFactory::setWorld(const std::shared_ptr<Model::World>& newWorld) {
     AbstractFactory::world = newWorld;
 }
 
-
-
-Model::PacMan::PacMan(int row, int col, Model::World *world) : EntityModel(row, col), world(world) {
+Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : EntityModel(row, col), world(world) {
     this->setCurrentDirection(direction::none);
     this->setNextDirection(direction::none);
     xSpeed = double(1) / this->getWorld()->getWidth() / 100;
@@ -308,7 +313,7 @@ void Model::PacMan::moveDirection(const direction &dir) {
 
 
 
-bool Model::PacMan::canMove(const int &row, const int &col) const {
+bool Model::PacMan::canMove(const int &row, const int &col)  {
     if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin" or this->getWorld()->getItem(row, col)->getTag() == "Ghost"){
         return true;
     }
@@ -358,14 +363,14 @@ int Model::Ghost::getManhattanDistance(const direction &direction) {
     }
 }
 
-bool Model::Ghost::canMove(const int &row, const int &col) const {
+bool Model::Ghost::canMove(const int &row, const int &col) {
     if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin" or this->getWorld()->getItem(row, col)->getTag() == "PacMan"){
         return true;
     }
     return false;
 }
 
-Model::Ghost::Ghost(int row, int col, Model::World *world) : EntityModel(row, col), world(world) {
+Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world) : EntityModel(row, col), world(world) {
     this->setTag("Ghost");
     currentDirection = direction::up;
     currentState = "WAITING";
@@ -379,6 +384,15 @@ Model::Ghost::Ghost(int row, int col, Model::World *world) : EntityModel(row, co
 void Model::Ghost::move(const int &steps) {
     this->getObservers().at(0)->move(steps);
 }
+
+shared_ptr<Model::World> Model::Ghost::getWorld() {
+    return world.lock();
+}
+
+void Model::Ghost::setWorld(const weak_ptr<Model::World> &weakPtr) {
+    Ghost::world = weakPtr;
+}
+
 
 
 

@@ -18,15 +18,15 @@
 #include "memory"
 
 class Model::World {
-    std::vector<std::vector<Model::EntityModel*>> world;
+    std::vector<std::vector<std::weak_ptr<Model::EntityModel>>> world;
     int height;
     int width;
-    Model::AbstractFactory* factory;
-    Model::PacMan* pacMan;
+    std::shared_ptr<Model::AbstractFactory> factory;
+    std::shared_ptr<Model::PacMan> pacMan;
     int coinsLeft;
-    std::vector<Coin*> coins;
-    std::vector<Ghost*> ghosts;
-    std::vector<Wall*> walls;
+    std::vector<std::shared_ptr<Coin>> coins;
+    std::vector<std::shared_ptr<Ghost>> ghosts;
+    std::vector<std::shared_ptr<Wall>> walls;
 public:
     explicit World();
 
@@ -44,45 +44,45 @@ public:
 
     void setWidth(int wd);
 
-    EntityModel* getItem(const int &row, const int &col);
+    std::shared_ptr<Model::EntityModel> getItem(const int &row, const int &col);
 
-    void setItem(EntityModel* item, const int &row, const int &col);
+    void setItem(const std::shared_ptr<Model::EntityModel>& item, const int &row, const int &col);
 
-    void addItem(EntityModel* item);
+    void addItem(const std::weak_ptr<Model::EntityModel>& item);
 
-    [[nodiscard]] AbstractFactory *getFactory() const;
+    [[nodiscard]] std::shared_ptr<AbstractFactory> getFactory() const;
 
-    void setFactory(AbstractFactory *fac);
-
-    [[nodiscard]] PacMan *getPacMan() const;
-
-    void setPacMan(PacMan *pMan);
+    void setFactory(std::shared_ptr<AbstractFactory> fac);
 
     [[nodiscard]] int getCoinsLeft() const;
 
-    void setCoinsLeft(int coins);
+    void setCoinsLeft(int coinsAmount);
 
-    void addGhost(Ghost* ghost);
+    void addGhost(const std::shared_ptr<Model::Ghost>& ghost);
 
-    [[nodiscard]] const std::vector<Ghost *> &getGhosts() const;
+    void addWall(const std::shared_ptr<Model::Wall> &wall);
 
-    void setGhosts(const std::vector<Ghost *> &ghostVector);
+    void addCoin(const std::shared_ptr<Model::Coin> &coin);
 
-    [[nodiscard]] const std::vector<std::vector<Model::EntityModel *>> &getWorld() const;
+    [[nodiscard]] const std::vector<std::vector<std::weak_ptr<Model::EntityModel>>> &getWorld() const;
 
-    [[nodiscard]] const std::vector<Coin *> &getCoins() const;
+    void setWorld(const std::vector<std::vector<std::weak_ptr<Model::EntityModel>>> &newWorld);
 
-    [[nodiscard]] const std::vector<Wall *> &getWalls() const;
+    [[nodiscard]] const std::shared_ptr<Model::PacMan> &getPacMan() const;
 
-    void setWorld(const std::vector<std::vector<Model::EntityModel *>> &newWorld);
+    void setPacMan(const std::shared_ptr<Model::PacMan> &newPacMan);
 
-    void setCoins(const std::vector<Coin *> &coinVector);
+    [[nodiscard]] const std::vector<std::shared_ptr<Coin>> &getCoins() const;
 
-    void setWalls(const std::vector<Wall *> &wallVector);
+    void setCoins(const std::vector<std::shared_ptr<Coin>> &newCoins);
 
-    void addWall(Model::Wall* &wall);
+    [[nodiscard]] const std::vector<std::shared_ptr<Ghost>> &getGhosts() const;
 
-    void addCoin(Model::Coin* &coin);
+    void setGhosts(const std::vector<std::shared_ptr<Ghost>> &newGhosts);
+
+    [[nodiscard]] const std::vector<std::shared_ptr<Wall>> &getWalls() const;
+
+    void setWalls(const std::vector<std::shared_ptr<Wall>> &newWalls);
 
 };
 

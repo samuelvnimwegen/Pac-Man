@@ -7,12 +7,13 @@
 #include "State.h"
 #include "MenuState.h"
 #include "PausedState.h"
+#include "stack"
 class GUI::StateManager {
-    vector<State*> stack;
+    std::stack<shared_ptr<State>> stack;
 public:
     StateManager();
 
-    State* getCurrentState();
+    std::shared_ptr<GUI::State> getCurrentState();
 
     void pop();
 

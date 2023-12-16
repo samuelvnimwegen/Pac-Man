@@ -15,15 +15,15 @@
 
 class GUI::ConcreteFactory: public Model::AbstractFactory{
 public:
-    explicit ConcreteFactory(Model::World *world);
+    explicit ConcreteFactory(const std::shared_ptr<Model::World>& world);
 
-    std::unique_ptr<Model::PacMan> createPacMan(const int &row, const int &col) override;
+    std::shared_ptr<Model::PacMan> createPacMan(const int &row, const int &col) override;
 
-    std::unique_ptr<Model::Wall>  createWall(const int &row, const int &col) override;
+    std::shared_ptr <Model::Wall> createWall(const int &row, const int &col) override;
 
-    std::unique_ptr<Model::Coin>  createCoin(const int &row, const int &col) override;
+    std::shared_ptr <Model::Coin> createCoin(const int &row, const int &col) override;
 
-    std::unique_ptr<Model::Ghost> createGhost(const int &row, const int &col) override;
+    std::shared_ptr <Model::Ghost> createGhost(const int &row, const int &col) override;
 
 };
 

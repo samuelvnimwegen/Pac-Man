@@ -8,8 +8,8 @@ GUI::PausedState::PausedState() {
     this->setTag("PausedState");
 }
 
-GUI::State *GUI::PausedState::getNext() {
-    return new MenuState();
+shared_ptr<GUI::State> GUI::PausedState::getNext() {
+    return make_shared<GUI::MenuState>();
 }
 
 GUI::PausedState::~PausedState() = default;

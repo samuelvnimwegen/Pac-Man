@@ -10,7 +10,7 @@ class GUI::MenuState: public GUI::State{
 public:
     MenuState();
 
-    LevelState* getNext() override;
+    shared_ptr<GUI::State>  getNext() override;
 
     ~MenuState() override;
 

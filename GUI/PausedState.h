@@ -12,7 +12,7 @@ public:
 
     ~PausedState() override;
 
-    State * getNext() override;
+    std::shared_ptr<State> getNext() override;
 };
 
 

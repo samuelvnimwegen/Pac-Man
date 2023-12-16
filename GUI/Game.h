@@ -25,15 +25,9 @@
 class GUI::Game {
     int width;
     int height;
-    vector<EntityView*> viewEntities;
-    Model::World* world;
-    GUI::Camera* camera;
-    StateManager* stateManager;
-    vector<GUI::GUIGhost*> ghosts;
-    vector<GUI::GUIWall*> walls;
-    vector<GUI::GUICoin*> coins;
-    GUI::GUIPacMan* pacMan;
-
+    shared_ptr<Model::World> world;
+    shared_ptr<GUI::Camera> camera;
+    shared_ptr<StateManager> stateManager;
 public:
     Game(const int &width, const int &height);
 
@@ -47,19 +41,13 @@ public:
 
     [[nodiscard]] int getWidth() const;
 
-    void setWidth(int wd);
-
     [[nodiscard]] int getHeight() const;
 
-    void setHeight(int hg);
+    [[nodiscard]] const shared_ptr<Model::World> &getWorld() const;
 
-    [[nodiscard]] Model::World *getWorld() const;
+    [[nodiscard]] const shared_ptr<GUI::Camera> &getCamera() const;
 
-    void setWorld(Model::World *sWorld);
-
-    [[nodiscard]] StateManager *getStateManager() const;
-
-    void setStateManager(StateManager *state);
+    [[nodiscard]] const shared_ptr<GUI::StateManager> &getStateManager() const;
 
 };
 

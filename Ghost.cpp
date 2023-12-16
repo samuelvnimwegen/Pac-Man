@@ -4,9 +4,6 @@
 
 #include "Ghost.h"
 using namespace std;
-Model::World *Model::Ghost::getWorld() const {
-    return world;
-}
 
 void Model::Ghost::changeDirection() {
     int minDistance = 1000000;
@@ -96,10 +93,6 @@ bool Model::Ghost::isJustTurned() const {
 
 void Model::Ghost::setJustTurned(bool turned) {
     Ghost::justTurned = turned;
-}
-
-void Model::Ghost::setWorld(World *gWorld) {
-    Ghost::world = gWorld;
 }
 
 const string &Model::Ghost::getCurrentState() const {

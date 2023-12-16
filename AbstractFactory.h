@@ -8,21 +8,21 @@
 #include "Subject.h"
 
 class Model::AbstractFactory {
-    Model::World* world;
+    std::weak_ptr<Model::World> world;
 public:
-    explicit AbstractFactory(Model::World *world);
+    explicit AbstractFactory(const std::shared_ptr<Model::World>& world);
 
-    virtual Model::PacMan* createPacMan(const int &row, const int &col) = 0;
+    virtual std::shared_ptr <PacMan> createPacMan(const int &row, const int &col) = 0;
 
-    virtual Model::Wall* createWall(const int&row, const int &col) = 0;
+    virtual std::shared_ptr <Wall> createWall(const int&row, const int &col) = 0;
 
-    virtual Model::Coin* createCoin(const int&row, const int &col) = 0;
+    virtual std::shared_ptr <Coin> createCoin(const int&row, const int &col) = 0;
 
-    virtual Model::Ghost* createGhost(const int &row, const int &col) = 0;
+    virtual std::shared_ptr <Ghost> createGhost(const int &row, const int &col) = 0;
 
-    [[nodiscard]] Model::World *getWorld() const;
+    [[nodiscard]] std::shared_ptr<Model::World> getWorld() const;
 
-    void setWorld(World *newWorld);
+    void setWorld(const std::shared_ptr<Model::World>& newWorld);
 };
 
 

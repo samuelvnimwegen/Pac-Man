@@ -8,7 +8,7 @@
 #include "Subject.h"
 
 class Model::Ghost: public Model::EntityModel{
-    Model::World* world;
+    std::weak_ptr<Model::World> world;
     color ghostColor;
     direction currentDirection;
     direction nextDirection;
@@ -18,7 +18,7 @@ class Model::Ghost: public Model::EntityModel{
     int startCol;
 
 public:
-    Ghost(int row, int col, World *world);
+    Ghost(int row, int col, const std::shared_ptr<Model::World>& world);
 
     void move(const int &steps);
 
@@ -26,17 +26,13 @@ public:
 
     void reset();
 
-    [[nodiscard]] bool canMove(const int &row, const int &col) const;
+    [[nodiscard]] bool canMove(const int &row, const int &col) ;
 
     [[nodiscard]] int getManhattanDistance(const direction &direction);
-
-    [[nodiscard]] World *getWorld() const;
 
     [[nodiscard]] bool isJustTurned() const;
 
     void setJustTurned(bool turned);
-
-    void setWorld(World *gWorld);
 
     [[nodiscard]] const std::string &getCurrentState() const;
 
@@ -50,17 +46,21 @@ public:
 
     void setStartCol(int col);
 
-    color getColor() const;
+    [[nodiscard]] color getColor() const;
 
     void setColor(color col);
 
-    direction getCurrentDirection() const;
+    [[nodiscard]] direction getCurrentDirection() const;
 
     void setCurrentDirection(direction direction);
 
-    direction getNextDirection() const;
+    [[nodiscard]] direction getNextDirection() const;
 
     void setNextDirection(direction direction);
+
+    [[nodiscard]]  std::shared_ptr<Model::World> getWorld() ;
+
+    void setWorld(const std::weak_ptr<Model::World> &weakPtr);
 };
 
 

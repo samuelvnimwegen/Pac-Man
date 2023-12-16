@@ -21,14 +21,6 @@ void GUI::EntityView::setSprite(const sf::Sprite &entitySprite) {
     EntityView::sprite = entitySprite;
 }
 
-void GUI::EntityView::removeSprite() {
-    sf::Texture tex;
-    tex.loadFromFile("Sprites.png");
-    this->setTexture(tex);
-    sf::Sprite spr(this->getTexture(), sf::IntRect(0, 0, 1, 1));
-    this->setSprite(spr);
-}
-
 GUI::EntityView::~EntityView() = default;
 
 
@@ -52,18 +44,14 @@ void GUI::EntityView::move(const int &ticks) {
 
 }
 
-GUI::EntityView::EntityView(Model::EntityModel *sub) : subject(sub) {
+GUI::EntityView::EntityView(const std::shared_ptr<Model::EntityModel>& subject) : subject(subject) {
     auto camera = GUI::Camera::instance();
     cameraX = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
     cameraY = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
 }
 
-Model::EntityModel *GUI::EntityView::getSubject() const {
-    return subject;
-}
-
-void GUI::EntityView::setSubject(Model::EntityModel *sub) {
-    EntityView::subject = sub;
+std::shared_ptr<Model::EntityModel> GUI::EntityView::getSubject() const {
+    return subject.lock();
 }
 
 

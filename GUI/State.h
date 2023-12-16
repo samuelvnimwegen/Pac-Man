@@ -20,7 +20,7 @@ public:
 
     void setTag(const string &tag);
 
-    virtual State* getNext() = 0;
+    virtual std::shared_ptr<GUI::State> getNext() = 0;
 };
 
 

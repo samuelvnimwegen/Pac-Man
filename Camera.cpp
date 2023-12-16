@@ -5,8 +5,7 @@
 #include "Camera.h"
 using namespace std;
 
-GUI::Camera* GUI::Camera::cameraPointer = nullptr;
-
+std::shared_ptr<GUI::Camera> GUI::Camera::cameraPointer = nullptr;
 
 
 Coordinates GUI::Camera::getCameraCoords(int row, int col) const {
@@ -15,9 +14,9 @@ Coordinates GUI::Camera::getCameraCoords(int row, int col) const {
     return {width, height};
 }
 
-GUI::Camera *GUI::Camera::instance() {
+std::shared_ptr<GUI::Camera> GUI::Camera::instance() {
     if (cameraPointer == nullptr){
-        cameraPointer = new GUI::Camera();
+        cameraPointer = shared_ptr<GUI::Camera>(new GUI::Camera());
         return cameraPointer;
     }
     return cameraPointer;

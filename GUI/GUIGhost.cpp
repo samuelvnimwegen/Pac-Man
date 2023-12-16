@@ -4,19 +4,18 @@
 
 #include "GUIGhost.h"
 
+#include <utility>
+
 
 
 sf::Sprite GUI::GUIGhost::getSprite() {
     sf::Sprite sprite;
-
     sprite = sf::Sprite(this->getTexture(), sf::IntRect(spriteX, 0, 40, 40));
-
-
     return sprite;
 }
 
-GUI::GUIGhost::GUIGhost(Model::Ghost* ghost) : GUI::EntityView(ghost) {
-    this->subject = ghost;
+GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost>& ghost) : GUI::EntityView(ghost) {
+    subject = ghost;
     textureNr = 0;
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
@@ -31,14 +30,14 @@ GUI::GUIGhost::GUIGhost(Model::Ghost* ghost) : GUI::EntityView(ghost) {
     }else {
         spriteX = 150;
     }
-    Camera* camera = Camera::instance();
+    auto camera = Camera::instance();
     xSpeed = camera->getXSpeed() * 0.5;
     ySpeed = camera->getYSpeed() * 0.5;
     subject = ghost;
 }
 
 void GUI::GUIGhost::move(const int &ticks) {
-    Camera* camera = Camera::instance();
+    auto camera = Camera::instance();
     this->getSubject()->changeDirection();
     if (this->getSubject()->getCurrentDirection() == up){
         double yCoord = this->getCameraY();
@@ -303,12 +302,9 @@ void GUI::GUIGhost::setXSpeed(double speed) {
     GUIGhost::xSpeed = speed;
 }
 
-Model::Ghost *GUI::GUIGhost::getSubject() const {
+std::shared_ptr<Model::Ghost> GUI::GUIGhost::getSubject(){
     return subject;
 }
 
-void GUI::GUIGhost::setSubject(Model::Ghost *sub) {
-    GUIGhost::subject = sub;
-}
 
 

@@ -6,8 +6,7 @@
 
 
 
-GUI::GUICoin::GUICoin(Model::Coin *coin) : GUI::EntityView(coin) {
-    subject = coin;
+GUI::GUICoin::GUICoin(const std::shared_ptr<Model::Coin>& coin) : GUI::EntityView(coin) {
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
     this->setTexture(texture);

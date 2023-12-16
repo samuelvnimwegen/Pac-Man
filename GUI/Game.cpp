@@ -3,24 +3,25 @@
 //
 
 #include "Game.h"
-#include "ConcreteFactory.h"
 
+#include <memory>
+#include "ConcreteFactory.h"
+using namespace std;
 
 
 GUI::Game::Game(const int &wd, const int &hg) {
     width = wd;
     height = hg;
-    pacMan = nullptr;
 
-    world = new Model::World();
-    auto concreteFactory = new ConcreteFactory(world);
+    world = std::make_shared<Model::World>();
+    auto concreteFactory = std::make_shared<GUI::ConcreteFactory> (world);
     world->setFactory(concreteFactory);
     camera = GUI::Camera::instance();
-    camera->setModelHeight(this->getWorld()->getHeight());
-    camera->setModelWidth(this->getWorld()->getWidth());
+    this->getCamera()->setModelHeight(this->getWorld()->getHeight());
+    this->getCamera()->setModelWidth(this->getWorld()->getWidth());
     world->buildWorld();
 
-    stateManager = new StateManager();
+    stateManager = std::make_shared<GUI::StateManager>();
 
     assert(this->getHeight() % world->getHeight() == 0);
     assert(this->getWidth() % world->getWidth() == 0);
@@ -94,7 +95,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
             int ticks = Model::Stopwatch::instance()->getTicks();
             direction direction = getDirection();
             if (this->getWorld()->getPacMan()->getCurrentDirection() != direction::none){
-                for (auto ghost: this->getWorld()->getGhosts()){
+                for (const auto& ghost: this->getWorld()->getGhosts()){
                     ghost->move(ticks);
                 }
             }
@@ -102,13 +103,13 @@ GUI::Game::Game(const int &wd, const int &hg) {
             this->getWorld()->getPacMan()->move(ticks);
             text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));
             window.clear();
-            for (auto wall:this->getWorld()->getWalls()){
+            for (const auto& wall:this->getWorld()->getWalls()){
                 auto pos = this->cameraToPixels(wall->getObservers().at(0)->getCameraX(), wall->getObservers().at(0)->getCameraY());
                 sf::Sprite sprite = wall->getObservers().at(0)->getSprite();
                 sprite.setPosition(float(pos.first), float(pos.second));
                 window.draw(sprite);
             }
-            for (auto coin: this->getWorld()->getCoins()){
+            for (const auto& coin: this->getWorld()->getCoins()){
                 if (!coin->isConsumed()){
                     auto pos = this->cameraToPixels(coin->getObservers().at(0)->getCameraX(), coin->getObservers().at(0)->getCameraY());
                     sf::Sprite sprite = coin->getObservers().at(0)->getSprite();
@@ -116,7 +117,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
                     window.draw(sprite);
                 }
             }
-            for (auto ghost: this->getWorld()->getGhosts()){
+            for (const auto& ghost: this->getWorld()->getGhosts()){
                 auto pos = this->cameraToPixels(ghost->getObservers().at(0)->getCameraX(), ghost->getObservers().at(0)->getCameraY());
                 sf::Sprite sprite = ghost->getObservers().at(0)->getSprite();
                 sprite.setPosition(float(pos.first), float(pos.second));
@@ -144,9 +145,6 @@ GUI::Game::Game(const int &wd, const int &hg) {
                 window.draw(pauzeText);
                 window.display();
                 this->getStateManager()->push();
-                for (auto entity: this->viewEntities){
-                    delete entity;
-                }
                 /*
                  * Hier nog wat code om level te resetten
                  */
@@ -158,14 +156,9 @@ GUI::Game::Game(const int &wd, const int &hg) {
         else if (this->getStateManager()->getCurrentState()->getTag() == "VictoryState"){
             string input = getInput();
             if (input == "ESCAPE"){
-                this->getStateManager()->push();
-
-                for (auto entity: this->viewEntities){
-                    delete entity;
-                }
-
-                world = new Model::World();
-                world->buildWorld();
+                /*
+                 * Code voor victory state bij ingeven escape
+                 */
             }
             sf::Text introText3;
             introText3.setFont(font1);
@@ -184,36 +177,13 @@ int GUI::Game::getWidth() const {
     return width;
 }
 
-void GUI::Game::setWidth(int wd) {
-    Game::width = wd;
-}
+
 
 int GUI::Game::getHeight() const {
     return height;
 }
 
-void GUI::Game::setHeight(int hg) {
-    Game::height = hg;
-}
-
-
-
-Model::World *GUI::Game::getWorld() const {
-    return world;
-}
-
-void GUI::Game::setWorld(Model::World *sWorld) {
-    Game::world = sWorld;
-}
-
-GUI::Game::~Game() {
-    int entitySize = int(this->viewEntities.size());
-    for (int i = 0; i < entitySize; ++i){
-        delete viewEntities[i];
-    }
-    delete world;
-
-}
+GUI::Game::~Game() = default;
 
 direction GUI::Game::getDirection() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) or sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
@@ -234,13 +204,6 @@ pair<int, int> GUI::Game::cameraToPixels(double xCamera, double yCamera) const {
     return make_pair(x, y);
 }
 
-GUI::StateManager *GUI::Game::getStateManager() const {
-    return stateManager;
-}
-
-void GUI::Game::setStateManager(GUI::StateManager *state) {
-    Game::stateManager = state;
-}
 
 string GUI::Game::getInput() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
@@ -251,6 +214,18 @@ string GUI::Game::getInput() {
         return "BACKSPACE";
     }
     return "NONE";
+}
+
+const shared_ptr<Model::World> &GUI::Game::getWorld() const {
+    return world;
+}
+
+const shared_ptr<GUI::Camera> &GUI::Game::getCamera() const {
+    return camera;
+}
+
+const shared_ptr<GUI::StateManager> &GUI::Game::getStateManager() const {
+    return stateManager;
 }
 
 

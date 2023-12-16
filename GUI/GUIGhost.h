@@ -7,13 +7,13 @@
 #include "EntityView.h"
 
 class GUI::GUIGhost: public GUI::EntityView{
+    std::shared_ptr<Model::Ghost> subject;
     int textureNr;
     int spriteX;
     double ySpeed;
     double xSpeed;
-    Model::Ghost* subject;
 public:
-    explicit GUIGhost(Model::Ghost* ghost);
+    explicit GUIGhost(const std::shared_ptr<Model::Ghost>& ghost);
 
     void move(const int &ticks) override;
 
@@ -27,9 +27,8 @@ public:
 
     void setXSpeed(double speed);
 
-    Model::Ghost *getSubject() const override;
+    std::shared_ptr<Model::Ghost> getSubject();
 
-    void setSubject(Model::Ghost *sub);
 };
 
 

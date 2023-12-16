@@ -3,7 +3,7 @@
 //
 
 #include "Stopwatch.h"
-Model::Stopwatch* Model::Stopwatch::m_pStopwatch = nullptr;
+std::shared_ptr<Model::Stopwatch> Model::Stopwatch::m_pStopwatch = nullptr;
 
 Model::Stopwatch::Stopwatch(){
     tickTime = sf::milliseconds(1);
@@ -19,9 +19,9 @@ int Model::Stopwatch::getTicks() {
     return steps;
 }
 
-Model::Stopwatch *Model::Stopwatch::instance() {
+std::shared_ptr<Model::Stopwatch> Model::Stopwatch::instance() {
     if (m_pStopwatch == nullptr){
-        m_pStopwatch = new Stopwatch();
+        m_pStopwatch = std::shared_ptr<Model::Stopwatch>(new Stopwatch);
     }
     return m_pStopwatch;
 }

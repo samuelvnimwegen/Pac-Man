@@ -64,17 +64,17 @@ void GUI::GUIPacMan::setTextureNr(int nr) {
 }
 
 void GUI::GUIPacMan::updateTextureNr() {
-    if (textureNr < 1){
-        ++textureNr;
+    if (this->getTextureNr() < 1){
+        this->setTextureNr(this->getTextureNr() + 1);
     }
     else{
-        textureNr = 0;
+        this->setTextureNr(0);
     }
 }
 
 
 void GUI::GUIPacMan::move(const int &ticks) {
-    Camera* camera = Camera::instance();
+    shared_ptr<GUI::Camera> camera = Camera::instance();
     this->getPacManModel()->setHasMoved(true);
     if (this->getPacManModel()->getCurrentDirection() == direction::up){
         double yCoord = this->getCameraY();
@@ -345,17 +345,17 @@ double GUI::GUIPacMan::getYSpeed() const {
     return ySpeed;
 }
 
-Model::PacMan *GUI::GUIPacMan::getPacManModel() const {
-    return pacManModel;
+std::shared_ptr<Model::PacMan> GUI::GUIPacMan::getPacManModel() const {
+    return pacManModel.lock();
 }
 
-GUI::GUIPacMan::GUIPacMan(Model::PacMan *subject) : EntityView(subject) {
+GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan>& subject) : EntityView(subject) {
     textureNr = 0;
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
     this->setTexture(texture);
     pacManModel = subject;
-    Camera* cam = Camera::instance();
+    shared_ptr<Camera> cam = Camera::instance();
     xSpeed = cam->getXSpeed();
     ySpeed = cam->getYSpeed();
 }

@@ -8,7 +8,7 @@
 
 class GUI::GUIWall: public GUI::EntityView {
 public:
-    explicit GUIWall(Model::Wall *subject);
+    explicit GUIWall(std::shared_ptr<Model::Wall> subject);
 
     ~GUIWall() override;
 

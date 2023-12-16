@@ -11,11 +11,11 @@ class Model::Stopwatch {
 private:
     sf::Time tickTime;
     sf::Clock clock;
-    static Stopwatch* m_pStopwatch;
+    static std::shared_ptr<Model::Stopwatch> m_pStopwatch;
 protected:
     explicit Stopwatch();
 public:
-    static Stopwatch* instance();
+    static std::shared_ptr<Model::Stopwatch> instance();
 
     Stopwatch(Model::Stopwatch &other) = delete;
 

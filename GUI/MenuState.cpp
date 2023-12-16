@@ -8,12 +8,8 @@ GUI::MenuState::MenuState() {
     this->setTag("MenuState");
 }
 
-GUI::LevelState *GUI::MenuState::getNext() {
-    return new LevelState();
-}
-
 GUI::MenuState::~MenuState() = default;
 
-GUI::State *GUI::VictoryState::getNext() {
-    return new MenuState();
+shared_ptr<GUI::State> GUI::VictoryState::getNext() {
+    return make_shared<LevelState>();
 }

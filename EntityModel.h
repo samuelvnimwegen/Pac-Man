@@ -9,7 +9,7 @@
 class Model::EntityModel: public  Model::Subject{
     std::string tag;
     bool consumed;
-    std::vector<Model::Observer*> observers;
+    std::vector<std::shared_ptr<Model::Observer>> observers;
 public:
     EntityModel(int row, int col);
 
@@ -21,9 +21,9 @@ public:
 
     void consume();
 
-    void addObserver(Model::Observer* observer);
+    [[nodiscard]] const std::vector<std::shared_ptr<Model::Observer>> &getObservers() const;
 
-    [[nodiscard]] const std::vector<Model::Observer *> &getObservers() const;
+    void addObserver(const std::shared_ptr<Model::Observer>& observer);
 };
 
 

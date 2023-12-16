@@ -8,13 +8,13 @@
 #include "iostream"
 
 class GUI::GUIPacMan: public GUI::EntityView{
-    Model::PacMan* pacManModel;
+    std::weak_ptr<Model::PacMan> pacManModel;
     int textureNr;
     double xSpeed;
     double ySpeed;
 public:
 
-    explicit GUIPacMan(Model::PacMan *subject);
+    explicit GUIPacMan(const std::shared_ptr<Model::PacMan>& subject);
 
     ~GUIPacMan() override;
 
@@ -32,7 +32,7 @@ public:
 
     double getYSpeed() const;
 
-    Model::PacMan *getPacManModel() const;
+    std::shared_ptr<Model::PacMan> getPacManModel() const;
 };
 
 

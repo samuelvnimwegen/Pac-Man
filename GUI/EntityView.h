@@ -13,15 +13,13 @@ class GUI::EntityView: public Model::Observer{
     sf::Sprite sprite;
     double cameraX;
     double cameraY;
-    Model::EntityModel* subject;
+    std::weak_ptr<Model::EntityModel> subject;
 public:
-    explicit EntityView(Model::EntityModel *subject);
+    explicit EntityView(const std::shared_ptr<Model::EntityModel>& subject);
 
     virtual ~EntityView();
 
     const sf::Texture &getTexture() const;
-
-    void removeSprite();
 
     void setTexture(const sf::Texture &entityTexture);
 
@@ -39,10 +37,7 @@ public:
 
     void move(const int &ticks) override;
 
-    virtual Model::EntityModel *getSubject() const;
-
-    void setSubject(Model::EntityModel *sub);
-
+    virtual std::shared_ptr<Model::EntityModel> getSubject() const;
 };
 
 

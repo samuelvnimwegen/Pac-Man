@@ -4,27 +4,24 @@
 
 #include "StateManager.h"
 
+#include <memory>
+
 GUI::StateManager::StateManager() {
-    stack.push_back(new MenuState());
+    stack.push(std::make_shared<GUI::MenuState>());
 }
 
-GUI::State *GUI::StateManager::getCurrentState() {
-    return stack.at(stack.size() - 1);
+std::shared_ptr<GUI::State> GUI::StateManager::getCurrentState() {
+    return stack.top();
 }
 
 void GUI::StateManager::pop() {
-    if (stack.size() != 1){
-        delete stack.at(stack.size() - 1);
-        stack.pop_back();
-    }
+    stack.pop();
 }
 
 void GUI::StateManager::push() {
-    if (this->getCurrentState()->getNext() != nullptr){
-        stack.push_back(this->getCurrentState()->getNext());
-    }
+    stack.push(this->getCurrentState()->getNext());
 }
 
 void GUI::StateManager::pauze() {
-    stack.push_back(new PausedState());
+    stack.push(std::make_shared<GUI::PausedState>());
 }

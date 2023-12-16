@@ -4,12 +4,14 @@
 
 #include "LevelState.h"
 
+#include <memory>
+
 GUI::LevelState::LevelState(){
    this->setTag("LevelState");
 }
 
-GUI::VictoryState *GUI::LevelState::getNext() {
-    return new VictoryState();
+shared_ptr<GUI::State> GUI::LevelState::getNext() {
+    return std::make_shared<GUI::VictoryState>();
 }
 
 GUI::LevelState::~LevelState() = default;

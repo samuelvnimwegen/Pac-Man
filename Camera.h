@@ -23,11 +23,11 @@ class GUI::Camera {
     int modelHeight;
     double xSpeed;
     double ySpeed;
-    static GUI::Camera* cameraPointer;
+    static std::shared_ptr<GUI::Camera> cameraPointer;
 public:
     virtual ~Camera();
 
-    static  GUI::Camera *instance();
+    static std::shared_ptr<GUI::Camera> instance();
 
     [[nodiscard]] int getModelWidth() const;
 

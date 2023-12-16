@@ -25,10 +25,12 @@ void Model::EntityModel::consume() {
     consumed = true;
 }
 
-void Model::EntityModel::addObserver(Model::Observer *observer) {
+const vector<std::shared_ptr<Model::Observer>> &Model::EntityModel::getObservers() const {
+    return observers;
+}
+
+void Model::EntityModel::addObserver(const std::shared_ptr<Model::Observer>& observer) {
     observers.push_back(observer);
 }
 
-const vector<Model::Observer *> &Model::EntityModel::getObservers() const {
-    return observers;
-}
+
