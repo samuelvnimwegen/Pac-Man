@@ -13,7 +13,7 @@ class GUI::GUIGhost: public GUI::EntityView{
     double ySpeed;
     double xSpeed;
 public:
-    explicit GUIGhost(const std::shared_ptr<Model::Ghost>& ghost);
+    explicit GUIGhost(const std::shared_ptr<Model::Ghost>& ghost, std::weak_ptr<sf::RenderWindow> win);
 
     void move(const int &ticks) override;
 

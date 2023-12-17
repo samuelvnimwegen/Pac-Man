@@ -12,9 +12,10 @@ using namespace std;
 GUI::Game::Game(const int &wd, const int &hg) {
     width = wd;
     height = hg;
+    auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(this->getWidth(), this->getHeight() + 50), "Pac-Man");
 
     world = std::make_shared<Model::World>();
-    auto concreteFactory = std::make_shared<GUI::ConcreteFactory> (world);
+    auto concreteFactory = std::make_shared<GUI::ConcreteFactory>(world, window);
     world->setFactory(concreteFactory);
     camera = GUI::Camera::instance();
     this->getCamera()->setModelHeight(this->getWorld()->getHeight());
@@ -27,7 +28,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
     assert(this->getWidth() % world->getWidth() == 0);
 
 
-    sf::RenderWindow window(sf::VideoMode(this->getWidth(), this->getHeight() + 50), "Pac-Man");
+
 
     // Score voor level:
     sf::Font font;
@@ -69,11 +70,11 @@ GUI::Game::Game(const int &wd, const int &hg) {
     pauzeText.setPosition(70, 250);
     pauzeText.setString("press space to unpause");
 
-    while (window.isOpen()){
+    while (window->isOpen()){
         sf::Event event{};
-        while(window.pollEvent(event)){
+        while(window->pollEvent(event)){
             if (event.type == sf::Event::Closed){
-                window.close();
+                window->close();
             }
         }
         if (this->getStateManager()->getCurrentState()->getTag() == "MenuState"){
@@ -81,11 +82,11 @@ GUI::Game::Game(const int &wd, const int &hg) {
             if (input == "SPACE"){
                 this->getStateManager()->push();
             }
-            window.clear();
-            window.draw(introSprite);
-            window.draw(introText);
-            window.draw(introText2);
-            window.display();
+            window->clear();
+            window->draw(introSprite);
+            window->draw(introText);
+            window->draw(introText2);
+            window->display();
         }
         else if (this->getStateManager()->getCurrentState()->getTag() == "LevelState"){
             string input = getInput();
@@ -102,37 +103,37 @@ GUI::Game::Game(const int &wd, const int &hg) {
             this->getWorld()->getPacMan()->moveDirection(direction);
             this->getWorld()->getPacMan()->move(ticks);
             text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));
-            window.clear();
+            window->clear();
             for (const auto& wall:this->getWorld()->getWalls()){
                 auto pos = this->cameraToPixels(wall->getObservers().at(0)->getCameraX(), wall->getObservers().at(0)->getCameraY());
                 sf::Sprite sprite = wall->getObservers().at(0)->getSprite();
                 sprite.setPosition(float(pos.first), float(pos.second));
-                window.draw(sprite);
+                window->draw(sprite);
             }
             for (const auto& coin: this->getWorld()->getCoins()){
                 if (!coin->isConsumed()){
                     auto pos = this->cameraToPixels(coin->getObservers().at(0)->getCameraX(), coin->getObservers().at(0)->getCameraY());
                     sf::Sprite sprite = coin->getObservers().at(0)->getSprite();
                     sprite.setPosition(float(pos.first), float(pos.second));
-                    window.draw(sprite);
+                    window->draw(sprite);
                 }
             }
             for (const auto& ghost: this->getWorld()->getGhosts()){
                 auto pos = this->cameraToPixels(ghost->getObservers().at(0)->getCameraX(), ghost->getObservers().at(0)->getCameraY());
                 sf::Sprite sprite = ghost->getObservers().at(0)->getSprite();
                 sprite.setPosition(float(pos.first), float(pos.second));
-                window.draw(sprite);
+                window->draw(sprite);
             }
             auto pacManPos = this->cameraToPixels(this->getWorld()->getPacMan()->getObservers().at(0)->getCameraX(), this->getWorld()->getPacMan()->getObservers().at(0)->getCameraY());
             sf::Sprite pacManSprite =  this->getWorld()->getPacMan()->getObservers().at(0)->getSprite();
             pacManSprite.setPosition(float(pacManPos.first), float(pacManPos.second));
-            window.draw(pacManSprite);
+            window->draw(pacManSprite);
 
             if (this->getWorld()->getCoinsLeft() == 0){
                 this->getStateManager()->push();
             }
-            window.draw(text);
-            window.display();
+            window->draw(text);
+            window->display();
         }
         else if (this->getStateManager()->getCurrentState()->getTag() == "PausedState"){
             string input = getInput();
@@ -141,17 +142,17 @@ GUI::Game::Game(const int &wd, const int &hg) {
                 Model::Stopwatch::instance()->getTicks();
             }
             else if (input == "BACKSPACE"){
-                window.clear();
-                window.draw(pauzeText);
-                window.display();
+                window->clear();
+                window->draw(pauzeText);
+                window->display();
                 this->getStateManager()->push();
                 /*
                  * Hier nog wat code om level te resetten
                  */
             }
-            window.clear();
-            window.draw(pauzeText);
-            window.display();
+            window->clear();
+            window->draw(pauzeText);
+            window->display();
         }
         else if (this->getStateManager()->getCurrentState()->getTag() == "VictoryState"){
             string input = getInput();
@@ -166,9 +167,9 @@ GUI::Game::Game(const int &wd, const int &hg) {
             introText3.setFillColor(sf::Color::White);
             introText3.setPosition(150 , 300);
             introText3.setString("Victory");
-            window.clear();
-            window.draw(introText3);
-            window.display();
+            window->clear();
+            window->draw(introText3);
+            window->display();
         }
     }
 }

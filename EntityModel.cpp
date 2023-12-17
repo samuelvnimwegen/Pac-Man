@@ -13,7 +13,9 @@ void Model::EntityModel::setTag(const string &tg) {
     EntityModel::tag = tg;
 }
 
-Model::EntityModel::EntityModel(int row, int col) : Subject(row, col) {
+Model::EntityModel::EntityModel(int r, int c) : Subject() {
+    row = r;
+    col = c;
     consumed = false;
 }
 
@@ -25,12 +27,25 @@ void Model::EntityModel::consume() {
     consumed = true;
 }
 
-const vector<std::shared_ptr<Model::Observer>> &Model::EntityModel::getObservers() const {
-    return observers;
+int Model::EntityModel::getRow() const {
+    return row;
 }
 
-void Model::EntityModel::addObserver(const std::shared_ptr<Model::Observer>& observer) {
-    observers.push_back(observer);
+int Model::EntityModel::getCol() const {
+    return col;
 }
+
+void Model::EntityModel::setConsumed(bool cons) {
+    EntityModel::consumed = cons;
+}
+
+void Model::EntityModel::setRow(int r) {
+    EntityModel::row = r;
+}
+
+void Model::EntityModel::setCol(int c) {
+    EntityModel::col = c;
+}
+
 
 

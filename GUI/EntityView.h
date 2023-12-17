@@ -14,8 +14,9 @@ class GUI::EntityView: public Model::Observer{
     double cameraX;
     double cameraY;
     std::weak_ptr<Model::EntityModel> subject;
+    std::weak_ptr<sf::RenderWindow> window;
 public:
-    explicit EntityView(const std::shared_ptr<Model::EntityModel>& subject);
+    explicit EntityView(const std::shared_ptr<Model::EntityModel>& subject, std::weak_ptr<sf::RenderWindow> win);
 
     virtual ~EntityView();
 

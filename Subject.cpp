@@ -3,25 +3,17 @@
 //
 
 #include "Subject.h"
+using namespace std;
 
 
 
 
-int Model::Subject::getRow() const {
-    return row;
-
+const vector<std::shared_ptr<Model::Observer>> &Model::Subject::getObservers() const {
+    return observers;
 }
 
-void Model::Subject::setRow(int r) {
-    Subject::row = r;
+void Model::Subject::addObserver(const std::shared_ptr<Model::Observer>& observer) {
+    observers.push_back(observer);
 }
 
-int Model::Subject::getCol() const {
-    return col;
-}
-
-void Model::Subject::setCol(int c) {
-    Subject::col = c;
-}
-
-Model::Subject::Subject(int row, int col) : row(row), col(col) {}
+Model::Subject::Subject() = default;

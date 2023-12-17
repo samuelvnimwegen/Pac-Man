@@ -14,7 +14,7 @@ class GUI::GUIPacMan: public GUI::EntityView{
     double ySpeed;
 public:
 
-    explicit GUIPacMan(const std::shared_ptr<Model::PacMan>& subject);
+    explicit GUIPacMan(const std::shared_ptr<Model::PacMan>& subject, std::weak_ptr<sf::RenderWindow> win);
 
     ~GUIPacMan() override;
 

@@ -14,7 +14,7 @@ sf::Sprite GUI::GUIGhost::getSprite() {
     return sprite;
 }
 
-GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost>& ghost) : GUI::EntityView(ghost) {
+GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost>& ghost, std::weak_ptr<sf::RenderWindow> win) : GUI::EntityView(ghost, std::move(win)) {
     subject = ghost;
     textureNr = 0;
     sf::Texture texture;

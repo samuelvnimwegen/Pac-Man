@@ -239,6 +239,10 @@ void Model::World::setWalls(const vector<std::shared_ptr<Wall>> &newWalls) {
     World::walls = newWalls;
 }
 
+void Model::World::update() {
+
+}
+
 Model::AbstractFactory::AbstractFactory(const std::shared_ptr<Model::World>& world) : world(world) {}
 
 

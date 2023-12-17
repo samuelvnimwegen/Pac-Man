@@ -45,20 +45,13 @@ enum direction {up, down, left, right, none};
 enum color{red, pink, blue, orange, green, purple};
 
 class Model::Subject {
-    int row;
-    int col;
+    std::vector<std::shared_ptr<Model::Observer>> observers;
 public:
-    Subject(int row, int col);
+    Subject();
 
-    [[nodiscard]] int getRow() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Model::Observer>> &getObservers() const;
 
-    void setRow(int row);
-
-    [[nodiscard]] virtual bool isConsumed() const = 0;
-
-    [[nodiscard]] int getCol() const;
-
-    void setCol(int c);
+    void addObserver(const std::shared_ptr<Model::Observer>& observer);
 };
 
 

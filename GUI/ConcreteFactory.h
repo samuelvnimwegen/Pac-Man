@@ -14,8 +14,9 @@
 
 
 class GUI::ConcreteFactory: public Model::AbstractFactory{
+    std::shared_ptr<sf::RenderWindow> window;
 public:
-    explicit ConcreteFactory(const std::shared_ptr<Model::World>& world);
+    explicit ConcreteFactory(const std::shared_ptr<Model::World>& world, const std::shared_ptr<sf::RenderWindow> &win);
 
     std::shared_ptr<Model::PacMan> createPacMan(const int &row, const int &col) override;
 
@@ -24,6 +25,8 @@ public:
     std::shared_ptr <Model::Coin> createCoin(const int &row, const int &col) override;
 
     std::shared_ptr <Model::Ghost> createGhost(const int &row, const int &col) override;
+
+    [[nodiscard]] const std::shared_ptr<sf::RenderWindow> &getWindow() const;
 
 };
 

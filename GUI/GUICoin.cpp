@@ -4,9 +4,11 @@
 
 #include "GUICoin.h"
 
+#include <utility>
 
 
-GUI::GUICoin::GUICoin(const std::shared_ptr<Model::Coin>& coin) : GUI::EntityView(coin) {
+
+GUI::GUICoin::GUICoin(const std::shared_ptr<Model::Coin>& coin, std::weak_ptr<sf::RenderWindow> win) : GUI::EntityView(coin, std::move(win)) {
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");
     this->setTexture(texture);

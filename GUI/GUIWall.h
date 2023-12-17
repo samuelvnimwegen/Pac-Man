@@ -8,11 +8,9 @@
 
 class GUI::GUIWall: public GUI::EntityView {
 public:
-    explicit GUIWall(std::shared_ptr<Model::Wall> subject);
+    explicit GUIWall(const std::shared_ptr<Model::Wall>& subject, std::weak_ptr<sf::RenderWindow> win);
 
     ~GUIWall() override;
-
-
 
 };
 

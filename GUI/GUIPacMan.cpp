@@ -3,6 +3,8 @@
 //
 
 #include "GUIPacMan.h"
+
+#include <utility>
 using namespace std;
 
 
@@ -349,7 +351,7 @@ std::shared_ptr<Model::PacMan> GUI::GUIPacMan::getPacManModel() const {
     return pacManModel.lock();
 }
 
-GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan>& subject) : EntityView(subject) {
+GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan>& subject, std::weak_ptr<sf::RenderWindow> win) : EntityView(subject, std::move(win)) {
     textureNr = 0;
     sf::Texture texture;
     texture.loadFromFile("Sprites.png");

@@ -23,10 +23,10 @@ class Model::World {
     int width;
     std::shared_ptr<Model::AbstractFactory> factory;
     std::shared_ptr<Model::PacMan> pacMan;
-    int coinsLeft;
     std::vector<std::shared_ptr<Coin>> coins;
     std::vector<std::shared_ptr<Ghost>> ghosts;
     std::vector<std::shared_ptr<Wall>> walls;
+    int coinsLeft;
 public:
     explicit World();
 
@@ -35,6 +35,8 @@ public:
     void buildWorld();
 
     void die() const;
+
+    void update();
 
     [[nodiscard]] int getHeight() const;
 

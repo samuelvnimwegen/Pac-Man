@@ -4,6 +4,8 @@
 
 #include "EntityView.h"
 
+#include <utility>
+
 
 sf::Sprite GUI::EntityView::getSprite() {
     return sprite;
@@ -44,7 +46,7 @@ void GUI::EntityView::move(const int &ticks) {
 
 }
 
-GUI::EntityView::EntityView(const std::shared_ptr<Model::EntityModel>& subject) : subject(subject) {
+GUI::EntityView::EntityView(const std::shared_ptr<Model::EntityModel>& subject, std::weak_ptr<sf::RenderWindow> win) : subject(subject), window(std::move(win)) {
     auto camera = GUI::Camera::instance();
     cameraX = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
     cameraY = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
