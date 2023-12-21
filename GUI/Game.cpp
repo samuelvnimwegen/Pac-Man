@@ -100,7 +100,11 @@ GUI::Game::Game(const int &wd, const int &hg) {
                     ghost->move(ticks);
                 }
             }
-            this->getWorld()->getPacMan()->moveDirection(direction);
+            this->getWorld()->getPacMan()->changeDirection(direction);
+            text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));
+            window->clear();
+            this->getWorld()->update(ticks);
+            /*
             this->getWorld()->getPacMan()->move(ticks);
             text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));
             window->clear();
@@ -128,6 +132,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
             sf::Sprite pacManSprite =  this->getWorld()->getPacMan()->getObservers().at(0)->getSprite();
             pacManSprite.setPosition(float(pacManPos.first), float(pacManPos.second));
             window->draw(pacManSprite);
+            */
 
             if (this->getWorld()->getCoinsLeft() == 0){
                 this->getStateManager()->push();

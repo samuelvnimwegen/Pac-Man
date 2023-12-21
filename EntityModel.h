@@ -9,10 +9,12 @@
 class Model::EntityModel: public  Model::Subject{
     std::string tag;
     bool consumed;
-    int row;
-    int col;
+    double row;
+    double col;
 public:
     EntityModel(int row, int col);
+
+    virtual void update(const int& ticks) = 0;
 
     [[nodiscard]] const std::string &getTag() const;
 
@@ -22,16 +24,16 @@ public:
 
     void consume();
 
-    [[nodiscard]] int getRow() const;
+    [[nodiscard]] double getY() const;
 
-    [[nodiscard]] int getCol() const;
+    [[nodiscard]] double getX() const;
 
-    void setConsumed(bool cons);
+    void setY(double r);
 
-    void setRow(int r);
-
-    void setCol(int c);
+    void setX(double c);
 };
+
+int toTile(double db);
 
 
 #endif //PAC_MAN_ENTITYMODEL_H

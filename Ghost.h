@@ -22,6 +22,8 @@ public:
 
     void move(const int &steps);
 
+    void update(const int &ticks) override;
+
     void changeDirection();
 
     void reset();

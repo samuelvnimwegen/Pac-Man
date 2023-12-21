@@ -8,17 +8,17 @@
 
 
 
-sf::Sprite GUI::GUIGhost::getSprite() {
+std::shared_ptr<sf::Sprite> GUI::GUIGhost::getSprite() {
     sf::Sprite sprite;
-    sprite = sf::Sprite(this->getTexture(), sf::IntRect(spriteX, 0, 40, 40));
-    return sprite;
+    sprite = sf::Sprite(*this->getTexture(), sf::IntRect(spriteX, 0, 40, 40));
+    return std::make_shared<sf::Sprite>(sprite);
 }
 
 GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost>& ghost, std::weak_ptr<sf::RenderWindow> win) : GUI::EntityView(ghost, std::move(win)) {
     subject = ghost;
     textureNr = 0;
-    sf::Texture texture;
-    texture.loadFromFile("Sprites.png");
+    auto texture = std::make_shared<sf::Texture>();
+    texture->loadFromFile("Sprites.png");
     this->setTexture(texture);
     color ghostColor = this->getSubject()->getColor();
     if (ghostColor == color::red){
@@ -43,8 +43,9 @@ void GUI::GUIGhost::move(const int &ticks) {
         double yCoord = this->getCameraY();
         yCoord -= ticks * this->getYSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
-        if (this->getSubject()->getNextDirection() == direction::right and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() + 1)){
-            double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
+        if (this->getSubject()->getNextDirection() == direction::right and this->getSubject()->canMove(
+                this->getSubject()->getY(), this->getSubject()->getX() + 1)){
+            double wallYCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getYCoord();
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
                 // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
@@ -58,8 +59,9 @@ void GUI::GUIGhost::move(const int &ticks) {
         }
 
             // Als volgende direction naar links is en hij kan naar links:
-        else if (this->getSubject()->getNextDirection() == direction::left and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() - 1)){
-            double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
+        else if (this->getSubject()->getNextDirection() == direction::left and this->getSubject()->canMove(
+                this->getSubject()->getY(), this->getSubject()->getX() - 1)){
+            double wallYCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getYCoord();
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
@@ -73,8 +75,9 @@ void GUI::GUIGhost::move(const int &ticks) {
         }
 
             // Als de volgende tile een muur is:
-        else if (this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() - 1, this->getSubject()->getCol()) != nullptr and this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() - 1, this->getSubject()->getCol())->getTag() == "Wall"){
-            double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
+        else if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY() - 1, this->getSubject()->getX()) != nullptr and this->getSubject()->getWorld()->getItem(
+                this->getSubject()->getY() - 1, this->getSubject()->getX())->getTag() == "Wall"){
+            double wallYCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getYCoord();
             if (yCoord < wallYCoord){
                 this->setCameraY(wallYCoord);
             }
@@ -84,19 +87,22 @@ void GUI::GUIGhost::move(const int &ticks) {
         }
 
             // Checken of hij dichter bij een ander vakje staat dan het huidige
-        else if (abs(camera->getCameraCoords(this->getSubject()->getRow() - 1, this->getSubject()->getCol()).getYCoord() - yCoord) <
-                 abs(camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord() - yCoord)){
+        else if (abs(camera->getCameraCoords(this->getSubject()->getY() - 1, this->getSubject()->getX()).getYCoord() - yCoord) <
+                 abs(camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getYCoord() - yCoord)){
             // Als het vakje een ghost bevat:
-            if (this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() + 1, this->getSubject()->getCol()) != nullptr and this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() + 1, this->getSubject()->getCol())->getTag() == "PacMan"){
+            if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY() + 1, this->getSubject()->getX()) != nullptr and this->getSubject()->getWorld()->getItem(
+                    this->getSubject()->getY() + 1, this->getSubject()->getX())->getTag() == "PacMan"){
                 this->getSubject()->getWorld()->die();
             }
                 // Als het volgende vakje geen muur is: gaan
-            else if (this->getSubject()->canMove(this->getSubject()->getRow() - 1, this->getSubject()->getCol())){
+            else if (this->getSubject()->canMove(this->getSubject()->getY() - 1, this->getSubject()->getX())){
                 this->setCameraY(yCoord);
-                auto tempItem = this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() - 1, this->getSubject()->getCol());
-                this->getSubject()->getWorld()->setItem(tempItem, this->getSubject()->getRow(), this->getSubject()->getCol());
-                this->getSubject()->getWorld()->setItem(this->getSubject(), this->getSubject()->getRow() - 1, this->getSubject()->getCol());
-                this->getSubject()->setRow(this->getSubject()->getRow() - 1);
+                auto tempItem = this->getSubject()->getWorld()->getItem(this->getSubject()->getY() - 1,
+                                                                        this->getSubject()->getX());
+                this->getSubject()->getWorld()->setItem(tempItem, this->getSubject()->getY(), this->getSubject()->getX());
+                this->getSubject()->getWorld()->setItem(this->getSubject(), this->getSubject()->getY() - 1,
+                                                        this->getSubject()->getX());
+                this->getSubject()->setY(this->getSubject()->getY() - 1);
             }
         }else{
             this->setCameraY(yCoord);
@@ -106,8 +112,9 @@ void GUI::GUIGhost::move(const int &ticks) {
         double yCoord = this->getCameraY();
         yCoord += ticks * this->getYSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
-        if (this->getSubject()->getNextDirection() == direction::right and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() + 1)){
-            double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
+        if (this->getSubject()->getNextDirection() == direction::right and this->getSubject()->canMove(
+                this->getSubject()->getY(), this->getSubject()->getX() + 1)){
+            double wallYCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getYCoord();
             if (yCoord > wallYCoord){
                 this->setCameraY(wallYCoord);
                 // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
@@ -120,8 +127,9 @@ void GUI::GUIGhost::move(const int &ticks) {
             }
         }
             // Als volgende direction naar links is en hij kan naar links:
-        else if (this->getSubject()->getNextDirection() == direction::left and this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() - 1)){
-            double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
+        else if (this->getSubject()->getNextDirection() == direction::left and this->getSubject()->canMove(
+                this->getSubject()->getY(), this->getSubject()->getX() - 1)){
+            double wallYCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getYCoord();
             if (yCoord > wallYCoord){
                 this->setCameraY(wallYCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
@@ -134,8 +142,9 @@ void GUI::GUIGhost::move(const int &ticks) {
             }
         }
             // Als de volgende tile een muur is:
-        else if (this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() + 1, this->getSubject()->getCol()) != nullptr and this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() + 1, this->getSubject()->getCol())->getTag() == "Wall"){
-            double wallYCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord();
+        else if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY() + 1, this->getSubject()->getX()) != nullptr and this->getSubject()->getWorld()->getItem(
+                this->getSubject()->getY() + 1, this->getSubject()->getX())->getTag() == "Wall"){
+            double wallYCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getYCoord();
             if (yCoord > wallYCoord){
                 this->setCameraY(wallYCoord);
             }
@@ -144,19 +153,22 @@ void GUI::GUIGhost::move(const int &ticks) {
             }
         }
             // Checken of hij dichter bij een ander vakje staat dan het huidige
-        else if (abs(camera->getCameraCoords(this->getSubject()->getRow() + 1, this->getSubject()->getCol()).getYCoord() - yCoord) <
-                 abs(camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getYCoord() - yCoord)){
+        else if (abs(camera->getCameraCoords(this->getSubject()->getY() + 1, this->getSubject()->getX()).getYCoord() - yCoord) <
+                 abs(camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getYCoord() - yCoord)){
             // Als het vakje een ghost bevat:
-            if (this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() + 1, this->getSubject()->getCol()) != nullptr and this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() + 1, this->getSubject()->getCol())->getTag() == "PacMan"){
+            if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY() + 1, this->getSubject()->getX()) != nullptr and this->getSubject()->getWorld()->getItem(
+                    this->getSubject()->getY() + 1, this->getSubject()->getX())->getTag() == "PacMan"){
                 this->getSubject()->getWorld()->die();
             }
                 // Als het volgende vakje geen muur is: gaan
-            else if (this->getSubject()->canMove(this->getSubject()->getRow() + 1, this->getSubject()->getCol())){
+            else if (this->getSubject()->canMove(this->getSubject()->getY() + 1, this->getSubject()->getX())){
                 this->setCameraY(yCoord);
-                auto tempItem = this->getSubject()->getWorld()->getItem(this->getSubject()->getRow() + 1, this->getSubject()->getCol());
-                this->getSubject()->getWorld()->setItem(tempItem, this->getSubject()->getRow(), this->getSubject()->getCol());
-                this->getSubject()->getWorld()->setItem(this->getSubject(), this->getSubject()->getRow() + 1, this->getSubject()->getCol());
-                this->getSubject()->setRow(this->getSubject()->getRow() + 1);
+                auto tempItem = this->getSubject()->getWorld()->getItem(this->getSubject()->getY() + 1,
+                                                                        this->getSubject()->getX());
+                this->getSubject()->getWorld()->setItem(tempItem, this->getSubject()->getY(), this->getSubject()->getX());
+                this->getSubject()->getWorld()->setItem(this->getSubject(), this->getSubject()->getY() + 1,
+                                                        this->getSubject()->getX());
+                this->getSubject()->setY(this->getSubject()->getY() + 1);
             }
         }
         else{
@@ -167,8 +179,9 @@ void GUI::GUIGhost::move(const int &ticks) {
         double xCoord = this->getCameraX();
         xCoord += ticks * this->getXSpeed();
         // Als volgende direction naar links is en hij kan naar links:
-        if (this->getSubject()->getNextDirection() == direction::up and this->getSubject()->canMove(this->getSubject()->getRow() - 1, this->getSubject()->getCol())){
-            double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
+        if (this->getSubject()->getNextDirection() == direction::up and this->getSubject()->canMove(
+                this->getSubject()->getY() - 1, this->getSubject()->getX())){
+            double wallXCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getXCoord();
             if (xCoord > wallXCoord){
                 this->setCameraX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
@@ -180,8 +193,9 @@ void GUI::GUIGhost::move(const int &ticks) {
                 this->setCameraX(xCoord);
             }
         }
-        else if (this->getSubject()->getNextDirection() == direction::down and this->getSubject()->canMove(this->getSubject()->getRow() + 1, this->getSubject()->getCol())){
-            double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
+        else if (this->getSubject()->getNextDirection() == direction::down and this->getSubject()->canMove(
+                this->getSubject()->getY() + 1, this->getSubject()->getX())){
+            double wallXCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getXCoord();
             if (xCoord > wallXCoord){
                 this->setCameraX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
@@ -194,8 +208,9 @@ void GUI::GUIGhost::move(const int &ticks) {
             }
         }
             // Als de volgende tile een muur is:
-        else if (this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() + 1) != nullptr and this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() + 1)->getTag() == "Wall"){
-            double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
+        else if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY(), this->getSubject()->getX() + 1) != nullptr and this->getSubject()->getWorld()->getItem(
+                this->getSubject()->getY(), this->getSubject()->getX() + 1)->getTag() == "Wall"){
+            double wallXCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getXCoord();
             if (xCoord > wallXCoord){
                 this->setCameraX(wallXCoord);
             }
@@ -204,19 +219,22 @@ void GUI::GUIGhost::move(const int &ticks) {
             }
         }
             // Checken of hij dichter bij een ander vakje staat dan het huidige
-        else if (abs(camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol() + 1).getXCoord() - xCoord) <
-                 abs(camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord() - xCoord)){
+        else if (abs(camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX() + 1).getXCoord() - xCoord) <
+                 abs(camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getXCoord() - xCoord)){
             // Als het vakje een ghost bevat:
-            if (this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() + 1) != nullptr and this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() + 1)->getTag() == "PacMan"){
+            if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY(), this->getSubject()->getX() + 1) != nullptr and this->getSubject()->getWorld()->getItem(
+                    this->getSubject()->getY(), this->getSubject()->getX() + 1)->getTag() == "PacMan"){
                 this->getSubject()->getWorld()->die();
             }
                 // Als het volgende vakje geen muur is: gaan
-            else if (this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() + 1)){
+            else if (this->getSubject()->canMove(this->getSubject()->getY(), this->getSubject()->getX() + 1)){
                 this->setCameraX(xCoord);
-                auto tempItem = this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() + 1);
-                this->getSubject()->getWorld()->setItem(tempItem, this->getSubject()->getRow(), this->getSubject()->getCol());
-                this->getSubject()->getWorld()->setItem(this->getSubject(), this->getSubject()->getRow(), this->getSubject()->getCol() + 1);
-                this->getSubject()->setCol(this->getSubject()->getCol() + 1);
+                auto tempItem = this->getSubject()->getWorld()->getItem(this->getSubject()->getY(),
+                                                                        this->getSubject()->getX() + 1);
+                this->getSubject()->getWorld()->setItem(tempItem, this->getSubject()->getY(), this->getSubject()->getX());
+                this->getSubject()->getWorld()->setItem(this->getSubject(), this->getSubject()->getY(),
+                                                        this->getSubject()->getX() + 1);
+                this->getSubject()->setX(this->getSubject()->getX() + 1);
             }
         }else{
             this->setCameraX(xCoord);
@@ -226,8 +244,9 @@ void GUI::GUIGhost::move(const int &ticks) {
         double xCoord = this->getCameraX();
         xCoord -= ticks * this->getXSpeed();
         // Als volgende direction naar links is en hij kan naar links:
-        if (this->getSubject()->getNextDirection() == direction::up and this->getSubject()->canMove(this->getSubject()->getRow() - 1, this->getSubject()->getCol())){
-            double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
+        if (this->getSubject()->getNextDirection() == direction::up and this->getSubject()->canMove(
+                this->getSubject()->getY() - 1, this->getSubject()->getX())){
+            double wallXCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getXCoord();
             if (xCoord < wallXCoord){
                 this->setCameraX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
@@ -239,8 +258,9 @@ void GUI::GUIGhost::move(const int &ticks) {
                 this->setCameraX(xCoord);
             }
         }
-        else if (this->getSubject()->getNextDirection() == direction::down and this->getSubject()->canMove(this->getSubject()->getRow() + 1, this->getSubject()->getCol())){
-            double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
+        else if (this->getSubject()->getNextDirection() == direction::down and this->getSubject()->canMove(
+                this->getSubject()->getY() + 1, this->getSubject()->getX())){
+            double wallXCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getXCoord();
             if (xCoord < wallXCoord){
                 this->setCameraX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
@@ -253,8 +273,9 @@ void GUI::GUIGhost::move(const int &ticks) {
             }
         }
             // Als de volgende tile een muur is:
-        else if (this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() - 1) != nullptr and this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() - 1)->getTag() == "Wall"){
-            double wallXCoord = camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord();
+        else if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY(), this->getSubject()->getX() - 1) != nullptr and this->getSubject()->getWorld()->getItem(
+                this->getSubject()->getY(), this->getSubject()->getX() - 1)->getTag() == "Wall"){
+            double wallXCoord = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getXCoord();
             if (xCoord < wallXCoord){
                 this->setCameraX(wallXCoord);
             }
@@ -263,19 +284,22 @@ void GUI::GUIGhost::move(const int &ticks) {
             }
         }
             // Checken of hij dichter bij een ander vakje staat dan het huidige
-        else if (abs(camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol() - 1).getXCoord() - xCoord) <
-                 abs(camera->getCameraCoords(this->getSubject()->getRow(), this->getSubject()->getCol()).getXCoord() - xCoord)){
+        else if (abs(camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX() - 1).getXCoord() - xCoord) <
+                 abs(camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getXCoord() - xCoord)){
             // Als het vakje een ghost bevat:
-            if (this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() - 1) != nullptr and this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() - 1)->getTag() == "PacMan"){
+            if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY(), this->getSubject()->getX() - 1) != nullptr and this->getSubject()->getWorld()->getItem(
+                    this->getSubject()->getY(), this->getSubject()->getX() - 1)->getTag() == "PacMan"){
                 this->getSubject()->getWorld()->die();
             }
                 // Als het volgende vakje geen muur is: gaan
-            else if (this->getSubject()->canMove(this->getSubject()->getRow(), this->getSubject()->getCol() - 1)){
+            else if (this->getSubject()->canMove(this->getSubject()->getY(), this->getSubject()->getX() - 1)){
                 this->setCameraX(xCoord);
-                auto tempItem = this->getSubject()->getWorld()->getItem(this->getSubject()->getRow(), this->getSubject()->getCol() - 1);
-                this->getSubject()->getWorld()->setItem(tempItem, this->getSubject()->getRow(), this->getSubject()->getCol());
-                this->getSubject()->getWorld()->setItem(this->getSubject(), this->getSubject()->getRow(), this->getSubject()->getCol() - 1);
-                this->getSubject()->setCol(this->getSubject()->getCol() - 1);
+                auto tempItem = this->getSubject()->getWorld()->getItem(this->getSubject()->getY(),
+                                                                        this->getSubject()->getX() - 1);
+                this->getSubject()->getWorld()->setItem(tempItem, this->getSubject()->getY(), this->getSubject()->getX());
+                this->getSubject()->getWorld()->setItem(this->getSubject(), this->getSubject()->getY(),
+                                                        this->getSubject()->getX() - 1);
+                this->getSubject()->setX(this->getSubject()->getX() - 1);
             }
         }else{
             this->setCameraX(xCoord);
@@ -304,6 +328,16 @@ void GUI::GUIGhost::setXSpeed(double speed) {
 
 std::shared_ptr<Model::Ghost> GUI::GUIGhost::getSubject(){
     return subject;
+}
+
+void GUI::GUIGhost::update(const int &ticks) {
+    auto camera = Camera::instance();
+    auto camCoords = camera->getCameraCoords(this->getSubject()->getX(), this->getSubject()->getY());
+    auto windowCoords = cameraToPixels(camCoords.getXCoord(), camCoords.getYCoord());
+    auto sprite1 = this->getSprite();
+    sprite1->setPosition(float(windowCoords.first), float(windowCoords.second));
+    this->setSprite(sprite1);
+    EntityView::update(ticks);
 }
 
 

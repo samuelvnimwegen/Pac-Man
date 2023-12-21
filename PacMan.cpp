@@ -3,7 +3,7 @@
 //
 
 #include "PacMan.h"
-
+using namespace std;
 
 const direction &Model::PacMan::getCurrentDirection() const {
     return currentDirection;
@@ -17,16 +17,8 @@ int Model::PacMan::getStartRow() const {
     return startRow;
 }
 
-void Model::PacMan::setStartRow(int row) {
-    PacMan::startRow = row;
-}
-
 int Model::PacMan::getStartCol() const {
     return startCol;
-}
-
-void Model::PacMan::setStartCol(int col) {
-    PacMan::startCol = col;
 }
 
 int Model::PacMan::getScore() const {
@@ -43,21 +35,6 @@ bool Model::PacMan::isHasMoved() const {
 void Model::PacMan::setHasMoved(bool moved) {
     PacMan::hasMoved = moved;
 }
-double Model::PacMan::getXSpeed() const {
-    return xSpeed;
-}
-
-void Model::PacMan::setXSpeed(double speed) {
-    PacMan::xSpeed = speed;
-}
-
-double Model::PacMan::getYSpeed() const {
-    return ySpeed;
-}
-
-void Model::PacMan::setYSpeed(double speed) {
-    PacMan::ySpeed = speed;
-}
 
 const direction &Model::PacMan::getNextDirection() const {
     return nextDirection;
@@ -67,14 +44,65 @@ void Model::PacMan::setNextDirection(const direction &dir) {
     PacMan::nextDirection = dir;
 }
 
-void Model::PacMan::move(const int &ticks) {
-    this->getObservers().at(0)->move(ticks);
-}
+
 
  std::shared_ptr<Model::World> Model::PacMan::getWorld()  {
     return world.lock();
 }
 
-void Model::PacMan::setWorld(const std::weak_ptr<Model::World> &weakPtr) {
-    PacMan::world = weakPtr;
+void Model::PacMan::update(const int &ticks) {
+    this->move(ticks);
+    for (const auto& observer: this->getObservers()){
+        cout << observer->getCameraX() << endl;
+        observer->update(ticks);
+        cout << observer->getCameraY() << endl;
+    }
 }
+
+
+/*
+ * Verandert de richting afhankelijk van de volgende richting
+ */
+void Model::PacMan::changeDirection(const direction &dir) {
+    if (this->getCurrentDirection() == direction::none){
+        this->setCurrentDirection(dir);
+    }
+    else if (dir == direction::up){
+        if (this->getCurrentDirection() == direction::down){
+            setCurrentDirection(direction::up);
+            setNextDirection(direction::none);
+        }
+        else if (this->getCurrentDirection() == direction::left or this->getCurrentDirection() == direction::right){
+            setNextDirection(direction::up);
+        }
+    }
+    else if (dir == direction::left){
+        if (this->getCurrentDirection() == direction::right){
+            setCurrentDirection(direction::left);
+            setNextDirection(direction::none);
+        }
+        else if (this->getCurrentDirection() == direction::up or this->getCurrentDirection() == direction::down){
+            setNextDirection(direction::left);
+        }
+    }
+    else if (dir == direction::right){
+        if (this->getCurrentDirection() == direction::left){
+            setCurrentDirection(direction::right);
+            setNextDirection(direction::none);
+        }
+        else if (this->getCurrentDirection() == direction::up or this->getCurrentDirection() == direction::down){
+            setNextDirection(direction::right);
+        }
+    }
+    else if (dir == direction::down){
+        if (this->getCurrentDirection() == direction::up){
+            setCurrentDirection(direction::down);
+            setNextDirection(direction::none);
+        }
+        else if (this->getCurrentDirection() == direction::left or this->getCurrentDirection() == direction::right){
+            setNextDirection(direction::down);
+        }
+    }
+}
+
+

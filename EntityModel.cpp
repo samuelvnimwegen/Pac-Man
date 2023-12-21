@@ -2,7 +2,9 @@
 // Created by Samuel on 16/11/2023.
 //
 
+
 #include "EntityModel.h"
+#include <cmath>
 using namespace std;
 
 const string &Model::EntityModel::getTag() const {
@@ -14,8 +16,8 @@ void Model::EntityModel::setTag(const string &tg) {
 }
 
 Model::EntityModel::EntityModel(int r, int c) : Subject() {
-    row = r;
-    col = c;
+    row = double(r);
+    col = double(c);
     consumed = false;
 }
 
@@ -27,24 +29,27 @@ void Model::EntityModel::consume() {
     consumed = true;
 }
 
-int Model::EntityModel::getRow() const {
+double Model::EntityModel::getY() const {
     return row;
 }
 
-int Model::EntityModel::getCol() const {
+double Model::EntityModel::getX() const {
     return col;
 }
 
-void Model::EntityModel::setConsumed(bool cons) {
-    EntityModel::consumed = cons;
-}
-
-void Model::EntityModel::setRow(int r) {
+void Model::EntityModel::setY(double r) {
     EntityModel::row = r;
 }
 
-void Model::EntityModel::setCol(int c) {
+void Model::EntityModel::setX(double c) {
     EntityModel::col = c;
+}
+
+int toTile(double db) {
+    db += 0.5;
+    double integer;
+    modf(db, &integer);
+    return int(integer);
 }
 
 

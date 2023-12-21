@@ -18,7 +18,7 @@
 #include "memory"
 
 class Model::World {
-    std::vector<std::vector<std::weak_ptr<Model::EntityModel>>> world;
+    std::vector<std::vector<std::shared_ptr<Model::EntityModel>>> world;
     int height;
     int width;
     std::shared_ptr<Model::AbstractFactory> factory;
@@ -36,21 +36,17 @@ public:
 
     void die() const;
 
-    void update();
+    void update(const int &ticks) const;
 
     [[nodiscard]] int getHeight() const;
 
-    void setHeight(int hg);
-
     [[nodiscard]] int getWidth() const;
-
-    void setWidth(int wd);
 
     std::shared_ptr<Model::EntityModel> getItem(const int &row, const int &col);
 
     void setItem(const std::shared_ptr<Model::EntityModel>& item, const int &row, const int &col);
 
-    void addItem(const std::weak_ptr<Model::EntityModel>& item);
+    void addItem(const std::shared_ptr<Model::EntityModel>& item);
 
     [[nodiscard]] std::shared_ptr<AbstractFactory> getFactory() const;
 
@@ -66,9 +62,7 @@ public:
 
     void addCoin(const std::shared_ptr<Model::Coin> &coin);
 
-    [[nodiscard]] const std::vector<std::vector<std::weak_ptr<Model::EntityModel>>> &getWorld() const;
-
-    void setWorld(const std::vector<std::vector<std::weak_ptr<Model::EntityModel>>> &newWorld);
+    [[nodiscard]] const std::vector<std::vector<std::shared_ptr<Model::EntityModel>>> &getWorld() const;
 
     [[nodiscard]] const std::shared_ptr<Model::PacMan> &getPacMan() const;
 

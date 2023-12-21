@@ -37,7 +37,7 @@ public:
 
     void setModelHeight(int height);
 
-    [[nodiscard]] Coordinates getCameraCoords(int row, int col) const;
+    [[nodiscard]] Coordinates getCameraCoords(double row, double col) const;
 
     [[nodiscard]] double getXSpeed() const;
 

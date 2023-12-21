@@ -21,7 +21,7 @@ public:
 
     virtual void move(const int &ticks) = 0;
 
-    virtual sf::Sprite getSprite() = 0;
+    virtual void update(const int &ticks) = 0;
 
 };
 

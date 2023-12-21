@@ -17,3 +17,9 @@ bool Model::Coin::isConsumed1() const {
 void Model::Coin::setConsumed(bool cons) {
     Coin::consumed = cons;
 }
+
+void Model::Coin::update(const int &ticks) {
+    for (const auto& observer: this->getObservers()){
+        observer->update(ticks);
+    }
+}

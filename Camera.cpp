@@ -8,7 +8,7 @@ using namespace std;
 std::shared_ptr<GUI::Camera> GUI::Camera::cameraPointer = nullptr;
 
 
-Coordinates GUI::Camera::getCameraCoords(int row, int col) const {
+Coordinates GUI::Camera::getCameraCoords(double row, double col) const {
     double height = double (row) / double(modelHeight) * 2 - 1;
     double width = double(col) / double(modelWidth) * 2 - 1;
     return {width, height};

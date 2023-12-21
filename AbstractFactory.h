@@ -22,7 +22,6 @@ public:
 
     [[nodiscard]] std::shared_ptr<Model::World> getWorld() const;
 
-    void setWorld(const std::shared_ptr<Model::World>& newWorld);
 };
 
 

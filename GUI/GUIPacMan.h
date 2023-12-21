@@ -20,19 +20,21 @@ public:
 
     void move(const int &ticks) override;
 
+    void update(const int &ticks) override;
+
     void updateTextureNr();
 
-    sf::Sprite getSprite() override;
+    void updateSprite();
 
-    int getTextureNr() const;
+    [[nodiscard]] int getTextureNr() const;
 
     void setTextureNr(int nr);
 
-    double getXSpeed() const;
+    [[nodiscard]] double getXSpeed() const;
 
-    double getYSpeed() const;
+    [[nodiscard]] double getYSpeed() const;
 
-    std::shared_ptr<Model::PacMan> getPacManModel() const;
+    [[nodiscard]] std::shared_ptr<Model::PacMan> getPacManModel() const;
 };
 
 

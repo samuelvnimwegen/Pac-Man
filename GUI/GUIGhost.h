@@ -17,7 +17,9 @@ public:
 
     void move(const int &ticks) override;
 
-    sf::Sprite getSprite() override;
+    void update(const int &ticks) override;
+
+    std::shared_ptr<sf::Sprite> getSprite() override;
 
     double getYSpeed() const;
 

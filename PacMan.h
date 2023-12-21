@@ -28,6 +28,8 @@ public:
      */
     void move(const int &ticks);
 
+    void update(const int &ticks) override;
+
     /*
      * Sterven van pacman
      */
@@ -38,7 +40,7 @@ public:
     /*
     * Verandert de richting afhankelijk van de volgende richting
     */
-    void moveDirection(const direction &dir);
+    void changeDirection(const direction &dir);
 
     [[nodiscard]] bool canMove(const int &row, const int &col);
 
@@ -47,16 +49,6 @@ public:
     void setCurrentDirection(const direction &dir);
 
     std::shared_ptr<Model::World> getWorld() ;
-
-    void setWorld(const std::weak_ptr<Model::World> &weakPtr);
-
-    [[nodiscard]] double getXSpeed() const;
-
-    void setXSpeed(double speed);
-
-    [[nodiscard]] double getYSpeed() const;
-
-    void setYSpeed(double speed);
 
     [[nodiscard]] const direction &getNextDirection() const;
 
@@ -72,12 +64,11 @@ public:
 
     [[nodiscard]] int getStartRow() const;
 
-    void setStartRow(int row);
-
     [[nodiscard]] int getStartCol() const;
 
-    void setStartCol(int col);
+
 };
+
 
 
 #endif //PAC_MAN_PACMAN_H

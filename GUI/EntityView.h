@@ -9,8 +9,8 @@
 #include "SFML/Graphics.hpp"
 
 class GUI::EntityView: public Model::Observer{
-    sf::Texture texture;
-    sf::Sprite sprite;
+    std::shared_ptr<sf::Texture> texture;
+    std::shared_ptr<sf::Sprite> sprite;
     double cameraX;
     double cameraY;
     std::weak_ptr<Model::EntityModel> subject;
@@ -20,25 +20,31 @@ public:
 
     virtual ~EntityView();
 
-    const sf::Texture &getTexture() const;
+    [[nodiscard]] const std::shared_ptr<sf::Texture> &getTexture() const;
 
-    void setTexture(const sf::Texture &entityTexture);
+    void setTexture(const std::shared_ptr<sf::Texture> &sharedPtr);
 
-    sf::Sprite getSprite() override;
+    virtual std::shared_ptr<sf::Sprite> getSprite();
 
-    void setSprite(const sf::Sprite &entitySprite);
+    void setSprite(const std::shared_ptr<sf::Sprite> &sharedPtr);
 
-    double getCameraX() const override;
+    [[nodiscard]] double getCameraX() const override;
 
     void setCameraX(double x) override;
 
-    double getCameraY() const override;
+    [[nodiscard]] double getCameraY() const override;
 
     void setCameraY(double y) override;
 
     void move(const int &ticks) override;
 
-    virtual std::shared_ptr<Model::EntityModel> getSubject() const;
+    void update(const int &ticks) override;
+
+    [[nodiscard]] virtual std::shared_ptr<Model::EntityModel> getSubject() const;
+
+    [[nodiscard]] std::pair<int, int> cameraToPixels(double xCamera, double yCamera) const;
+
+    [[nodiscard]] const std::weak_ptr<sf::RenderWindow> &getWindow() const;
 };
 
 

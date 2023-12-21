@@ -16,4 +16,10 @@ void Model::Collectable::setValue(int val) {
     Collectable::value = val;
 }
 
+void Model::Collectable::update(const int &ticks) {
+    for (const auto& observer: this->getObservers()){
+        observer->update(ticks);
+    }
+}
+
 

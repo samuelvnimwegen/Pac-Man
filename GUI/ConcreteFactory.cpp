@@ -12,7 +12,6 @@ shared_ptr<Model::PacMan> GUI::ConcreteFactory::createPacMan(const int &row, con
     shared_ptr<Model::PacMan> entity(new Model::PacMan(row, col, this->getWorld()));
     shared_ptr<GUI::GUIPacMan> observer(new GUI::GUIPacMan(entity, this->getWindow()));
     entity->addObserver(observer);
-    this->getWorld()->addItem(entity);
     this->getWorld()->setPacMan(entity);
     return entity;
 }
@@ -39,7 +38,6 @@ shared_ptr<Model::Ghost> GUI::ConcreteFactory::createGhost(const int &row, const
     shared_ptr<Model::Ghost> entity(new Model::Ghost(row, col, this->getWorld()));
     shared_ptr<GUI::GUIGhost> observer(new GUI::GUIGhost(entity, this->getWindow()));
     entity->addObserver(observer);
-    this->getWorld()->addItem(entity);
     this->getWorld()->addGhost(entity);
     return entity;
 }

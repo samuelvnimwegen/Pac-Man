@@ -4,6 +4,7 @@
 
 #include "GUIWall.h"
 
+#include <memory>
 #include <utility>
 
 
@@ -11,10 +12,18 @@ GUI::GUIWall::~GUIWall() = default;
 
 
 GUI::GUIWall::GUIWall(const std::shared_ptr<Model::Wall>& subject, std::weak_ptr<sf::RenderWindow> win) : EntityView(subject, std::move(win)) {
-    sf::Texture texture;
-    texture.loadFromFile("Muur2.png");
+    auto texture = std::make_shared<sf::Texture>();
+    texture->loadFromFile("Muur2.png");
     this->setTexture(texture);
-    sf::Sprite sprite(this->getTexture());
+
+    auto camera = Camera::instance();
+    auto camCoords = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());
+    auto windowCoords = cameraToPixels(camCoords.getXCoord(), camCoords.getYCoord());
+
+    auto sprite = std::make_shared<sf::Sprite>(*this->getTexture());
+    sprite->setPosition(float(windowCoords.first), float(windowCoords.second));
     this->setSprite(sprite);
 }
+
+
 
