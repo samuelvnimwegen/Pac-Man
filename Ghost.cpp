@@ -9,7 +9,7 @@ void Model::Ghost::changeDirection() {
     int minDistance = 1000000;
     direction dir = direction::none;
     // Als hij omhoog kan:
-    if (this->canMove(this->getY() - 1, this->getX())){
+    if (this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
         int distance = this->getManhattanDistance(direction::up);
         if (distance < minDistance){
             minDistance = distance;
@@ -17,7 +17,7 @@ void Model::Ghost::changeDirection() {
         }
     }
     // Als hij naar beneden kan:
-    if (this->canMove(this->getY() + 1, this->getX())){
+    if (this->canMove(toTile(this->getY()) + 1, toTile(this->getX()))){
         int distance = this->getManhattanDistance(down);
         if (distance < minDistance){
             minDistance = distance;
@@ -25,7 +25,7 @@ void Model::Ghost::changeDirection() {
         }
     }
     // Als hij naar rechts kan:
-    if (this->canMove(this->getY(), this->getX() + 1)){
+    if (this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
         int distance = this->getManhattanDistance(direction::right);
         if (distance < minDistance){
             minDistance = distance;
@@ -33,7 +33,7 @@ void Model::Ghost::changeDirection() {
         }
     }
     // Als hij naar links kan:
-    if (this->canMove(this->getY(), this->getX() - 1)){
+    if (this->canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
         int distance = this->getManhattanDistance(direction::left);
         if (distance < minDistance){
             dir = direction::left;
@@ -42,7 +42,7 @@ void Model::Ghost::changeDirection() {
 
 
     if (this->getCurrentDirection() == direction::up){
-        if (dir == direction::down and !canMove(this->getY() - 1, this->getX())){
+        if (dir == direction::down and !canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
             this->setCurrentDirection(direction::down);
         }
         else if (dir == direction::left){
@@ -53,7 +53,7 @@ void Model::Ghost::changeDirection() {
         }
     }
     else if (this->getCurrentDirection() == direction::down ){
-        if (dir == direction::up and !canMove(this->getY() + 1, this->getX())){
+        if (dir == direction::up and !canMove(toTile(this->getY()) + 1, toTile(this->getX()))){
             this->setCurrentDirection(direction::up);
         }
         else if (dir == direction::left){
@@ -64,7 +64,7 @@ void Model::Ghost::changeDirection() {
         }
     }
     else if (this->getCurrentDirection() == direction::left){
-        if (dir == direction::right and !canMove(this->getY(), this->getX() - 1)){
+        if (dir == direction::right and !canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
             this->setCurrentDirection(direction::right);
         }
         else if (dir == direction::up){
@@ -75,7 +75,7 @@ void Model::Ghost::changeDirection() {
         }
     }
     else if (this->getCurrentDirection() == direction::right){
-        if (dir == direction::left and !canMove(this->getY(), this->getX() + 1)){
+        if (dir == direction::left and !canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
             this->setCurrentDirection(direction::left);
         }
         else if (dir == direction::up){

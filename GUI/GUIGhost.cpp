@@ -8,11 +8,7 @@
 
 
 
-std::shared_ptr<sf::Sprite> GUI::GUIGhost::getSprite() {
-    sf::Sprite sprite;
-    sprite = sf::Sprite(*this->getTexture(), sf::IntRect(spriteX, 0, 40, 40));
-    return std::make_shared<sf::Sprite>(sprite);
-}
+
 
 GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost>& ghost, std::weak_ptr<sf::RenderWindow> win) : GUI::EntityView(ghost, std::move(win)) {
     subject = ghost;
@@ -92,7 +88,7 @@ void GUI::GUIGhost::move(const int &ticks) {
             // Als het vakje een ghost bevat:
             if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY() + 1, this->getSubject()->getX()) != nullptr and this->getSubject()->getWorld()->getItem(
                     this->getSubject()->getY() + 1, this->getSubject()->getX())->getTag() == "PacMan"){
-                this->getSubject()->getWorld()->die();
+                this->getSubject()->getWorld()->restart();
             }
                 // Als het volgende vakje geen muur is: gaan
             else if (this->getSubject()->canMove(this->getSubject()->getY() - 1, this->getSubject()->getX())){
@@ -158,7 +154,7 @@ void GUI::GUIGhost::move(const int &ticks) {
             // Als het vakje een ghost bevat:
             if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY() + 1, this->getSubject()->getX()) != nullptr and this->getSubject()->getWorld()->getItem(
                     this->getSubject()->getY() + 1, this->getSubject()->getX())->getTag() == "PacMan"){
-                this->getSubject()->getWorld()->die();
+                this->getSubject()->getWorld()->restart();
             }
                 // Als het volgende vakje geen muur is: gaan
             else if (this->getSubject()->canMove(this->getSubject()->getY() + 1, this->getSubject()->getX())){
@@ -224,7 +220,7 @@ void GUI::GUIGhost::move(const int &ticks) {
             // Als het vakje een ghost bevat:
             if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY(), this->getSubject()->getX() + 1) != nullptr and this->getSubject()->getWorld()->getItem(
                     this->getSubject()->getY(), this->getSubject()->getX() + 1)->getTag() == "PacMan"){
-                this->getSubject()->getWorld()->die();
+                this->getSubject()->getWorld()->restart();
             }
                 // Als het volgende vakje geen muur is: gaan
             else if (this->getSubject()->canMove(this->getSubject()->getY(), this->getSubject()->getX() + 1)){
@@ -289,7 +285,7 @@ void GUI::GUIGhost::move(const int &ticks) {
             // Als het vakje een ghost bevat:
             if (this->getSubject()->getWorld()->getItem(this->getSubject()->getY(), this->getSubject()->getX() - 1) != nullptr and this->getSubject()->getWorld()->getItem(
                     this->getSubject()->getY(), this->getSubject()->getX() - 1)->getTag() == "PacMan"){
-                this->getSubject()->getWorld()->die();
+                this->getSubject()->getWorld()->restart();
             }
                 // Als het volgende vakje geen muur is: gaan
             else if (this->getSubject()->canMove(this->getSubject()->getY(), this->getSubject()->getX() - 1)){
@@ -331,13 +327,20 @@ std::shared_ptr<Model::Ghost> GUI::GUIGhost::getSubject(){
 }
 
 void GUI::GUIGhost::update(const int &ticks) {
+    this->updateSprite();
     auto camera = Camera::instance();
-    auto camCoords = camera->getCameraCoords(this->getSubject()->getX(), this->getSubject()->getY());
+    auto camCoords = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());
     auto windowCoords = cameraToPixels(camCoords.getXCoord(), camCoords.getYCoord());
     auto sprite1 = this->getSprite();
     sprite1->setPosition(float(windowCoords.first), float(windowCoords.second));
     this->setSprite(sprite1);
     EntityView::update(ticks);
+}
+
+void GUI::GUIGhost::updateSprite() {
+    sf::Sprite sprite;
+    sprite = sf::Sprite(*this->getTexture(), sf::IntRect(spriteX, 0, 40, 40));
+    this->setSprite(std::make_shared<sf::Sprite>(sprite));
 }
 
 

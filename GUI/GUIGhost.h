@@ -19,13 +19,13 @@ public:
 
     void update(const int &ticks) override;
 
-    std::shared_ptr<sf::Sprite> getSprite() override;
+    void updateSprite();
 
-    double getYSpeed() const;
+    [[nodiscard]] double getYSpeed() const;
 
     void setYSpeed(double speed);
 
-    double getXSpeed() const;
+    [[nodiscard]] double getXSpeed() const;
 
     void setXSpeed(double speed);
 

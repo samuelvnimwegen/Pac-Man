@@ -53,9 +53,7 @@ void Model::PacMan::setNextDirection(const direction &dir) {
 void Model::PacMan::update(const int &ticks) {
     this->move(ticks);
     for (const auto& observer: this->getObservers()){
-        cout << observer->getCameraX() << endl;
         observer->update(ticks);
-        cout << observer->getCameraY() << endl;
     }
 }
 

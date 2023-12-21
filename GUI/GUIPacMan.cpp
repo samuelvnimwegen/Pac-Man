@@ -91,7 +91,7 @@ void GUI::GUIPacMan::move(const int &ticks) {
             if (this->getPacManModel()->getWorld()->getItem(this->getPacManModel()->getY() - 1,
                                                             this->getPacManModel()->getX()) != nullptr and this->getPacManModel()->getWorld()->getItem(
                     this->getPacManModel()->getY() - 1, this->getPacManModel()->getX())->getTag() == "Ghost"){
-                this->getPacManModel()->getWorld()->die();
+                this->getPacManModel()->getWorld()->restart();
             }
                 // Als het volgende vakje geen muur is: gaan
             else if (this->getPacManModel()->canMove(this->getPacManModel()->getY() - 1, this->getPacManModel()->getX())){
@@ -164,7 +164,7 @@ void GUI::GUIPacMan::move(const int &ticks) {
             if (this->getPacManModel()->getWorld()->getItem(this->getPacManModel()->getY() + 1,
                                                             this->getPacManModel()->getX()) != nullptr and this->getPacManModel()->getWorld()->getItem(
                     this->getPacManModel()->getY() + 1, this->getPacManModel()->getX())->getTag() == "Ghost"){
-                this->getPacManModel()->getWorld()->die();
+                this->getPacManModel()->getWorld()->restart();
             }
                 // Als het volgende vakje geen muur is: gaan
             else if (this->getPacManModel()->canMove(this->getPacManModel()->getY() + 1, this->getPacManModel()->getX())){
@@ -238,7 +238,7 @@ void GUI::GUIPacMan::move(const int &ticks) {
             if (this->getPacManModel()->getWorld()->getItem(this->getPacManModel()->getY(),
                                                             this->getPacManModel()->getX() + 1) != nullptr and this->getPacManModel()->getWorld()->getItem(
                     this->getPacManModel()->getY(), this->getPacManModel()->getX() + 1)->getTag() == "Ghost"){
-                this->getPacManModel()->getWorld()->die();
+                this->getPacManModel()->getWorld()->restart();
             }
                 // Als het volgende vakje geen muur is: gaan
             else if (this->getPacManModel()->canMove(this->getPacManModel()->getY(), this->getPacManModel()->getX() + 1)){
@@ -308,7 +308,7 @@ void GUI::GUIPacMan::move(const int &ticks) {
             // Als het vakje een ghost bevat:
             if (this->getPacManModel()->getWorld()->getItem(this->getSubject()->getY(), this->getSubject()->getX() - 1) != nullptr and this->getPacManModel()->getWorld()->getItem(
                     this->getSubject()->getY(), this->getSubject()->getX() - 1)->getTag() == "Ghost"){
-                this->getPacManModel()->getWorld()->die();
+                this->getPacManModel()->getWorld()->restart();
             }
                 // Als het volgende vakje geen muur is: gaan
             else if (this->getPacManModel()->canMove(this->getSubject()->getY(), this->getSubject()->getX() - 1)){
@@ -362,9 +362,6 @@ void GUI::GUIPacMan::update(const int &ticks) {
     auto camCoords = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());
     auto windowCoords = cameraToPixels(camCoords.getXCoord(), camCoords.getYCoord());
     this->getSprite()->setPosition(float(windowCoords.first), float(windowCoords.second));
-    std::cout << this->getPacManModel()->getX() << " " << this->getPacManModel()->getY() << endl;
-    std::cout << toTile(this->getPacManModel()->getX()) << " " << toTile(this->getPacManModel()->getY()) << endl;
-    std::cout << "-----------------------" << endl;
     EntityView::update(ticks);
 }
 

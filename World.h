@@ -27,6 +27,7 @@ class Model::World {
     std::vector<std::shared_ptr<Ghost>> ghosts;
     std::vector<std::shared_ptr<Wall>> walls;
     int coinsLeft;
+    bool gameStarted;
 public:
     explicit World();
 
@@ -34,9 +35,9 @@ public:
 
     void buildWorld();
 
-    void die() const;
+    void restart();
 
-    void update(const int &ticks) const;
+    void update(const int &ticks);
 
     [[nodiscard]] int getHeight() const;
 
@@ -79,6 +80,10 @@ public:
     [[nodiscard]] const std::vector<std::shared_ptr<Wall>> &getWalls() const;
 
     void setWalls(const std::vector<std::shared_ptr<Wall>> &newWalls);
+
+    [[nodiscard]] bool isGameStarted() const;
+
+    void setGameStarted(bool gameStarted);
 
 };
 

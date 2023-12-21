@@ -96,9 +96,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
             int ticks = Model::Stopwatch::instance()->getTicks();
             direction direction = getDirection();
             if (this->getWorld()->getPacMan()->getCurrentDirection() != direction::none){
-                for (const auto& ghost: this->getWorld()->getGhosts()){
-                    ghost->move(ticks);
-                }
+                this->getWorld()->setGameStarted(true);
             }
             this->getWorld()->getPacMan()->changeDirection(direction);
             text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));

@@ -129,7 +129,7 @@ void Model::World::buildWorld() {
 
     this->getFactory()->createPacMan(1, 1);
 
-    // this->getFactory()->createGhost(5, 9);
+    this->getFactory()->createGhost(5, 9);
 
     for (int i = 0; i < this->getHeight(); ++i){
         for (int j = 0; j < this->getWidth(); ++j){
@@ -157,11 +157,12 @@ void Model::World::setCoinsLeft(int coinsAmount) {
     World::coinsLeft = coinsAmount;
 }
 
-void Model::World::die() const {
+void Model::World::restart() {
     this->getPacMan()->die();
     for (const auto& ghost: this->getGhosts()){
         ghost->reset();
     }
+    setGameStarted(false);
 }
 
 
@@ -226,7 +227,7 @@ void Model::World::setWalls(const vector<std::shared_ptr<Wall>> &newWalls) {
     World::walls = newWalls;
 }
 
-void Model::World::update(const int &ticks) const {
+void Model::World::update(const int &ticks) {
     for (const auto& wall: this->getWalls()){
         wall->update(ticks);
     }
@@ -241,13 +242,21 @@ void Model::World::update(const int &ticks) const {
     // Checken op collisions van ghosts en pacMans:
     for (const auto& ghost: this->getGhosts()){
         if (toTile(ghost->getX()) == toTile(this->getPacMan()->getX()) and toTile(ghost->getY()) == toTile(this->getPacMan()->getY())){
-            this->getPacMan()->die();
+            this->restart();
         }
     }
 }
 
 const vector<std::vector<std::shared_ptr<Model::EntityModel>>> &Model::World::getWorld() const {
     return world;
+}
+
+bool Model::World::isGameStarted() const {
+    return gameStarted;
+}
+
+void Model::World::setGameStarted(bool started) {
+    World::gameStarted = started;
 }
 
 Model::AbstractFactory::AbstractFactory(const std::shared_ptr<Model::World>& world) : world(world) {}
@@ -297,8 +306,6 @@ void Model::PacMan::removePrevious(const int &row, const int &col) {
 
 
 void Model::PacMan::die() {
-    this->getWorld()->setItem(nullptr, toTile(getY()), toTile(getX()));
-    this->getWorld()->setItem(this->getWorld()->getPacMan(), getStartRow(), getStartCol());
     this->setHasMoved(false);
     this->setCurrentDirection(direction::none);
     this->setNextDirection(direction::none);
@@ -344,8 +351,222 @@ Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world
     nextDirection = direction::none;
 }
 
-void Model::Ghost::move(const int &steps) {
-    this->getObservers().at(0)->move(steps);
+void Model::Ghost::move(const int &ticks) {
+    if (this->getCurrentDirection() == direction::up){
+        double yCoord = this->getY();
+        yCoord -= ticks / 400.0;
+        // Als volgende direction naar rechts is en hij kan naar rechts:
+        if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
+            double maxYCoord = toTile(this->getY());
+            if (yCoord < maxYCoord){
+                this->setY(maxYCoord);
+                // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
+                this->setX(this->getX() + 1.0 / 400.0);
+                this->setCurrentDirection(direction::right);
+                this->setNextDirection(direction::none);
+            }
+            else{
+                this->setY(yCoord);
+            }
+        }
+
+            // Als volgende direction naar links is en hij kan naar links:
+        else if (this->getNextDirection() == direction::left and this->canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
+            double maxYCoord = toTile(this->getY());
+            if (yCoord < maxYCoord){
+                this->setY(maxYCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setX(this->getX() - 1.0 / 400);
+                this->setCurrentDirection(direction::left);
+                this->setNextDirection(direction::none);
+            }
+            else{
+                this->setY(yCoord);
+            }
+        }
+
+            // Als de volgende tile een muur is:
+        else if (this->getWorld()->getItem(toTile(this->getY()) - 1, toTile(this->getX())) != nullptr and this->getWorld()->getItem(
+                toTile(this->getY()) - 1, toTile(this->getX()))->getTag() == "Wall"){
+            double maxYCoord = toTile(this->getY());
+            if (yCoord < maxYCoord){
+                this->setY(maxYCoord);
+            }
+            else{
+                this->setY(yCoord);
+            }
+        }
+
+            // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (toTile(this->getY()) != toTile(yCoord)){
+            // Als het volgende vakje geen muur is: gaan
+            if (this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
+                this->setY(yCoord);
+            }
+        }else{
+            this->setY(yCoord);
+        }
+    }
+    else if (this->getCurrentDirection() == direction::down){
+        double yCoord = this->getY();
+        yCoord += ticks * 1.0 / 400;
+        // Als volgende direction naar rechts is en hij kan naar rechts:
+        if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()),
+                                                                           toTile(this->getX()) + 1)){
+            double wallYCoord = toTile(this->getY());
+            if (yCoord > wallYCoord){
+                this->setY(wallYCoord);
+                // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
+                this->setX(this->getX() + 1.0 / 400);
+                this->setCurrentDirection(direction::right);
+                this->setNextDirection(direction::none);
+            }
+            else{
+                this->setY(yCoord);
+            }
+        }
+            // Als volgende direction naar links is en hij kan naar links:
+        else if (this->getNextDirection() == direction::left and this->canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
+            double wallYCoord = toTile(this->getY());
+            if (yCoord > wallYCoord){
+                this->setY(wallYCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setX(this->getX() - 1.0 / 400);
+                this->setCurrentDirection(direction::left);
+                this->setNextDirection(direction::none);
+            }
+            else{
+                this->setY(yCoord);
+            }
+        }
+            // Als de volgende tile een muur is:
+        else if (this->getWorld()->getItem(toTile(this->getY()) + 1, toTile(this->getX())) != nullptr and this->getWorld()->getItem(
+                toTile(this->getY()) + 1, toTile(this->getX()))->getTag() == "Wall"){
+            double wallYCoord = toTile(this->getY());
+            if (yCoord > wallYCoord){
+                this->setY(wallYCoord);
+            }
+            else{
+                this->setY(yCoord);
+            }
+        }
+            // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (toTile(this->getY()) != toTile(yCoord)){
+            // Als het volgende vakje geen muur is: gaan
+            if (this->canMove(toTile(this->getY()) + 1, toTile(this->getX()))){
+                this->setY(yCoord);
+            }
+        }
+        else{
+            this->setY(yCoord);
+        }
+    }
+    else if (this->getCurrentDirection() == direction::right){
+        double xCoord = this->getX();
+        xCoord += ticks * 1.0 / 400;
+        // Als volgende direction naar links is en hij kan naar links:
+        if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
+            double wallXCoord = toTile(this->getX());
+            if (xCoord > wallXCoord){
+                this->setX(wallXCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setY(this->getY() - 1.0 / 400);
+                this->setCurrentDirection(direction::up);
+                this->setNextDirection(direction::none);
+            }
+            else{
+                this->setX(xCoord);
+            }
+        }
+        else if (this->getNextDirection() == direction::down and this->canMove(toTile(this->getY()) + 1, toTile(this->getX()))){
+            double wallXCoord = toTile(getX());
+            if (xCoord > wallXCoord){
+                this->setX(wallXCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setY(this->getY() + 1.0 / 400);
+                this->setCurrentDirection(direction::down);
+                this->setNextDirection(direction::none);
+            }
+            else{
+                this->setX(xCoord);
+            }
+        }
+            // Als de volgende tile een muur is:
+        else if (this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()) + 1) != nullptr and this->getWorld()->getItem(
+                toTile(this->getY()), toTile(this->getX()) + 1)->getTag() == "Wall"){
+            double wallXCoord = toTile(this->getX());
+            if (xCoord > wallXCoord){
+                this->setX(wallXCoord);
+            }
+            else{
+                this->setX(xCoord);
+            }
+        }
+            // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (toTile(this->getX()) != toTile(xCoord)){
+            // Als het volgende vakje geen muur is: gaan
+            if (this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
+                this->setX(xCoord);
+            }
+        }else{
+            this->setX(xCoord);
+        }
+    }
+    else if (this->getCurrentDirection() == direction::left){
+        double xCoord = this->getX();
+        xCoord -= ticks * 1.0 / 400;
+        // Als volgende direction naar links is en hij kan naar links:
+        if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1,toTile(this->getX()))){
+            double wallXCoord = toTile(this->getX());
+            if (xCoord < wallXCoord){
+                this->setX(wallXCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setY(this->getY() - 1.0 / 400);
+                this->setCurrentDirection(direction::up);
+                this->setNextDirection(direction::none);
+            }
+            else{
+                this->setX(xCoord);
+            }
+        }
+        else if (this->getNextDirection() == direction::down and this->canMove(toTile(this->getY()) + 1,
+                                                                               toTile(this->getX()))){
+            double wallXCoord = toTile(this->getX());
+            if (xCoord < wallXCoord){
+                this->setX(wallXCoord);
+                // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
+                this->setY(this->getY() + 1.0 / 400);
+                this->setCurrentDirection(direction::down);
+                this->setNextDirection(direction::none);
+            }
+            else{
+                this->setX(xCoord);
+            }
+        }
+            // Als de volgende tile een muur is:
+        else if (this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()) - 1) != nullptr and this->getWorld()->getItem(
+                toTile(this->getY()), toTile(this->getX()) - 1)->getTag() == "Wall"){
+            double wallXCoord = toTile(this->getX());
+            if (xCoord < wallXCoord){
+                this->setX(wallXCoord);
+            }
+            else{
+                this->setX(xCoord);
+            }
+        }
+            // Checken of hij dichter bij een ander vakje staat dan het huidige
+        else if (toTile(this->getX()) != toTile(xCoord)){
+            // Als het volgende vakje geen muur is: gaan
+            if (this->canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
+                this->setX(xCoord);
+            }
+        }else{
+            this->setX(xCoord);
+        }
+    }
+    else{
+        assert(this->getCurrentDirection() == direction::none);
+    }
 }
 
 shared_ptr<Model::World> Model::Ghost::getWorld() {
@@ -353,7 +574,10 @@ shared_ptr<Model::World> Model::Ghost::getWorld() {
 }
 
 void Model::Ghost::update(const int &ticks) {
-    this->getObservers().at(0)->move(ticks);
+    if (this->getWorld()->isGameStarted()){
+        this->changeDirection();
+        this->move(ticks);
+    }
     for (const auto& observers: this->getObservers()){
         observers->update(ticks);
     }
@@ -381,7 +605,7 @@ void Model::PacMan::move(const int &ticks) {
         }
 
         // Als volgende direction naar links is en hij kan naar links:
-        else if (this->getNextDirection() == direction::left and this->canMove(toTile(this->getY()), toTile(this->getX())) - 1){
+        else if (this->getNextDirection() == direction::left and this->canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
             double maxYCoord = toTile(this->getY());
             if (yCoord < maxYCoord){
                 this->setY(maxYCoord);
@@ -416,8 +640,10 @@ void Model::PacMan::move(const int &ticks) {
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
                 auto item = this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()));
                 if (item != nullptr and item->getTag() == "Coin"){
-                    item->consume();
-                    this->setScore(this->getScore() + 10);
+                    if (!item->isConsumed()){
+                        item->consume();
+                        this->setScore(this->getScore() + 10);
+                    }
                 }
             }
         }else{
@@ -476,8 +702,10 @@ void Model::PacMan::move(const int &ticks) {
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
                 auto item = this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()));
                 if (item != nullptr and item->getTag() == "Coin"){
-                    item->consume();
-                    this->setScore(this->getScore() + 10);
+                    if (!item->isConsumed()){
+                        item->consume();
+                        this->setScore(this->getScore() + 10);
+                    }
                 }
             }
         }
@@ -535,8 +763,10 @@ void Model::PacMan::move(const int &ticks) {
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
                 auto item = this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()));
                 if (item != nullptr and item->getTag() == "Coin"){
-                    item->consume();
-                    this->setScore(this->getScore() + 10);
+                    if (!item->isConsumed()){
+                        item->consume();
+                        this->setScore(this->getScore() + 10);
+                    }
                 }
             }
         }else{
@@ -594,8 +824,10 @@ void Model::PacMan::move(const int &ticks) {
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
                 auto item = this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()));
                 if (item != nullptr and item->getTag() == "Coin"){
-                    item->consume();
-                    this->setScore(this->getScore() + 10);
+                    if (!item->isConsumed()){
+                        item->consume();
+                        this->setScore(this->getScore() + 10);
+                    }
                 }
             }
         }else{
