@@ -28,9 +28,7 @@ void GUI::EntityView::setCameraY(double y) {
     EntityView::cameraY = y;
 }
 
-void GUI::EntityView::move(const int &ticks) {
 
-}
 
 GUI::EntityView::EntityView(const std::shared_ptr<Model::EntityModel>& subject, std::weak_ptr<sf::RenderWindow> win) : subject(subject), window(std::move(win)) {
     auto camera = GUI::Camera::instance();

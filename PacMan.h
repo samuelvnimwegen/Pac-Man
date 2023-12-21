@@ -12,8 +12,7 @@ class Model::PacMan: public Model::EntityModel{
     std::weak_ptr<Model::World> world;
     direction currentDirection;
     direction nextDirection;
-    double xSpeed;
-    double ySpeed;
+    double speed;
     bool hasMoved;
     int score;
     int startRow;
@@ -31,11 +30,9 @@ public:
     void update(const int &ticks) override;
 
     /*
-     * Sterven van pacman
+     * Resetten van pacman
      */
-    void die();
-
-    void removePrevious(const int &row, const int &col);
+    void reset();
 
     /*
     * Verandert de richting afhankelijk van de volgende richting
@@ -65,6 +62,8 @@ public:
     [[nodiscard]] int getStartRow() const;
 
     [[nodiscard]] int getStartCol() const;
+
+    [[nodiscard]] double getSpeed() const;
 
 
 };

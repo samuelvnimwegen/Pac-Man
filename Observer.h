@@ -19,8 +19,6 @@ public:
 
     virtual void setCameraY(double y) = 0;
 
-    virtual void move(const int &ticks) = 0;
-
     virtual void update(const int &ticks) = 0;
 
 };

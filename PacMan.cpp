@@ -103,4 +103,8 @@ void Model::PacMan::changeDirection(const direction &dir) {
     }
 }
 
+double Model::PacMan::getSpeed() const {
+    return speed;
+}
+
 

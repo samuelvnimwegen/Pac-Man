@@ -16,6 +16,7 @@ class Model::Ghost: public Model::EntityModel{
     bool justTurned;
     int startRow;
     int startCol;
+    double speed;
 
 public:
     Ghost(int row, int col, const std::shared_ptr<Model::World>& world);
@@ -62,7 +63,7 @@ public:
 
     [[nodiscard]]  std::shared_ptr<Model::World> getWorld() ;
 
-    void setWorld(const std::weak_ptr<Model::World> &weakPtr);
+    [[nodiscard]] double getSpeed() const;
 };
 
 

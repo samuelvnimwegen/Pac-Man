@@ -10,15 +10,10 @@
 class GUI::GUIPacMan: public GUI::EntityView{
     std::weak_ptr<Model::PacMan> pacManModel;
     int textureNr;
-    double xSpeed;
-    double ySpeed;
 public:
-
     explicit GUIPacMan(const std::shared_ptr<Model::PacMan>& subject, std::weak_ptr<sf::RenderWindow> win);
 
     ~GUIPacMan() override;
-
-    void move(const int &ticks) override;
 
     void update(const int &ticks) override;
 
@@ -29,10 +24,6 @@ public:
     [[nodiscard]] int getTextureNr() const;
 
     void setTextureNr(int nr);
-
-    [[nodiscard]] double getXSpeed() const;
-
-    [[nodiscard]] double getYSpeed() const;
 
     [[nodiscard]] std::shared_ptr<Model::PacMan> getPacManModel() const;
 };

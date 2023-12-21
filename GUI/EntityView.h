@@ -36,8 +36,6 @@ public:
 
     void setCameraY(double y) override;
 
-    void move(const int &ticks) override;
-
     void update(const int &ticks) override;
 
     [[nodiscard]] virtual std::shared_ptr<Model::EntityModel> getSubject() const;
