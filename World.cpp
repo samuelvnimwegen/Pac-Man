@@ -606,6 +606,8 @@ bool Model::Ghost::canMove(const direction &direction) {
 }
 
 
+
+
 void Model::PacMan::move(const int &ticks) {
     this->setHasMoved(true);
     if (this->getCurrentDirection() == direction::up){

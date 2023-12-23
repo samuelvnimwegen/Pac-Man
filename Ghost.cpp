@@ -32,16 +32,12 @@ void Model::Ghost::changeDirection() {
             }
         }
     }
-    if (toTile(this->getY()) == 3 and toTile(this->getX()) == 9){
-        cout << boolalpha <<  this->canMove(this->getCurrentDirection()) << endl;
-        cout << "vrachtwagen" << endl;
-    }
 
     // Dit is voor hoeken en intersecties:
     if (!canMove(this->getCurrentDirection()) or viableDirections.size() >= 3){
         // Random getal tussen 0 en 1 berekenen, als deze kleiner is dan 0.5 beste richting kiezen:
         double randomDouble = randomGenerator->getRandomDouble(0, 1);
-        if (randomDouble <= 0.5){
+        if (templateMax(randomDouble, 0.5) == 0.5){
             // Als de current en de nieuwe direction allebei up-down of niet up-down zijn: meteen van richting veranderen
             if (std::count(upDown.begin(), upDown.end(), this->getCurrentDirection()) ==
                 std::count(upDown.begin(), upDown.end(), bestDirection)){
@@ -135,4 +131,9 @@ void Model::Ghost::reset() {
     this->setNextDirection(none);
     this->setX(getStartCol());
     this->setY(getStartRow());
+}
+
+template<typename T>
+T templateMax(const T &x, const T &y) {
+    return (x > y)?  x: y;
 }

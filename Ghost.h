@@ -67,6 +67,7 @@ public:
 
     [[nodiscard]] double getSpeed() const;
 };
+template<typename T> T templateMax(const T &x, const T &y);
 
 
 #endif //PAC_MAN_GHOST_H
