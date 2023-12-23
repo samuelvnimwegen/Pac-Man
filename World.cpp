@@ -53,9 +53,18 @@ void Model::World::buildWorld() {
         vector<std::shared_ptr<Model::EntityModel>> row;
         row.reserve(this->getWidth());
         for (int j = 0; j < this->getWidth(); ++j){
-            row.push_back(shared_ptr<EntityModel>());
+            row.push_back(nullptr);
         }
         this->world.push_back(row);
+    }
+    // Map voor collectables maken
+    for (int i = 0; i < this->getHeight(); ++i){
+        vector<std::shared_ptr<Model::Collectable>> row;
+        row.reserve(this->getWidth());
+        for (int j = 0; j < this->getWidth(); ++j){
+            row.push_back(nullptr);
+        }
+        this->collectableWorld.push_back(row);
     }
 
     // Muren om level heen
@@ -177,7 +186,7 @@ void Model::World::addWall(const std::shared_ptr<Model::Wall> &wall) {
 void Model::World::addCoin(const std::shared_ptr<Model::Coin> &coin) {
     auto coinVector = this->getCoins();
     coinVector.push_back(coin);
-    collectableWorld[toTile(coin->getY())][toTile(coin->getX())] = coin;
+    collectableWorld.at(toTile(coin->getY())).at(toTile(coin->getX())) = coin;
     this->setCoins(coinVector);
 }
 
@@ -391,6 +400,7 @@ void Model::Ghost::move(const int &ticks) {
             // Als het volgende vakje geen muur is: gaan
             if (this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
                 this->setY(yCoord);
+                this->changeDirection();
             }
         }else{
             this->setY(yCoord);
@@ -444,6 +454,7 @@ void Model::Ghost::move(const int &ticks) {
             // Als het volgende vakje geen muur is: gaan
             if (this->canMove(toTile(this->getY()) + 1, toTile(this->getX()))){
                 this->setY(yCoord);
+                this->changeDirection();
             }
         }
         else{
@@ -496,6 +507,7 @@ void Model::Ghost::move(const int &ticks) {
             // Als het volgende vakje geen muur is: gaan
             if (this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
                 this->setX(xCoord);
+                this->changeDirection();
             }
         }else{
             this->setX(xCoord);
@@ -548,6 +560,7 @@ void Model::Ghost::move(const int &ticks) {
             // Als het volgende vakje geen muur is: gaan
             if (this->canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
                 this->setX(xCoord);
+                this->changeDirection();
             }
         }else{
             this->setX(xCoord);
@@ -564,7 +577,6 @@ shared_ptr<Model::World> Model::Ghost::getWorld() {
 
 void Model::Ghost::update(const int &ticks) {
     if (this->getWorld()->isGameStarted()){
-        this->changeDirection();
         this->move(ticks);
     }
     for (const auto& observers: this->getObservers()){
@@ -574,6 +586,23 @@ void Model::Ghost::update(const int &ticks) {
 
 double Model::Ghost::getSpeed() const {
     return speed;
+}
+
+bool Model::Ghost::canMove(const direction &direction) {
+    assert(direction != direction::none);
+    if (direction == direction::up){
+        return this->canMove(toTile(this->getY()) - 1, toTile(this->getX()));
+    }
+    else if (direction == direction::down){
+        return this->canMove(toTile(this->getY()) + 1, toTile(this->getX()));
+    }
+    else if (direction == direction::left){
+        return this->canMove(toTile(this->getY()), toTile(this->getX()) - 1);
+    }
+    else{
+        assert(direction == direction::right);
+        return this->canMove(toTile(this->getY()), toTile(this->getX()) + 1);
+    }
 }
 
 

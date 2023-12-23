@@ -31,6 +31,8 @@ public:
 
     [[nodiscard]] bool canMove(const int &row, const int &col) ;
 
+    bool canMove(const direction &direction);
+
     [[nodiscard]] int getManhattanDistance(const direction &direction);
 
     [[nodiscard]] bool isJustTurned() const;

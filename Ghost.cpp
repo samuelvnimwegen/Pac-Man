@@ -3,88 +3,73 @@
 //
 
 #include "Ghost.h"
+#include "limits"
+#include "Random.h"
+#include "algorithm"
 using namespace std;
 
 void Model::Ghost::changeDirection() {
-    int minDistance = 1000000;
-    direction dir = direction::none;
-    // Als hij omhoog kan:
-    if (this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
-        int distance = this->getManhattanDistance(direction::up);
-        if (distance < minDistance){
-            minDistance = distance;
-            dir = direction::up;
+    // Random number generator voor later
+    auto randomGenerator = Model::Random::instance();
+
+    // Vector voor up/down en left/right voor later:
+    vector<direction> upDown = {direction::up, direction::down};
+    vector<direction> leftRight = {direction::left, direction::right};
+
+    // Maximale integer waarde zodat de eerste mogelijke manhattan-afstand altijd kleiner is
+    int minDistance = std::numeric_limits<int>::max();
+    direction bestDirection = direction::none;
+    vector<direction> viableDirections;
+
+    // Voor alle mogelijke directions afgaan of ze viable zijn en of ze de beste direction zijn:
+    for (auto direction: {direction::up, direction::down, direction::left, direction::right}){
+        if (this->canMove(direction)){
+            viableDirections.push_back(direction);
+            int distance = this->getManhattanDistance(direction);
+            if (distance < minDistance){
+                minDistance = distance;
+                bestDirection = direction;
+            }
         }
     }
-    // Als hij naar beneden kan:
-    if (this->canMove(toTile(this->getY()) + 1, toTile(this->getX()))){
-        int distance = this->getManhattanDistance(down);
-        if (distance < minDistance){
-            minDistance = distance;
-            dir = down;
-        }
+    if (toTile(this->getY()) == 3 and toTile(this->getX()) == 9){
+        cout << boolalpha <<  this->canMove(this->getCurrentDirection()) << endl;
+        cout << "vrachtwagen" << endl;
     }
-    // Als hij naar rechts kan:
-    if (this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
-        int distance = this->getManhattanDistance(direction::right);
-        if (distance < minDistance){
-            minDistance = distance;
-            dir = direction::right;
+
+    // Dit is voor hoeken en intersecties:
+    if (!canMove(this->getCurrentDirection()) or viableDirections.size() >= 3){
+        // Random getal tussen 0 en 1 berekenen, als deze kleiner is dan 0.5 beste richting kiezen:
+        double randomDouble = randomGenerator->getRandomDouble(0, 1);
+        if (randomDouble <= 0.5){
+            // Als de current en de nieuwe direction allebei up-down of niet up-down zijn: meteen van richting veranderen
+            if (std::count(upDown.begin(), upDown.end(), this->getCurrentDirection()) ==
+                std::count(upDown.begin(), upDown.end(), bestDirection)){
+                this->setCurrentDirection(bestDirection);
+                this->setNextDirection(direction::none);
+            }
+                // Als de nieuwe direction left-right is en de oude up-down of omgekeerd: draaien bij volgende mogelijkheid
+            else{
+                this->setNextDirection(bestDirection);
+            }
         }
-    }
-    // Als hij naar links kan:
-    if (this->canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
-        int distance = this->getManhattanDistance(direction::left);
-        if (distance < minDistance){
-            dir = direction::left;
+        // Anders random viable richting:
+        else{
+            int i = randomGenerator->getRandomInt(0, int(viableDirections.size()) - 1);
+            direction randomDirection = viableDirections.at(i);
+            // Als de current en de nieuwe direction allebei up-down of niet up-down zijn: meteen van richting veranderen
+            if (std::count(upDown.begin(), upDown.end(), this->getCurrentDirection()) ==
+                    std::count(upDown.begin(), upDown.end(), randomDirection)){
+                this->setCurrentDirection(randomDirection);
+                this->setNextDirection(direction::none);
+            }
+            // Als de nieuwe direction left-right is en de oude up-down of omgekeerd: draaien bij volgende mogelijkheid
+            else{
+                this->setNextDirection(randomDirection);
+            }
         }
     }
 
-
-    if (this->getCurrentDirection() == direction::up){
-        if (dir == direction::down and !canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
-            this->setCurrentDirection(direction::down);
-        }
-        else if (dir == direction::left){
-            this->setNextDirection(direction::left);
-        }
-        else if (dir == direction::right){
-            this->setNextDirection(direction::right);
-        }
-    }
-    else if (this->getCurrentDirection() == direction::down ){
-        if (dir == direction::up and !canMove(toTile(this->getY()) + 1, toTile(this->getX()))){
-            this->setCurrentDirection(direction::up);
-        }
-        else if (dir == direction::left){
-            this->setNextDirection(direction::left);
-        }
-        else if (dir == direction::right){
-            this->setNextDirection(direction::right);
-        }
-    }
-    else if (this->getCurrentDirection() == direction::left){
-        if (dir == direction::right and !canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
-            this->setCurrentDirection(direction::right);
-        }
-        else if (dir == direction::up){
-            this->setNextDirection(direction::up);
-        }
-        else if (dir == direction::down){
-            this->setNextDirection(direction::down);
-        }
-    }
-    else if (this->getCurrentDirection() == direction::right){
-        if (dir == direction::left and !canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
-            this->setCurrentDirection(direction::left);
-        }
-        else if (dir == direction::up){
-            this->setNextDirection(direction::up);
-        }
-        else if (dir == direction::down){
-            this->setNextDirection(direction::down);
-        }
-    }
 }
 
 bool Model::Ghost::isJustTurned() const {

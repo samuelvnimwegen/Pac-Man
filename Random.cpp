@@ -6,7 +6,7 @@
 
 std::shared_ptr<Model::Random> Model::Random::m_pRandom = nullptr;
 
-Model::Random::Random() {
+Model::Random::Random(): mersenneTwister(std::random_device{}()) {
     std::random_device rd;
     mersenneTwister = std::mt19937(rd());
 }

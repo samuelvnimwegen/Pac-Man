@@ -9,6 +9,7 @@
 
 
 GUI::GUICoin::GUICoin(const std::shared_ptr<Model::Coin>& coin, std::weak_ptr<sf::RenderWindow> win) : GUI::EntityView(coin, std::move(win)) {
+    subject = coin;
     auto texture = std::make_shared<sf::Texture>();
     texture->loadFromFile("Sprites.png");
     this->setTexture(texture);

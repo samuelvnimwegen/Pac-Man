@@ -19,7 +19,7 @@
 
 class Model::World {
     std::vector<std::vector<std::shared_ptr<Model::EntityModel>>> world;
-    std::vector<std::vector<std::shared_ptr<Model::Coin>>> collectableWorld;
+    std::vector<std::vector<std::shared_ptr<Model::Collectable>>> collectableWorld;
     int height;
     int width;
     std::shared_ptr<Model::AbstractFactory> factory;
