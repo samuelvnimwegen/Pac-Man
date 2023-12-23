@@ -22,4 +22,11 @@ void Model::Collectable::update(const int &ticks) {
     }
 }
 
+bool Model::Collectable::isConsumed() const {
+    return consumed;
+}
+
+void Model::Collectable::consume() {
+    consumed = true;
+}
 

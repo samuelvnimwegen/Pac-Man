@@ -8,7 +8,6 @@
 #include "memory"
 class Model::EntityModel: public  Model::Subject{
     std::string tag;
-    bool consumed;
     double row;
     double col;
 public:
@@ -19,10 +18,6 @@ public:
     [[nodiscard]] const std::string &getTag() const;
 
     void setTag(const std::string &tg);
-
-    [[nodiscard]] bool isConsumed() const;
-
-    void consume();
 
     [[nodiscard]] double getY() const;
 

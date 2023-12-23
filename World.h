@@ -19,6 +19,7 @@
 
 class Model::World {
     std::vector<std::vector<std::shared_ptr<Model::EntityModel>>> world;
+    std::vector<std::vector<std::shared_ptr<Model::Coin>>> collectableWorld;
     int height;
     int width;
     std::shared_ptr<Model::AbstractFactory> factory;
@@ -63,7 +64,7 @@ public:
 
     void addCoin(const std::shared_ptr<Model::Coin> &coin);
 
-    [[nodiscard]] const std::vector<std::vector<std::shared_ptr<Model::EntityModel>>> &getWorld() const;
+    [[nodiscard]] std::shared_ptr<Model::Collectable> getCollectable(const int &row, const int &col);
 
     [[nodiscard]] const std::shared_ptr<Model::PacMan> &getPacMan() const;
 

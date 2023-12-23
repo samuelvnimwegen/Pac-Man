@@ -177,6 +177,7 @@ void Model::World::addWall(const std::shared_ptr<Model::Wall> &wall) {
 void Model::World::addCoin(const std::shared_ptr<Model::Coin> &coin) {
     auto coinVector = this->getCoins();
     coinVector.push_back(coin);
+    collectableWorld[toTile(coin->getY())][toTile(coin->getX())] = coin;
     this->setCoins(coinVector);
 }
 
@@ -246,10 +247,6 @@ void Model::World::update(const int &ticks) {
             this->restart();
         }
     }
-}
-
-const vector<std::vector<std::shared_ptr<Model::EntityModel>>> &Model::World::getWorld() const {
-    return world;
 }
 
 bool Model::World::isGameStarted() const {
@@ -634,11 +631,11 @@ void Model::PacMan::move(const int &ticks) {
              if (this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
                 this->setY(yCoord);
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
-                auto item = this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()));
+                auto item = this->getWorld()->getCollectable(toTile(this->getY()), toTile(this->getX()));
                 if (item != nullptr and item->getTag() == "Coin"){
                     if (!item->isConsumed()){
                         item->consume();
-                        this->setScore(this->getScore() + 10);
+                        this->setScore(this->getScore() + item->getValue());
                         this->getWorld()->setCoinsLeft(this->getWorld()->getCoinsLeft() - 1);
                     }
                 }
@@ -697,11 +694,11 @@ void Model::PacMan::move(const int &ticks) {
              if (this->canMove(toTile(this->getY()) + 1, toTile(this->getX()))){
                 this->setY(yCoord);
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
-                auto item = this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()));
+                auto item = this->getWorld()->getCollectable(toTile(this->getY()), toTile(this->getX()));
                 if (item != nullptr and item->getTag() == "Coin"){
                     if (!item->isConsumed()){
                         item->consume();
-                        this->setScore(this->getScore() + 10);
+                        this->setScore(this->getScore() + item->getValue());
                         this->getWorld()->setCoinsLeft(this->getWorld()->getCoinsLeft() - 1);
                     }
                 }
@@ -759,11 +756,11 @@ void Model::PacMan::move(const int &ticks) {
             if (this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
                 this->setX(xCoord);
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
-                auto item = this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()));
+                auto item = this->getWorld()->getCollectable(toTile(this->getY()), toTile(this->getX()));
                 if (item != nullptr and item->getTag() == "Coin"){
                     if (!item->isConsumed()){
                         item->consume();
-                        this->setScore(this->getScore() + 10);
+                        this->setScore(this->getScore() + item->getValue());
                         this->getWorld()->setCoinsLeft(this->getWorld()->getCoinsLeft() - 1);
                     }
                 }
@@ -821,11 +818,11 @@ void Model::PacMan::move(const int &ticks) {
              if (this->canMove(toTile(this->getY()), toTile(this->getX()) - 1)){
                 this->setX(xCoord);
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
-                auto item = this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()));
+                auto item = this->getWorld()->getCollectable(toTile(this->getY()), toTile(this->getX()));
                 if (item != nullptr and item->getTag() == "Coin"){
                     if (!item->isConsumed()){
                         item->consume();
-                        this->setScore(this->getScore() + 10);
+                        this->setScore(this->getScore() + item->getValue());
                         this->getWorld()->setCoinsLeft(this->getWorld()->getCoinsLeft() - 1);
                     }
                 }
@@ -840,5 +837,8 @@ void Model::PacMan::move(const int &ticks) {
 
 }
 
+shared_ptr<Model::Collectable> Model::World::getCollectable(const int &row, const int &col) {
+    return collectableWorld[row][col];
+}
 
 

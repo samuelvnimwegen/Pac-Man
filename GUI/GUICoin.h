@@ -7,10 +7,13 @@
 #include "EntityView.h"
 
 class GUI::GUICoin: public GUI::EntityView{
+    std::weak_ptr<Model::Coin> subject;
 public:
     explicit GUICoin(const std::shared_ptr<Model::Coin>& coin, std::weak_ptr<sf::RenderWindow> win);
 
     void update(const int &ticks) override;
+
+    [[nodiscard]] std::shared_ptr<Model::Coin> getSubject();
 
     ~GUICoin() override;
 };

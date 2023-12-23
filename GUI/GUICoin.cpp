@@ -28,5 +28,9 @@ void GUI::GUICoin::update(const int &ticks) {
     }
 }
 
+std::shared_ptr<Model::Coin> GUI::GUICoin::getSubject() {
+    return subject.lock();
+}
+
 GUI::GUICoin::~GUICoin() = default;
 

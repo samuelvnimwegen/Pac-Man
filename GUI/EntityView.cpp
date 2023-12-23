@@ -12,29 +12,9 @@
 GUI::EntityView::~EntityView() = default;
 
 
-double GUI::EntityView::getCameraX() const {
-    return cameraX;
-}
-
-void GUI::EntityView::setCameraX(double x) {
-    EntityView::cameraX = x;
-}
-
-double GUI::EntityView::getCameraY() const {
-    return cameraY;
-}
-
-void GUI::EntityView::setCameraY(double y) {
-    EntityView::cameraY = y;
-}
 
 
-
-GUI::EntityView::EntityView(const std::shared_ptr<Model::EntityModel>& subject, std::weak_ptr<sf::RenderWindow> win) : subject(subject), window(std::move(win)) {
-    auto camera = GUI::Camera::instance();
-    cameraX = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getXCoord();
-    cameraY = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX()).getYCoord();
-}
+GUI::EntityView::EntityView(const std::shared_ptr<Model::EntityModel>& subject, std::weak_ptr<sf::RenderWindow> win) : subject(subject), window(std::move(win)) {}
 
 std::shared_ptr<Model::EntityModel> GUI::EntityView::getSubject() const {
     return subject.lock();

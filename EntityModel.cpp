@@ -18,15 +18,6 @@ void Model::EntityModel::setTag(const string &tg) {
 Model::EntityModel::EntityModel(int r, int c) : Subject() {
     row = double(r);
     col = double(c);
-    consumed = false;
-}
-
-bool Model::EntityModel::isConsumed() const {
-    return consumed;
-}
-
-void Model::EntityModel::consume() {
-    consumed = true;
 }
 
 double Model::EntityModel::getY() const {

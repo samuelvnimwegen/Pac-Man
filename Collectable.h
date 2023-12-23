@@ -9,7 +9,7 @@
 
 class Model::Collectable: public Model::EntityModel{
     int value;
-
+    bool consumed;
 public:
     Collectable(int row, int col);
 
@@ -18,6 +18,10 @@ public:
     [[nodiscard]] int getValue() const;
 
     void setValue(int val);
+
+    [[nodiscard]] bool isConsumed() const;
+
+    void consume();
 
 
 };
