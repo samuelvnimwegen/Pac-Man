@@ -48,8 +48,6 @@ public:
 
     std::shared_ptr<Model::EntityModel> getItem(const int &row, const int &col);
 
-    void setItem(const std::shared_ptr<Model::EntityModel>& item, const int &row, const int &col);
-
     void addItem(const std::shared_ptr<Model::EntityModel>& item);
 
     [[nodiscard]] std::shared_ptr<AbstractFactory> getFactory() const;

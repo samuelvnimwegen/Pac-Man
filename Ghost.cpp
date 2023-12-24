@@ -68,13 +68,6 @@ void Model::Ghost::changeDirection() {
 
 }
 
-bool Model::Ghost::isJustTurned() const {
-    return justTurned;
-}
-
-void Model::Ghost::setJustTurned(bool turned) {
-    Ghost::justTurned = turned;
-}
 
 const string &Model::Ghost::getCurrentState() const {
     return currentState;
@@ -88,25 +81,8 @@ int Model::Ghost::getStartRow() const {
     return startRow;
 }
 
-void Model::Ghost::setStartRow(int row) {
-    Ghost::startRow = row;
-}
-
 int Model::Ghost::getStartCol() const {
     return startCol;
-}
-
-void Model::Ghost::setStartCol(int col) {
-    Ghost::startCol = col;
-}
-
-
-color Model::Ghost::getColor() const {
-    return ghostColor;
-}
-
-void Model::Ghost::setColor(color col) {
-    Ghost::ghostColor = col;
 }
 
 direction Model::Ghost::getCurrentDirection() const {
@@ -127,7 +103,7 @@ void Model::Ghost::setNextDirection(direction direction) {
 
 
 void Model::Ghost::reset() {
-    this->setCurrentDirection(up);
+    this->setCurrentDirection(this->getStartDirection());
     this->setNextDirection(none);
     this->setX(getStartCol());
     this->setY(getStartRow());

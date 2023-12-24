@@ -11,7 +11,8 @@ class GUI::GUIGhost: public GUI::EntityView{
     int textureNr;
     int spriteX;
 public:
-    explicit GUIGhost(const std::shared_ptr<Model::Ghost>& ghost, std::weak_ptr<sf::RenderWindow> win);
+    explicit GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, std::weak_ptr<sf::RenderWindow> win,
+                      color ghostColor);
 
     void update(const double &seconds) override;
 

@@ -141,7 +141,10 @@ void Model::World::buildWorld() {
 
     this->getFactory()->createPacMan(1, 1);
 
+    this->getFactory()->createGhost(5, 8);
     this->getFactory()->createGhost(5, 9);
+    this->getFactory()->createGhost(5, 10);
+    this->getFactory()->createGhost(5, 11);
 
     for (int i = 0; i < this->getHeight(); ++i){
         for (int j = 0; j < this->getWidth(); ++j){
@@ -157,9 +160,6 @@ void Model::World::buildWorld() {
 Model::World::~World() = default;
 
 
-void Model::World::setItem(const shared_ptr<Model::EntityModel>& item, const int &row, const int &col) {
-    world[row][col] = item;
-}
 
 int Model::World::getCoinsLeft() const {
     return coinsLeft;
@@ -196,15 +196,6 @@ void Model::World::addGhost(const std::shared_ptr<Model::Ghost>& ghost) {
     auto ghostVector = this->getGhosts();
     ghostVector.push_back(ghost);
     this->setGhosts(ghostVector);
-    if (ghosts.size() == 1){
-        ghost->setColor(color::red);
-    }else if (ghosts.size() == 2){
-        ghost->setColor(color::pink);
-    }else if (ghosts.size() == 3){
-        ghost->setColor(color::blue);
-    }else{
-        ghost->setColor(color::orange);
-    }
 }
 
 
@@ -283,7 +274,6 @@ Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : Entity
     speed = 11.0;
     this->setTag("PacMan");
     hasMoved = false;
-    score = 0;
     startRow = row;
     startCol = col;
     currentDirection = direction::none;
@@ -342,11 +332,10 @@ bool Model::Ghost::canMove(const int &row, const int &col) {
 Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world) : EntityModel(row, col), world(world) {
     this->setTag("Ghost");
     currentDirection = direction::up;
+    startDirection = direction::up;
     currentState = "WAITING";
-    justTurned = true;
     startRow = row;
     startCol = col;
-    ghostColor = color::blue;
     nextDirection = direction::none;
     speed = 11.0 / 4;
 }
@@ -607,7 +596,14 @@ bool Model::Ghost::canMove(const direction &direction) {
     }
 }
 
+direction Model::Ghost::getStartDirection() const {
+    return startDirection;
+}
 
+void Model::Ghost::setStartDirection(direction direction) {
+    Ghost::startDirection = direction;
+    Ghost::currentDirection = direction;
+}
 
 
 void Model::PacMan::move(const double &seconds) {

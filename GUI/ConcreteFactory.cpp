@@ -37,7 +37,30 @@ shared_ptr<Model::Coin> GUI::ConcreteFactory::createCoin(const int &row, const i
 
 shared_ptr<Model::Ghost> GUI::ConcreteFactory::createGhost(const int &row, const int &col) {
     shared_ptr<Model::Ghost> entity(new Model::Ghost(row, col, this->getWorld()));
-    shared_ptr<GUI::GUIGhost> observer(new GUI::GUIGhost(entity, this->getWindow()));
+    int ghostSize = int(this->getWorld()->getGhosts().size());
+    color ghostColor;
+    switch (ghostSize) {
+        case 0:
+            ghostColor = color::red;
+            entity->setStartDirection(direction::right);
+            break;
+        case 1:
+            ghostColor = color::pink;
+            break;
+        case 2:
+            ghostColor = color::blue;
+            break;
+        case 3:
+            ghostColor = color::orange;
+            entity->setStartDirection(direction::left);
+            break;
+        case 4:
+            ghostColor = color::green;
+            break;
+        default:
+            ghostColor = color::purple;
+    }
+    shared_ptr<GUI::GUIGhost> observer(new GUI::GUIGhost(entity, this->getWindow(), ghostColor));
     entity->addObserver(observer);
     this->getWorld()->addGhost(entity);
     return entity;

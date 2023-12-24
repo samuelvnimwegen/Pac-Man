@@ -9,14 +9,14 @@
 
 class Model::Ghost: public Model::EntityModel{
     std::weak_ptr<Model::World> world;
-    color ghostColor;
+    direction startDirection;
     direction currentDirection;
     direction nextDirection;
     std::string currentState;
-    bool justTurned;
     int startRow;
     int startCol;
     double speed;
+
 
 public:
     Ghost(int row, int col, const std::shared_ptr<Model::World>& world);
@@ -35,25 +35,13 @@ public:
 
     [[nodiscard]] int getManhattanDistance(const direction &direction);
 
-    [[nodiscard]] bool isJustTurned() const;
-
-    void setJustTurned(bool turned);
-
     [[nodiscard]] const std::string &getCurrentState() const;
 
     void setCurrentState(const std::string &state);
 
     [[nodiscard]] int getStartRow() const;
 
-    void setStartRow(int row);
-
     [[nodiscard]] int getStartCol() const;
-
-    void setStartCol(int col);
-
-    [[nodiscard]] color getColor() const;
-
-    void setColor(color col);
 
     [[nodiscard]] direction getCurrentDirection() const;
 
@@ -66,6 +54,10 @@ public:
     [[nodiscard]]  std::shared_ptr<Model::World> getWorld() ;
 
     [[nodiscard]] double getSpeed() const;
+
+    [[nodiscard]] direction getStartDirection() const;
+
+    void setStartDirection(direction direction);
 };
 template<typename T> T templateMax(const T &x, const T &y);
 
