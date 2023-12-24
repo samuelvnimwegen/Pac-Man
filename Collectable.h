@@ -13,7 +13,7 @@ class Model::Collectable: public Model::EntityModel{
 public:
     Collectable(int row, int col);
 
-    void update(const int &ticks) override;
+    void update(const double &seconds) override;
 
     [[nodiscard]] int getValue() const;
 

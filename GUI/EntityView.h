@@ -16,6 +16,8 @@ class GUI::EntityView: public Model::Observer{
 public:
     explicit EntityView(const std::shared_ptr<Model::EntityModel>& subject, std::weak_ptr<sf::RenderWindow> win);
 
+    void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) override;
+
     virtual ~EntityView();
 
     [[nodiscard]] const std::shared_ptr<sf::Texture> &getTexture() const;
@@ -26,13 +28,15 @@ public:
 
     void setSprite(const std::shared_ptr<sf::Sprite> &sharedPtr);
 
-    void update(const int &ticks) override;
+    void update(const double &ticks) override;
 
     [[nodiscard]] virtual std::shared_ptr<Model::EntityModel> getSubject() const;
 
     [[nodiscard]] std::pair<int, int> cameraToPixels(double xCamera, double yCamera) const;
 
     [[nodiscard]] const std::weak_ptr<sf::RenderWindow> &getWindow() const;
+
+
 };
 
 

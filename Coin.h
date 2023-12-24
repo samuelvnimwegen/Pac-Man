@@ -16,7 +16,7 @@ public:
 
     void setConsumed(bool cons);
 
-    void update(const int &ticks) override;
+    void update(const double &seconds) override;
 };
 
 

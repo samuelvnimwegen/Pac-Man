@@ -45,7 +45,7 @@ GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan>& subject, std::weak_pt
     shared_ptr<Camera> cam = Camera::instance();
 }
 
-void GUI::GUIPacMan::update(const int &ticks) {
+void GUI::GUIPacMan::update(const double &ticks) {
     this->updateSprite();
     auto camera = Camera::instance();
     auto camCoords = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());

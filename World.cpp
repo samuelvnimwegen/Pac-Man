@@ -5,8 +5,9 @@
 #include "World.h"
 #include "Ghost.h"
 
+#include <memory>
 #include <utility>
-
+#include "cmath"
 using namespace std;
 
 Model::World::World() {
@@ -16,6 +17,7 @@ Model::World::World() {
     factory = nullptr;
     coinsLeft = 0;
     pacMan = nullptr;
+    score = nullptr;
 }
 
 int Model::World::getHeight() const {
@@ -238,17 +240,17 @@ void Model::World::setWalls(const vector<std::shared_ptr<Wall>> &newWalls) {
     World::walls = newWalls;
 }
 
-void Model::World::update(const int &ticks) {
+void Model::World::update(const double &seconds) {
     for (const auto& wall: this->getWalls()){
-        wall->update(ticks);
+        wall->update(seconds);
     }
     for (const auto& coin: this->getCoins()){
-        coin->update(ticks);
+        coin->update(seconds);
     }
     for (const auto& ghost: this->getGhosts()){
-        ghost->update(ticks);
+        ghost->update(seconds);
     }
-    this->getPacMan()->update(ticks);
+    this->getPacMan()->update(seconds);
 
     // Checken op collisions van ghosts en pacMans:
     for (const auto& ghost: this->getGhosts()){
@@ -278,7 +280,7 @@ std::shared_ptr<Model::World> Model::AbstractFactory::getWorld() const {
 Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : EntityModel(row, col), world(world) {
     this->setCurrentDirection(direction::none);
     this->setNextDirection(direction::none);
-    speed = 1.0 / 80;
+    speed = 11.0;
     this->setTag("PacMan");
     hasMoved = false;
     score = 0;
@@ -346,20 +348,20 @@ Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world
     startCol = col;
     ghostColor = color::blue;
     nextDirection = direction::none;
-    speed = 1.0 / 400;
+    speed = 11.0 / 4;
 }
 
-void Model::Ghost::move(const int &ticks) {
+void Model::Ghost::move(const double &seconds) {
     if (this->getCurrentDirection() == direction::up){
         double yCoord = this->getY();
-        yCoord -= ticks * this->getSpeed();
+        yCoord -= seconds * this->getSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
         if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
             double maxYCoord = toTile(this->getY());
             if (yCoord < maxYCoord){
                 this->setY(maxYCoord);
                 // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
-                this->setX(this->getX() + this->getSpeed());
+                this->setX(this->getX() + this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::right);
                 this->setNextDirection(direction::none);
             }
@@ -374,7 +376,7 @@ void Model::Ghost::move(const int &ticks) {
             if (yCoord < maxYCoord){
                 this->setY(maxYCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setX(this->getX() - this->getSpeed());
+                this->setX(this->getX() - this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::left);
                 this->setNextDirection(direction::none);
             }
@@ -408,7 +410,7 @@ void Model::Ghost::move(const int &ticks) {
     }
     else if (this->getCurrentDirection() == direction::down){
         double yCoord = this->getY();
-        yCoord += ticks * this->getSpeed();
+        yCoord += seconds * this->getSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
         if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()),
                                                                            toTile(this->getX()) + 1)){
@@ -416,7 +418,7 @@ void Model::Ghost::move(const int &ticks) {
             if (yCoord > wallYCoord){
                 this->setY(wallYCoord);
                 // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
-                this->setX(this->getX() + this->getSpeed());
+                this->setX(this->getX() + this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::right);
                 this->setNextDirection(direction::none);
             }
@@ -430,7 +432,7 @@ void Model::Ghost::move(const int &ticks) {
             if (yCoord > wallYCoord){
                 this->setY(wallYCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setX(this->getX() - this->getSpeed());
+                this->setX(this->getX() - this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::left);
                 this->setNextDirection(direction::none);
             }
@@ -463,14 +465,14 @@ void Model::Ghost::move(const int &ticks) {
     }
     else if (this->getCurrentDirection() == direction::right){
         double xCoord = this->getX();
-        xCoord += ticks * this->getSpeed();
+        xCoord += seconds * this->getSpeed();
         // Als volgende direction naar links is en hij kan naar links:
         if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
             double wallXCoord = toTile(this->getX());
             if (xCoord > wallXCoord){
                 this->setX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setY(this->getY() - this->getSpeed());
+                this->setY(this->getY() - this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::up);
                 this->setNextDirection(direction::none);
             }
@@ -483,7 +485,7 @@ void Model::Ghost::move(const int &ticks) {
             if (xCoord > wallXCoord){
                 this->setX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setY(this->getY() + this->getSpeed());
+                this->setY(this->getY() + this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::down);
                 this->setNextDirection(direction::none);
             }
@@ -515,14 +517,14 @@ void Model::Ghost::move(const int &ticks) {
     }
     else if (this->getCurrentDirection() == direction::left){
         double xCoord = this->getX();
-        xCoord -= ticks * this->getSpeed();
+        xCoord -= seconds * this->getSpeed();
         // Als volgende direction naar links is en hij kan naar links:
         if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1,toTile(this->getX()))){
             double wallXCoord = toTile(this->getX());
             if (xCoord < wallXCoord){
                 this->setX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setY(this->getY() - this->getSpeed());
+                this->setY(this->getY() - this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::up);
                 this->setNextDirection(direction::none);
             }
@@ -536,7 +538,7 @@ void Model::Ghost::move(const int &ticks) {
             if (xCoord < wallXCoord){
                 this->setX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setY(this->getY() + this->getSpeed());
+                this->setY(this->getY() + this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::down);
                 this->setNextDirection(direction::none);
             }
@@ -575,12 +577,12 @@ shared_ptr<Model::World> Model::Ghost::getWorld() {
     return world.lock();
 }
 
-void Model::Ghost::update(const int &ticks) {
+void Model::Ghost::update(const double &seconds) {
     if (this->getWorld()->isGameStarted()){
-        this->move(ticks);
+        this->move(seconds);
     }
     for (const auto& observers: this->getObservers()){
-        observers->update(ticks);
+        observers->update(seconds);
     }
 }
 
@@ -608,18 +610,18 @@ bool Model::Ghost::canMove(const direction &direction) {
 
 
 
-void Model::PacMan::move(const int &ticks) {
+void Model::PacMan::move(const double &seconds) {
     this->setHasMoved(true);
     if (this->getCurrentDirection() == direction::up){
         double yCoord = this->getY();
-        yCoord -= ticks * this->getSpeed();
+        yCoord -= seconds * this->getSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
         if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
             double maxYCoord = toTile(this->getY());
             if (yCoord < maxYCoord){
                 this->setY(maxYCoord);
                 // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
-                this->setX(this->getX() + this->getSpeed());
+                this->setX(this->getX() + this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::right);
                 this->setNextDirection(direction::none);
             }
@@ -634,7 +636,7 @@ void Model::PacMan::move(const int &ticks) {
             if (yCoord < maxYCoord){
                 this->setY(maxYCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setX(this->getX() - this->getSpeed());
+                this->setX(this->getX() - this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::left);
                 this->setNextDirection(direction::none);
             }
@@ -666,8 +668,9 @@ void Model::PacMan::move(const int &ticks) {
                 if (item != nullptr and item->getTag() == "Coin"){
                     if (!item->isConsumed()){
                         item->consume();
-                        this->setScore(this->getScore() + item->getValue());
-                        this->getWorld()->setCoinsLeft(this->getWorld()->getCoinsLeft() - 1);
+                        for (const auto& observer: this->getObservers()){
+                            observer->collectableCollected(item);
+                        }
                     }
                 }
             }
@@ -677,7 +680,7 @@ void Model::PacMan::move(const int &ticks) {
     }
     else if (this->getCurrentDirection() == direction::down){
         double yCoord = this->getY();
-        yCoord += ticks * this->getSpeed();
+        yCoord += seconds * this->getSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
         if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()),
                                                                            toTile(this->getX()) + 1)){
@@ -685,7 +688,7 @@ void Model::PacMan::move(const int &ticks) {
             if (yCoord > wallYCoord){
                 this->setY(wallYCoord);
                 // 1 Tick naar rechts gaan als hij om de hoek is en de richtingen aanpassen
-                this->setX(this->getX() + this->getSpeed());
+                this->setX(this->getX() + this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::right);
                 this->setNextDirection(direction::none);
             }
@@ -699,7 +702,7 @@ void Model::PacMan::move(const int &ticks) {
             if (yCoord > wallYCoord){
                 this->setY(wallYCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setX(this->getX() - this->getSpeed());
+                this->setX(this->getX() - this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::left);
                 this->setNextDirection(direction::none);
             }
@@ -729,8 +732,9 @@ void Model::PacMan::move(const int &ticks) {
                 if (item != nullptr and item->getTag() == "Coin"){
                     if (!item->isConsumed()){
                         item->consume();
-                        this->setScore(this->getScore() + item->getValue());
-                        this->getWorld()->setCoinsLeft(this->getWorld()->getCoinsLeft() - 1);
+                        for (const auto& observer: this->getObservers()){
+                            observer->collectableCollected(item);
+                        }
                     }
                 }
             }
@@ -741,14 +745,14 @@ void Model::PacMan::move(const int &ticks) {
     }
     else if (this->getCurrentDirection() == direction::right){
         double xCoord = this->getX();
-        xCoord += ticks * this->getSpeed();
+        xCoord += seconds * this->getSpeed();
         // Als volgende direction naar links is en hij kan naar links:
         if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
             double wallXCoord = toTile(this->getX());
             if (xCoord > wallXCoord){
                 this->setX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setY(this->getY() - this->getSpeed());
+                this->setY(this->getY() - this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::up);
                 this->setNextDirection(direction::none);
             }
@@ -761,7 +765,7 @@ void Model::PacMan::move(const int &ticks) {
             if (xCoord > wallXCoord){
                 this->setX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setY(this->getY() + this->getSpeed());
+                this->setY(this->getY() + this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::down);
                 this->setNextDirection(direction::none);
             }
@@ -791,8 +795,9 @@ void Model::PacMan::move(const int &ticks) {
                 if (item != nullptr and item->getTag() == "Coin"){
                     if (!item->isConsumed()){
                         item->consume();
-                        this->setScore(this->getScore() + item->getValue());
-                        this->getWorld()->setCoinsLeft(this->getWorld()->getCoinsLeft() - 1);
+                        for (const auto& observer: this->getObservers()){
+                            observer->collectableCollected(item);
+                        }
                     }
                 }
             }
@@ -802,14 +807,14 @@ void Model::PacMan::move(const int &ticks) {
     }
     else if (this->getCurrentDirection() == direction::left){
         double xCoord = this->getX();
-        xCoord -= ticks * this->getSpeed();
+        xCoord -= seconds * this->getSpeed();
         // Als volgende direction naar links is en hij kan naar links:
         if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1,toTile(this->getX()))){
             double wallXCoord = toTile(this->getX());
             if (xCoord < wallXCoord){
                 this->setX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setY(this->getY() - this->getSpeed());
+                this->setY(this->getY() - this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::up);
                 this->setNextDirection(direction::none);
             }
@@ -823,7 +828,7 @@ void Model::PacMan::move(const int &ticks) {
             if (xCoord < wallXCoord){
                 this->setX(wallXCoord);
                 // 1 Tick naar links gaan als hij om de hoek is en de richtingen aanpassen
-                this->setY(this->getY() + this->getSpeed());
+                this->setY(this->getY() + this->getSpeed() / 1000);
                 this->setCurrentDirection(direction::down);
                 this->setNextDirection(direction::none);
             }
@@ -853,8 +858,9 @@ void Model::PacMan::move(const int &ticks) {
                 if (item != nullptr and item->getTag() == "Coin"){
                     if (!item->isConsumed()){
                         item->consume();
-                        this->setScore(this->getScore() + item->getValue());
-                        this->getWorld()->setCoinsLeft(this->getWorld()->getCoinsLeft() - 1);
+                        for (const auto& observer: this->getObservers()){
+                            observer->collectableCollected(item);
+                        }
                     }
                 }
             }
@@ -870,6 +876,41 @@ void Model::PacMan::move(const int &ticks) {
 
 shared_ptr<Model::Collectable> Model::World::getCollectable(const int &row, const int &col) {
     return collectableWorld[row][col];
+}
+
+const shared_ptr<Model::Score> &Model::World::getScoreClass() const {
+    return score;
+}
+
+void Model::World::setScore(const shared_ptr<Model::Score> &sharedPtr) {
+    World::score = sharedPtr;
+}
+
+void Model::Score::update(const double &seconds) {
+    auto stopwatch = Model::Stopwatch::instance();
+    // Als de game gestart is zetten we de level start time gelijk aan de huidige kloktijd.
+    if (this->getWorld().lock() and this->getWorld().lock()->isGameStarted()){
+        if (this->getLevelStartTime() == 0){
+            this->setLevelStartTime(stopwatch->getTotalSeconds());
+            this->setBenchMarkTime(this->getLevelStartTime());
+        }
+        // Nu voor elke seconde dat het level langer dan 20 seconden duurt, worden er 5 punten afgetrokken:
+        // dit wordt door een benchmark-time gedaan wat die begint op de begintijd van het level en telkens per seconde
+        // over 20 sec telkens 1 seconden omhoog schuift zodat mooi bij elke seconde over tijd de score wordt aangepast.
+        if (stopwatch->getTotalSeconds() - this->getBenchMarkTime() > 20){
+            this->setScore(this->getScore() - 5);
+            this->setBenchMarkTime(this->getBenchMarkTime() + 1);
+        }
+    }
+}
+void Model::Score::collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) {
+    // De value van de collectable wordt vermenigvuldigd met een amplifying factor op basis van de tijd waarop de vorige
+    // collectable die is opgepakt.
+    double doubleValue = collectable.lock()->getValue() * this->getAmplifyingFactor();
+    this->setScore(this->getScore() + int(std::round(doubleValue)));
+    if (this->getWorld().lock() and collectable.lock() and collectable.lock()->getTag() == "Coin"){
+        this->getWorld().lock()->setCoinsLeft(this->getWorld().lock()->getCoinsLeft() - 1);
+    }
 }
 
 

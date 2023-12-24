@@ -16,6 +16,7 @@
 #include "Ghost.h"
 #include "Observer.h"
 #include "memory"
+#include "Score.h"
 
 class Model::World {
     std::vector<std::vector<std::shared_ptr<Model::EntityModel>>> world;
@@ -29,6 +30,7 @@ class Model::World {
     std::vector<std::shared_ptr<Wall>> walls;
     int coinsLeft;
     bool gameStarted;
+    std::shared_ptr<Model::Score> score;
 public:
     explicit World();
 
@@ -38,7 +40,7 @@ public:
 
     void restart();
 
-    void update(const int &ticks);
+    void update(const double &seconds);
 
     [[nodiscard]] int getHeight() const;
 
@@ -85,6 +87,10 @@ public:
     [[nodiscard]] bool isGameStarted() const;
 
     void setGameStarted(bool gameStarted);
+
+    [[nodiscard]] const std::shared_ptr<Model::Score> &getScoreClass() const;
+
+    void setScore(const std::shared_ptr<Model::Score> &sharedPtr);
 
 };
 

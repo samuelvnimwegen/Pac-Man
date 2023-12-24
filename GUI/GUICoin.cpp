@@ -23,7 +23,7 @@ GUI::GUICoin::GUICoin(const std::shared_ptr<Model::Coin>& coin, std::weak_ptr<sf
     this->setSprite(sprite);
 }
 
-void GUI::GUICoin::update(const int &ticks) {
+void GUI::GUICoin::update(const double &ticks) {
     if (!this->getSubject()->isConsumed()){
         EntityView::update(ticks);
     }

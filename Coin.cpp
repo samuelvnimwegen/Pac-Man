@@ -18,8 +18,8 @@ void Model::Coin::setConsumed(bool cons) {
     Coin::consumed = cons;
 }
 
-void Model::Coin::update(const int &ticks) {
+void Model::Coin::update(const double &seconds) {
     for (const auto& observer: this->getObservers()){
-        observer->update(ticks);
+        observer->update(seconds);
     }
 }

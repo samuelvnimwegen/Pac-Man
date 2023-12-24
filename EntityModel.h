@@ -13,7 +13,7 @@ class Model::EntityModel: public  Model::Subject{
 public:
     EntityModel(int row, int col);
 
-    virtual void update(const int& ticks) = 0;
+    virtual void update(const double &seconds) = 0;
 
     [[nodiscard]] const std::string &getTag() const;
 

@@ -12,6 +12,7 @@ shared_ptr<Model::PacMan> GUI::ConcreteFactory::createPacMan(const int &row, con
     shared_ptr<Model::PacMan> entity(new Model::PacMan(row, col, this->getWorld()));
     shared_ptr<GUI::GUIPacMan> observer(new GUI::GUIPacMan(entity, this->getWindow()));
     entity->addObserver(observer);
+    entity->addObserver(this->getWorld()->getScoreClass());
     this->getWorld()->setPacMan(entity);
     return entity;
 }

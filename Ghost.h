@@ -21,9 +21,9 @@ class Model::Ghost: public Model::EntityModel{
 public:
     Ghost(int row, int col, const std::shared_ptr<Model::World>& world);
 
-    void move(const int &steps);
+    void move(const double &seconds);
 
-    void update(const int &ticks) override;
+    void update(const double &seconds) override;
 
     void changeDirection();
 

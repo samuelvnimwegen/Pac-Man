@@ -15,6 +15,8 @@ GUI::Game::Game(const int &wd, const int &hg) {
     auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(this->getWidth(), this->getHeight() + 50), "Pac-Man");
 
     world = std::make_shared<Model::World>();
+    auto score = std::make_shared<Model::Score>(world);
+    world->setScore(score);
     auto concreteFactory = std::make_shared<GUI::ConcreteFactory>(world, window);
     world->setFactory(concreteFactory);
     camera = GUI::Camera::instance();
@@ -93,46 +95,17 @@ GUI::Game::Game(const int &wd, const int &hg) {
             if (input == "ESCAPE"){
                 this->getStateManager()->pauze();
             }
-            int ticks = Model::Stopwatch::instance()->getTicks();
+            double time = Model::Stopwatch::instance()->getDeltaTime();
             direction direction = getDirection();
             if (this->getWorld()->getPacMan()->getCurrentDirection() != direction::none){
                 this->getWorld()->setGameStarted(true);
             }
             this->getWorld()->getPacMan()->changeDirection(direction);
-            text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));
+            text.setString("score " + to_string(this->getWorld()->getScoreClass()->getScore()));
             window->clear();
-            this->getWorld()->update(ticks);
-            /*
-            this->getWorld()->getPacMan()->move(ticks);
-            text.setString("score " + to_string(this->getWorld()->getPacMan()->getScore()));
-            window->clear();
-            for (const auto& wall:this->getWorld()->getWalls()){
-                auto pos = this->cameraToPixels(wall->getObservers().at(0)->getCameraX(), wall->getObservers().at(0)->getCameraY());
-                sf::Sprite sprite = wall->getObservers().at(0)->getSprite();
-                sprite.setPosition(float(pos.first), float(pos.second));
-                window->draw(sprite);
-            }
-            for (const auto& coin: this->getWorld()->getCoins()){
-                if (!coin->isConsumed()){
-                    auto pos = this->cameraToPixels(coin->getObservers().at(0)->getCameraX(), coin->getObservers().at(0)->getCameraY());
-                    sf::Sprite sprite = coin->getObservers().at(0)->getSprite();
-                    sprite.setPosition(float(pos.first), float(pos.second));
-                    window->draw(sprite);
-                }
-            }
-            for (const auto& ghost: this->getWorld()->getGhosts()){
-                auto pos = this->cameraToPixels(ghost->getObservers().at(0)->getCameraX(), ghost->getObservers().at(0)->getCameraY());
-                sf::Sprite sprite = ghost->getObservers().at(0)->getSprite();
-                sprite.setPosition(float(pos.first), float(pos.second));
-                window->draw(sprite);
-            }
-            auto pacManPos = this->cameraToPixels(this->getWorld()->getPacMan()->getObservers().at(0)->getCameraX(), this->getWorld()->getPacMan()->getObservers().at(0)->getCameraY());
-            sf::Sprite pacManSprite =  this->getWorld()->getPacMan()->getObservers().at(0)->getSprite();
-            pacManSprite.setPosition(float(pacManPos.first), float(pacManPos.second));
-            window->draw(pacManSprite);
-            */
-
+            this->getWorld()->update(time);
             if (this->getWorld()->getCoinsLeft() == 0){
+                this->getWorld()->getScoreClass()->storeScoreBoard();
                 this->getStateManager()->push();
             }
             window->draw(text);
@@ -142,7 +115,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
             string input = getInput();
             if (input == "SPACE"){
                 this->getStateManager()->pop();
-                Model::Stopwatch::instance()->getTicks();
+                Model::Stopwatch::instance()->getDeltaTime();
             }
             else if (input == "BACKSPACE"){
                 window->clear();

@@ -14,7 +14,6 @@ class Model::PacMan: public Model::EntityModel{
     direction nextDirection;
     double speed;
     bool hasMoved;
-    int score;
     int startRow;
     int startCol;
 public:
@@ -25,9 +24,9 @@ public:
     /*
      * Beweegt Pac-Man
      */
-    void move(const int &ticks);
+    void move(const double &seconds);
 
-    void update(const int &ticks) override;
+    void update(const double &seconds) override;
 
     /*
      * Resetten van pacman
@@ -54,10 +53,6 @@ public:
     [[nodiscard]] bool isHasMoved() const;
 
     void setHasMoved(bool moved);
-
-    [[nodiscard]] int getScore() const;
-
-    void setScore(int newScore);
 
     [[nodiscard]] int getStartRow() const;
 

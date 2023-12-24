@@ -3,20 +3,22 @@
 //
 
 #include "Stopwatch.h"
+typedef std::chrono::high_resolution_clock Clock;
+
 std::shared_ptr<Model::Stopwatch> Model::Stopwatch::m_pStopwatch = nullptr;
 
 Model::Stopwatch::Stopwatch(){
-    tickTime = sf::milliseconds(1);
-}
+    totalTime = clock();
+};
 
-int Model::Stopwatch::getTicks() {
-    auto elapsedTime = clock.getElapsedTime();
-    int steps = int(elapsedTime / tickTime);
-    if (steps == 0){
-        return 1;
+double Model::Stopwatch::getDeltaTime() {
+    auto elapsedTime = double(clock() - totalTime) / double(CLOCKS_PER_SEC);
+    while (elapsedTime == 0.0){
+        elapsedTime = double(clock() - totalTime) / (double) CLOCKS_PER_SEC;
     }
-    clock.restart();
-    return steps;
+
+    totalTime = clock();
+    return elapsedTime;
 }
 
 std::shared_ptr<Model::Stopwatch> Model::Stopwatch::instance() {
@@ -24,4 +26,9 @@ std::shared_ptr<Model::Stopwatch> Model::Stopwatch::instance() {
         m_pStopwatch = std::shared_ptr<Model::Stopwatch>(new Stopwatch);
     }
     return m_pStopwatch;
+}
+
+double Model::Stopwatch::getTotalSeconds() {
+    auto elapsedTime = double(clock()) / double(CLOCKS_PER_SEC);
+    return elapsedTime;
 }

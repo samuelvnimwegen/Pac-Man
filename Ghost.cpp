@@ -44,7 +44,7 @@ void Model::Ghost::changeDirection() {
                 this->setCurrentDirection(bestDirection);
                 this->setNextDirection(direction::none);
             }
-                // Als de nieuwe direction left-right is en de oude up-down of omgekeerd: draaien bij volgende mogelijkheid
+            // Als de nieuwe direction left-right is en de oude up-down of omgekeerd: draaien bij volgende mogelijkheid
             else{
                 this->setNextDirection(bestDirection);
             }

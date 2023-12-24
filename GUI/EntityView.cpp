@@ -20,7 +20,7 @@ std::shared_ptr<Model::EntityModel> GUI::EntityView::getSubject() const {
     return subject.lock();
 }
 
-void GUI::EntityView::update(const int &ticks) {
+void GUI::EntityView::update(const double &ticks) {
     if (this->getWindow().lock()){
         this->getWindow().lock()->draw(*this->getSprite());
     }
@@ -54,5 +54,7 @@ std::shared_ptr<sf::Sprite> GUI::EntityView::getSprite() {
 void GUI::EntityView::setSprite(const std::shared_ptr<sf::Sprite> &sharedPtr) {
     EntityView::sprite = sharedPtr;
 }
+
+void GUI::EntityView::collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) {}
 
 

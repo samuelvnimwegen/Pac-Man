@@ -34,7 +34,7 @@ std::shared_ptr<Model::Ghost> GUI::GUIGhost::getSubject(){
     return subject.lock();
 }
 
-void GUI::GUIGhost::update(const int &ticks) {
+void GUI::GUIGhost::update(const double &seconds) {
     this->updateSprite();
     auto camera = Camera::instance();
     auto camCoords = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());
@@ -42,7 +42,7 @@ void GUI::GUIGhost::update(const int &ticks) {
     auto sprite1 = this->getSprite();
     sprite1->setPosition(float(windowCoords.first), float(windowCoords.second));
     this->setSprite(sprite1);
-    EntityView::update(ticks);
+    EntityView::update(seconds);
 }
 
 void GUI::GUIGhost::updateSprite() {

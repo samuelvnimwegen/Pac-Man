@@ -15,7 +15,7 @@ public:
 
     ~GUIPacMan() override;
 
-    void update(const int &ticks) override;
+    void update(const double &ticks) override;
 
     void updateTextureNr();
 

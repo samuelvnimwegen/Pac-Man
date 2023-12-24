@@ -4,13 +4,12 @@
 
 #ifndef PAC_MAN_STOPWATCH_H
 #define PAC_MAN_STOPWATCH_H
-#include "SFML/Graphics.hpp"
+#include "chrono"
 #include "Subject.h"
 
 class Model::Stopwatch {
 private:
-    sf::Time tickTime;
-    sf::Clock clock;
+    clock_t totalTime;
     static std::shared_ptr<Model::Stopwatch> m_pStopwatch;
 protected:
     explicit Stopwatch();
@@ -21,8 +20,9 @@ public:
 
     void operator=(const Model::Stopwatch&) = delete;
 
+    double getDeltaTime();
 
-    int getTicks();
+    [[nodiscard]] static double getTotalSeconds() ;
 };
 
 

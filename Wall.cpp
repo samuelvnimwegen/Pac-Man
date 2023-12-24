@@ -11,9 +11,9 @@ Model::Wall::Wall(int row, int col) : EntityModel(row, col) {
     this->setTag("Wall");
 }
 
-void Model::Wall::update(const int &ticks) {
+void Model::Wall::update(const double &seconds) {
     for (const auto& observer: this->getObservers()){
-        observer->update(ticks);
+        observer->update(seconds);
     }
 }
 

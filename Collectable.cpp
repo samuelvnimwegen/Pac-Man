@@ -16,9 +16,9 @@ void Model::Collectable::setValue(int val) {
     Collectable::value = val;
 }
 
-void Model::Collectable::update(const int &ticks) {
+void Model::Collectable::update(const double &seconds) {
     for (const auto& observer: this->getObservers()){
-        observer->update(ticks);
+        observer->update(seconds);
     }
 }
 

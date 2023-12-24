@@ -21,13 +21,6 @@ int Model::PacMan::getStartCol() const {
     return startCol;
 }
 
-int Model::PacMan::getScore() const {
-    return score;
-}
-
-void Model::PacMan::setScore(int newScore) {
-    PacMan::score = newScore;
-}
 bool Model::PacMan::isHasMoved() const {
     return hasMoved;
 }
@@ -50,10 +43,10 @@ void Model::PacMan::setNextDirection(const direction &dir) {
     return world.lock();
 }
 
-void Model::PacMan::update(const int &ticks) {
-    this->move(ticks);
+void Model::PacMan::update(const double &seconds) {
+    this->move(seconds);
     for (const auto& observer: this->getObservers()){
-        observer->update(ticks);
+        observer->update(seconds);
     }
 }
 
