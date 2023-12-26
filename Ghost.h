@@ -16,8 +16,6 @@ class Model::Ghost: public Model::EntityModel{
     int startRow;
     int startCol;
     double speed;
-
-
 public:
     Ghost(int row, int col, const std::shared_ptr<Model::World>& world);
 

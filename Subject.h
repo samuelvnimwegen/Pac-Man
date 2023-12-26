@@ -23,6 +23,12 @@ namespace Model{
     class Random;
     class Stopwatch;
     class AbstractFactory;
+    class GhostStateManager;
+    class GhostIdleState;
+    class GhostState;
+    class GhostChasingState;
+    class GhostFrightenedState;
+    class GhostResetState;
 }
 namespace GUI{
     class ConcreteFactory;
