@@ -11,6 +11,9 @@ class Model::Stopwatch {
 private:
     clock_t totalTime;
     static std::shared_ptr<Model::Stopwatch> m_pStopwatch;
+    clock_t pausedLevelTime;
+    clock_t totalPauseTime;
+    clock_t levelStartTime;
 protected:
     explicit Stopwatch();
 public:
@@ -23,6 +26,14 @@ public:
     double getDeltaTime();
 
     [[nodiscard]] static double getTotalSeconds() ;
+
+    [[nodiscard]] double getLevelTime() const;
+
+    void startLevel();
+
+    void pause();
+
+    void unpause();
 };
 
 

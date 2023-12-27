@@ -3,7 +3,6 @@
 //
 
 #include "Stopwatch.h"
-typedef std::chrono::high_resolution_clock Clock;
 
 std::shared_ptr<Model::Stopwatch> Model::Stopwatch::m_pStopwatch = nullptr;
 
@@ -31,4 +30,21 @@ std::shared_ptr<Model::Stopwatch> Model::Stopwatch::instance() {
 double Model::Stopwatch::getTotalSeconds() {
     auto elapsedTime = double(clock()) / double(CLOCKS_PER_SEC);
     return elapsedTime;
+}
+
+double Model::Stopwatch::getLevelTime() const {
+    return clock() - levelStartTime - totalPauseTime;
+}
+
+void Model::Stopwatch::startLevel() {
+    levelStartTime = clock();
+    totalPauseTime = 0;
+}
+
+void Model::Stopwatch::pause() {
+    pausedLevelTime = clock();
+}
+
+void Model::Stopwatch::unpause() {
+    totalPauseTime += clock() - pausedLevelTime;
 }
