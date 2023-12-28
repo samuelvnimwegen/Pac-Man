@@ -6,12 +6,18 @@
 #define PAC_MAN_GHOSTFRIGHTENEDSTATE_H
 #include "Subject.h"
 #include "GhostState.h"
+#include "World.h"
+#include "GhostResetState.h"
 
 class Model::GhostFrightenedState: public Model::GhostState{
+    double frightenedTime;
 public:
-    GhostFrightenedState();
+    GhostFrightenedState(const std::weak_ptr<Model::GhostStateManager> &stateManager,
+                         const std::weak_ptr<Model::Ghost> &ghost);
 
-    std::shared_ptr<GhostState> getNext() override;
+    void update() override;
+
+    [[nodiscard]] double getFrightenedTime() const;
 };
 
 

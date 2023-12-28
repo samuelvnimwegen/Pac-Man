@@ -9,12 +9,22 @@ enum ghostStateTag{idle, chasing, frightened, reset};
 
 #include "Subject.h"
 class Model::GhostState {
+    std::weak_ptr<Model::GhostStateManager> stateManager;
+    std::weak_ptr<Model::Ghost> ghost;
 protected:
     ghostStateTag tag;
 public:
-    GhostState();
+    GhostState(const std::weak_ptr<Model::GhostStateManager> &stateManager, const std::weak_ptr<Model::Ghost> &ghost);
 
-    virtual std::shared_ptr<GhostState> getNext() = 0;
+    virtual ~GhostState();
+
+    virtual void update() = 0;
+
+    [[nodiscard]] ghostStateTag getTag() const;
+
+    [[nodiscard]] const std::weak_ptr<Model::GhostStateManager> &getStateManager() const;
+
+    [[nodiscard]] const std::weak_ptr<Model::Ghost> &getGhost() const;
 };
 
 

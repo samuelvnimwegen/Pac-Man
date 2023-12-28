@@ -7,6 +7,9 @@
 std::shared_ptr<Model::Stopwatch> Model::Stopwatch::m_pStopwatch = nullptr;
 
 Model::Stopwatch::Stopwatch(){
+    levelStartTime = 0;
+    pausedLevelTime = 0;
+    totalPauseTime = 0;
     totalTime = clock();
 };
 
@@ -33,7 +36,7 @@ double Model::Stopwatch::getTotalSeconds() {
 }
 
 double Model::Stopwatch::getLevelTime() const {
-    return clock() - levelStartTime - totalPauseTime;
+    return double(clock() - levelStartTime - totalPauseTime) / double(CLOCKS_PER_SEC);
 }
 
 void Model::Stopwatch::startLevel() {

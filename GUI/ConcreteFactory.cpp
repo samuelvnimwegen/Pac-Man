@@ -37,7 +37,10 @@ shared_ptr<Model::Coin> GUI::ConcreteFactory::createCoin(const int &row, const i
 
 shared_ptr<Model::Ghost> GUI::ConcreteFactory::createGhost(const int &row, const int &col) {
     shared_ptr<Model::Ghost> entity(new Model::Ghost(row, col, this->getWorld()));
+    entity->getStateManager()->push(make_unique<Model::GhostIdleState>(entity->getStateManager(), entity));
     int ghostSize = int(this->getWorld()->getGhosts().size());
+
+    // Kleur van het viewEntity kiezen
     color ghostColor;
     switch (ghostSize) {
         case 0:
@@ -59,6 +62,15 @@ shared_ptr<Model::Ghost> GUI::ConcreteFactory::createGhost(const int &row, const
             break;
         default:
             ghostColor = color::purple;
+    }
+
+    // Wachttijd waarin de ghost idle is aanpassen: 3 seconden meer dan vorige ghost die is toegevoegd
+    if (this->getWorld()->getGhosts().empty()){
+        entity->setWaitTime(0);
+    }
+    else{
+        double waitTime = entity->getWorld()->getGhosts().at(entity->getWorld()->getGhosts().size() - 1)->getWaitTime();
+        entity->setWaitTime(waitTime + 3);
     }
     shared_ptr<GUI::GUIGhost> observer(new GUI::GUIGhost(entity, this->getWindow(), ghostColor));
     entity->addObserver(observer);

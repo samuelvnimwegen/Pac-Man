@@ -24,12 +24,12 @@ GUI::Game::Game(const int &wd, const int &hg) {
     this->getCamera()->setModelWidth(this->getWorld()->getWidth());
     world->buildWorld();
 
+    auto stopwatch = Model::Stopwatch::instance();
+
     stateManager = std::make_shared<GUI::StateManager>();
 
     assert(this->getHeight() % world->getHeight() == 0);
     assert(this->getWidth() % world->getWidth() == 0);
-
-
 
 
     // Score voor level:
@@ -94,11 +94,16 @@ GUI::Game::Game(const int &wd, const int &hg) {
             string input = getInput();
             if (input == "ESCAPE"){
                 this->getStateManager()->pauze();
+                stopwatch->pause();
             }
             double time = Model::Stopwatch::instance()->getDeltaTime();
             direction direction = getDirection();
             if (this->getWorld()->getPacMan()->getCurrentDirection() != direction::none){
+                if (!this->getWorld()->isGameStarted()){
+                    stopwatch->startLevel();
+                }
                 this->getWorld()->setGameStarted(true);
+
             }
             this->getWorld()->getPacMan()->changeDirection(direction);
             text.setString("score " + to_string(this->getWorld()->getScoreClass()->getScore()));
@@ -115,7 +120,8 @@ GUI::Game::Game(const int &wd, const int &hg) {
             string input = getInput();
             if (input == "SPACE"){
                 this->getStateManager()->pop();
-                Model::Stopwatch::instance()->getDeltaTime();
+                stopwatch->getDeltaTime();
+                stopwatch->unpause();
             }
             else if (input == "BACKSPACE"){
                 window->clear();

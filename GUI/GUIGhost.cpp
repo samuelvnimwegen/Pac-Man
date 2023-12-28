@@ -57,23 +57,26 @@ void GUI::GUIGhost::update(const double &seconds) {
 
 void GUI::GUIGhost::updateSprite() {
     sf::Sprite sprite;
-    int spriteY;
+    int pixelY;
     auto dir = this->getSubject()->getCurrentDirection();
-    if (dir == direction::right){
-        spriteY = 0;
-    }
-    else if (dir == direction::down){
-        spriteY = 100;
-    }
-    else if (dir == direction::left){
-        spriteY = 200;
-    }
-    else{
-        assert(dir == direction::up);
-        spriteY = 300;
+    switch (dir) {
+        case direction::right:
+            pixelY = 0;
+            break;
+        case direction::down:
+            pixelY = 100;
+            break;
+        case direction::left:
+            pixelY = 200;
+            break;
+        case direction::up:
+            pixelY = 300;
+            break;
+        case direction::none:
+            throw std::runtime_error("Ghost had geen direction bij updateSprite van GUIGhost.cpp");
     }
     if (this->textureNr == 1){
-        spriteY += 50;
+        pixelY += 50;
     }
     // Texture nummer bijwerken als game gestart is
     if (this->getSubject()->getWorld()->isGameStarted()){
@@ -84,7 +87,19 @@ void GUI::GUIGhost::updateSprite() {
             this->textureNr = 0;
         }
     }
-    sprite = sf::Sprite(*this->getTexture(), sf::IntRect(spriteX, spriteY, 40, 40));
+    auto pixelX = spriteX;
+
+    // Als hij feared is, aanpassen
+    if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::frightened){
+        pixelX = 0;
+        pixelY += 550;
+    }
+    // Als hij aan het resetten is, aanpassen
+    else if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::reset){
+        pixelX = 300;
+        pixelY = 250 + dir * 50;
+    }
+    sprite = sf::Sprite(*this->getTexture(), sf::IntRect(pixelX, pixelY, 40, 40));
     this->setSprite(std::make_shared<sf::Sprite>(sprite));
 }
 

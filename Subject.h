@@ -46,7 +46,7 @@ namespace GUI{
     class StateManager;
     class VictoryState;
 }
-enum direction {up, down, left, right, none};
+enum direction {right, down, left, up, none};
 
 enum color{red, pink, blue, orange, green, purple};
 

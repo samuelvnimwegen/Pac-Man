@@ -21,14 +21,27 @@ void Model::Ghost::changeDirection() {
     direction bestDirection = direction::none;
     vector<direction> viableDirections;
 
-    // Voor alle mogelijke directions afgaan of ze viable zijn en of ze de beste direction zijn:
+    // Slechts mogelijke richting moet ook bepaald worden voor in feared mode
+    int maxDistance = 0;
+    direction worstDirection = direction::none;
+
+    // Voor alle mogelijke directions afgaan of ze viable zijn en of ze de beste of slechtste direction zijn:
     for (auto direction: {direction::up, direction::down, direction::left, direction::right}){
         if (this->canMove(direction)){
             viableDirections.push_back(direction);
-            int distance = this->getManhattanDistance(direction);
+
+            // Afstand tot pacman of tot de spawn in het geval van een reset (dus als de ghost is opgegeten)
+            int distance = this->getManhattanDistancePacMan(direction);
+            if (this->getStateManager()->getCurrentTag() == ghostStateTag::reset){
+                distance = this->getManhattanDistanceSpawn(direction);
+            }
             if (distance < minDistance){
                 minDistance = distance;
                 bestDirection = direction;
+            }
+            if (distance > maxDistance){
+                maxDistance = distance;
+                worstDirection = direction;
             }
         }
     }
@@ -38,15 +51,21 @@ void Model::Ghost::changeDirection() {
         // Random getal tussen 0 en 1 berekenen, als deze kleiner is dan 0.5 beste richting kiezen:
         double randomDouble = randomGenerator->getRandomDouble(0, 1);
         if (templateMax(randomDouble, 0.5) == 0.5){
+            auto direction = bestDirection;
+            // Als de ghost frightened is moet hij de slechtste richting nemen:
+            if (this->getStateManager()->getCurrentTag() == ghostStateTag::frightened){
+                direction = worstDirection;
+            }
+
             // Als de current en de nieuwe direction allebei up-down of niet up-down zijn: meteen van richting veranderen
             if (std::count(upDown.begin(), upDown.end(), this->getCurrentDirection()) ==
-                std::count(upDown.begin(), upDown.end(), bestDirection)){
-                this->setCurrentDirection(bestDirection);
+                std::count(upDown.begin(), upDown.end(), direction)){
+                this->setCurrentDirection(direction);
                 this->setNextDirection(direction::none);
             }
             // Als de nieuwe direction left-right is en de oude up-down of omgekeerd: draaien bij volgende mogelijkheid
             else{
-                this->setNextDirection(bestDirection);
+                this->setNextDirection(direction);
             }
         }
         // Anders random viable richting:
@@ -68,14 +87,6 @@ void Model::Ghost::changeDirection() {
 
 }
 
-
-const string &Model::Ghost::getCurrentState() const {
-    return currentState;
-}
-
-void Model::Ghost::setCurrentState(const string &state) {
-    Ghost::currentState = state;
-}
 
 int Model::Ghost::getStartRow() const {
     return startRow;
@@ -107,6 +118,7 @@ void Model::Ghost::reset() {
     this->setNextDirection(none);
     this->setX(getStartCol());
     this->setY(getStartRow());
+    this->getStateManager()->reset();
 }
 
 template<typename T>

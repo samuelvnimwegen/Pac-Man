@@ -9,16 +9,21 @@
 #include "GhostState.h"
 
 class Model::GhostStateManager{
-    std::stack<std::shared_ptr<Model::GhostState>> stack;
-
+    std::stack<std::unique_ptr<Model::GhostState>> stack;
 public:
     GhostStateManager();
 
-    std::shared_ptr<Model::GhostState> getCurrentState();
+    void update();
 
     void pop();
 
-    void push();
+    void push(std::unique_ptr<Model::GhostState>);
+    /*
+     * Maakt stack weer size 1 met alleen idle state er op
+     */
+    void reset();
+
+    ghostStateTag getCurrentTag();
 };
 
 

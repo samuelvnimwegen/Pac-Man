@@ -4,4 +4,21 @@
 
 #include "GhostState.h"
 
-Model::GhostState::GhostState() = default;
+ghostStateTag Model::GhostState::getTag() const {
+    return tag;
+}
+
+Model::GhostState::GhostState(const std::weak_ptr<Model::GhostStateManager> &stateManager,
+                              const std::weak_ptr<Model::Ghost> &ghost) : stateManager(stateManager), ghost(ghost) {
+    tag = ghostStateTag::idle;
+}
+
+const std::weak_ptr<Model::GhostStateManager> &Model::GhostState::getStateManager() const {
+    return stateManager;
+}
+
+const std::weak_ptr<Model::Ghost> &Model::GhostState::getGhost() const {
+    return ghost;
+}
+
+Model::GhostState::~GhostState() = default;

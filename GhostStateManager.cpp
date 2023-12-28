@@ -4,17 +4,29 @@
 
 #include "GhostStateManager.h"
 
-Model::GhostStateManager::GhostStateManager() = default;
+#include <memory>
 
-std::shared_ptr<Model::GhostState> Model::GhostStateManager::getCurrentState() {
-    return stack.top();
-}
+Model::GhostStateManager::GhostStateManager()= default;
 
 void Model::GhostStateManager::pop() {
     stack.pop();
 }
 
-void Model::GhostStateManager::push() {
-    stack.push()
+void Model::GhostStateManager::update() {
+    stack.top()->update();
+}
+
+void Model::GhostStateManager::push(std::unique_ptr<Model::GhostState> uniqueState) {
+    stack.push(std::move(uniqueState));
+}
+
+void Model::GhostStateManager::reset() {
+    while (stack.size() > 1){
+        stack.pop();
+    }
+}
+
+ghostStateTag Model::GhostStateManager::getCurrentTag() {
+    return stack.top()->getTag();
 }
 

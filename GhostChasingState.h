@@ -6,11 +6,14 @@
 #define PAC_MAN_GHOSTCHASINGSTATE_H
 #include "Subject.h"
 #include "GhostState.h"
+#include "Ghost.h"
 class Model::GhostChasingState: public Model::GhostState{
 public:
-    GhostChasingState();
+    GhostChasingState(const std::weak_ptr<Model::GhostStateManager> &stateManager,
+                      const std::weak_ptr<Model::Ghost> &ghost);
 
-    std::shared_ptr<GhostState> getNext() override;
+    void update() override;
+
 };
 
 

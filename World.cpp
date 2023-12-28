@@ -8,6 +8,8 @@
 #include <memory>
 #include <utility>
 #include "cmath"
+#include "GhostChasingState.h"
+
 using namespace std;
 
 Model::World::World() {
@@ -246,7 +248,10 @@ void Model::World::update(const double &seconds) {
     // Checken op collisions van ghosts en pacMans:
     for (const auto& ghost: this->getGhosts()){
         if (toTile(ghost->getX()) == toTile(this->getPacMan()->getX()) and toTile(ghost->getY()) == toTile(this->getPacMan()->getY())){
-            this->restart();
+            // Als de ghost in chase modus staat, level restart
+            if (ghost->getStateManager()->getCurrentTag() == ghostStateTag::chasing){
+                this->restart();
+            }
         }
     }
 }
@@ -271,7 +276,7 @@ std::shared_ptr<Model::World> Model::AbstractFactory::getWorld() const {
 Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : EntityModel(row, col), world(world) {
     this->setCurrentDirection(direction::none);
     this->setNextDirection(direction::none);
-    speed = 11.0;
+    speed = 8.0;
     this->setTag("PacMan");
     hasMoved = false;
     startRow = row;
@@ -304,7 +309,7 @@ void Model::PacMan::reset() {
 
 
 
-int Model::Ghost::getManhattanDistance(const direction &direction) {
+int Model::Ghost::getManhattanDistancePacMan(const direction &direction) {
     int pacManRow = toTile(this->getWorld()->getPacMan()->getY());
     int pacManCol = toTile(this->getWorld()->getPacMan()->getX());
     if (direction == direction::up){
@@ -333,14 +338,20 @@ Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world
     this->setTag("Ghost");
     currentDirection = direction::up;
     startDirection = direction::up;
-    currentState = "WAITING";
+    stateManager = std::make_unique<Model::GhostStateManager>();
     startRow = row;
     startCol = col;
     nextDirection = direction::none;
+    waitTime = 0;
     speed = 11.0 / 4;
+    frightened = false;
 }
 
 void Model::Ghost::move(const double &seconds) {
+    // Niks doen bij idle mode:
+    if (this->getStateManager()->getCurrentTag() == ghostStateTag::idle){
+        return;
+    }
     if (this->getCurrentDirection() == direction::up){
         double yCoord = this->getY();
         yCoord -= seconds * this->getSpeed();
@@ -573,6 +584,7 @@ void Model::Ghost::update(const double &seconds) {
     for (const auto& observers: this->getObservers()){
         observers->update(seconds);
     }
+    this->getStateManager()->update();
 }
 
 double Model::Ghost::getSpeed() const {
@@ -603,6 +615,42 @@ direction Model::Ghost::getStartDirection() const {
 void Model::Ghost::setStartDirection(direction direction) {
     Ghost::startDirection = direction;
     Ghost::currentDirection = direction;
+}
+
+const shared_ptr<Model::GhostStateManager> &Model::Ghost::getStateManager() const {
+    return stateManager;
+}
+
+double Model::Ghost::getWaitTime() const {
+    return waitTime;
+}
+
+void Model::Ghost::setWaitTime(double seconds) {
+    Ghost::waitTime = seconds;
+}
+
+bool Model::Ghost::isFrightened() const {
+    return frightened;
+}
+
+void Model::Ghost::setFrightened(bool b) {
+    Ghost::frightened = b;
+}
+
+int Model::Ghost::getManhattanDistanceSpawn(const direction &direction) {
+    if (direction == direction::up){
+        return abs(toTile(this->getY()) - 1 - this->getStartRow()) + abs(toTile(this->getX()) - this->getStartCol());
+    }
+    else if (direction == direction::down){
+        return abs(toTile(this->getY()) + 1 - this->getStartRow()) + abs(toTile(this->getX()) - this->getStartCol());
+    }
+    else if (direction == direction::left){
+        return abs(toTile(this->getY()) - this->getStartRow()) + abs(toTile(this->getX()) - 1 - this->getStartCol());
+    }
+    else {
+        assert(direction == direction::right);
+        return abs(toTile(this->getY()) - this->getStartRow()) + abs(toTile(this->getX()) + 1 - this->getStartCol());
+    }
 }
 
 
@@ -893,7 +941,7 @@ void Model::Score::update(const double &seconds) {
         // Nu voor elke seconde dat het level langer dan 20 seconden duurt, worden er 5 punten afgetrokken:
         // dit wordt door een benchmark-time gedaan wat die begint op de begintijd van het level en telkens per seconde
         // over 20 sec telkens 1 seconden omhoog schuift zodat mooi bij elke seconde over tijd de score wordt aangepast.
-        if (stopwatch->getTotalSeconds() - this->getBenchMarkTime() > 20){
+        if (stopwatch->getLevelTime() - this->getBenchMarkTime() > 20){
             this->setScore(this->getScore() - 5);
             this->setBenchMarkTime(this->getBenchMarkTime() + 1);
         }
@@ -908,5 +956,4 @@ void Model::Score::collectableCollected(const std::weak_ptr<Model::Collectable> 
         this->getWorld().lock()->setCoinsLeft(this->getWorld().lock()->getCoinsLeft() - 1);
     }
 }
-
 

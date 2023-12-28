@@ -6,16 +6,20 @@
 #define PAC_MAN_GHOST_H
 #include "EntityModel.h"
 #include "Subject.h"
+#include "GhostStateManager.h"
+#include "GhostIdleState.h"
 
 class Model::Ghost: public Model::EntityModel{
     std::weak_ptr<Model::World> world;
     direction startDirection;
     direction currentDirection;
     direction nextDirection;
-    std::string currentState;
+    std::shared_ptr<Model::GhostStateManager> stateManager;
     int startRow;
     int startCol;
+    double waitTime;
     double speed;
+    bool frightened;
 public:
     Ghost(int row, int col, const std::shared_ptr<Model::World>& world);
 
@@ -31,11 +35,9 @@ public:
 
     bool canMove(const direction &direction);
 
-    [[nodiscard]] int getManhattanDistance(const direction &direction);
+    [[nodiscard]] int getManhattanDistancePacMan(const direction &direction);
 
-    [[nodiscard]] const std::string &getCurrentState() const;
-
-    void setCurrentState(const std::string &state);
+    int getManhattanDistanceSpawn(const direction &direction);
 
     [[nodiscard]] int getStartRow() const;
 
@@ -56,6 +58,16 @@ public:
     [[nodiscard]] direction getStartDirection() const;
 
     void setStartDirection(direction direction);
+
+    [[nodiscard]] const std::shared_ptr<Model::GhostStateManager> &getStateManager() const;
+
+    [[nodiscard]] double getWaitTime() const;
+
+    void setWaitTime(double seconds);
+
+    [[nodiscard]] bool isFrightened() const;
+
+    void setFrightened(bool b);
 };
 template<typename T> T templateMax(const T &x, const T &y);
 
