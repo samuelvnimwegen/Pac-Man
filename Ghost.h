@@ -19,6 +19,7 @@ class Model::Ghost: public Model::EntityModel{
     int startCol;
     double waitTime;
     double speed;
+    double defaultSpeed;
     bool frightened;
 public:
     Ghost(int row, int col, const std::shared_ptr<Model::World>& world);
@@ -68,6 +69,10 @@ public:
     [[nodiscard]] bool isFrightened() const;
 
     void setFrightened(bool b);
+
+    void setSpeed(double d);
+
+    [[nodiscard]] double getDefaultSpeed() const;
 };
 template<typename T> T templateMax(const T &x, const T &y);
 

@@ -121,6 +121,10 @@ void Model::Ghost::reset() {
     this->getStateManager()->reset();
 }
 
+void Model::Ghost::setSpeed(double d) {
+    Ghost::speed = d;
+}
+
 template<typename T>
 T templateMax(const T &x, const T &y) {
     return (x > y)?  x: y;

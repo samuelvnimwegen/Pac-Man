@@ -7,7 +7,7 @@
 #include "Subject.h"
 #include "memory"
 class Model::EntityModel: public  Model::Subject{
-    std::string tag;
+    entityTag tag;
     double row;
     double col;
 public:
@@ -15,9 +15,9 @@ public:
 
     virtual void update(const double &seconds) = 0;
 
-    [[nodiscard]] const std::string &getTag() const;
+    [[nodiscard]] entityTag getTag() const;
 
-    void setTag(const std::string &tg);
+    void setTag(entityTag entityTag);
 
     [[nodiscard]] double getY() const;
 

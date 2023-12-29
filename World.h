@@ -17,6 +17,7 @@
 #include "Observer.h"
 #include "memory"
 #include "Score.h"
+#include "Fruit.h"
 
 class Model::World {
     std::vector<std::vector<std::shared_ptr<Model::EntityModel>>> world;
@@ -28,6 +29,7 @@ class Model::World {
     std::vector<std::shared_ptr<Coin>> coins;
     std::vector<std::shared_ptr<Ghost>> ghosts;
     std::vector<std::shared_ptr<Wall>> walls;
+    std::vector<std::shared_ptr<Fruit>> fruits;
     int coinsLeft;
     bool gameStarted;
     std::shared_ptr<Model::Score> score;
@@ -64,6 +66,8 @@ public:
 
     void addCoin(const std::shared_ptr<Model::Coin> &coin);
 
+    void addFruit(const std::shared_ptr<Model::Fruit> &fruit);
+
     [[nodiscard]] std::shared_ptr<Model::Collectable> getCollectable(const int &row, const int &col);
 
     [[nodiscard]] const std::shared_ptr<Model::PacMan> &getPacMan() const;
@@ -89,6 +93,10 @@ public:
     [[nodiscard]] const std::shared_ptr<Model::Score> &getScoreClass() const;
 
     void setScore(const std::shared_ptr<Model::Score> &sharedPtr);
+
+    [[nodiscard]] const std::vector<std::shared_ptr<Fruit>> &getFruits() const;
+
+    void setFruits(const std::vector<std::shared_ptr<Fruit>> &fruit);
 
 };
 

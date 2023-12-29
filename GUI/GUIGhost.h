@@ -10,6 +10,7 @@ class GUI::GUIGhost: public GUI::EntityView{
     std::weak_ptr<Model::Ghost> subject;
     int textureNr;
     int spriteX;
+    std::shared_ptr<sf::Texture> scoreTexture;
 public:
     explicit GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, std::weak_ptr<sf::RenderWindow> win,
                       color ghostColor);
@@ -19,6 +20,8 @@ public:
     void updateSprite();
 
     std::shared_ptr<Model::Ghost> getSubject();
+
+    [[nodiscard]] const std::shared_ptr<sf::Texture> &getScoreTexture() const;
 };
 
 

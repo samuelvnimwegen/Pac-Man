@@ -148,6 +148,10 @@ void Model::World::buildWorld() {
     this->getFactory()->createGhost(5, 10);
     this->getFactory()->createGhost(5, 11);
 
+    this->getFactory()->createFruit(9, 1);
+    this->getFactory()->createFruit(9, 18);
+    this->getFactory()->createFruit(1, 18);
+
     for (int i = 0; i < this->getHeight(); ++i){
         for (int j = 0; j < this->getWidth(); ++j){
             if (this->getItem(i, j) == nullptr and !(this->getPacMan()->getX() == j and this->getPacMan()->getY() == i)){
@@ -192,6 +196,13 @@ void Model::World::addCoin(const std::shared_ptr<Model::Coin> &coin) {
     coinVector.push_back(coin);
     collectableWorld.at(toTile(coin->getY())).at(toTile(coin->getX())) = coin;
     this->setCoins(coinVector);
+}
+
+void Model::World::addFruit(const shared_ptr<Model::Fruit> &fruit) {
+    auto fruitVector = this->getFruits();
+    fruitVector.push_back(fruit);
+    collectableWorld.at(toTile(fruit->getY())).at(toTile(fruit->getX())) = fruit;
+    this->setFruits(fruitVector);
 }
 
 void Model::World::addGhost(const std::shared_ptr<Model::Ghost>& ghost) {
@@ -240,6 +251,9 @@ void Model::World::update(const double &seconds) {
     for (const auto& coin: this->getCoins()){
         coin->update(seconds);
     }
+    for (const auto& fruit: this->getFruits()){
+        fruit->update(seconds);
+    }
     for (const auto& ghost: this->getGhosts()){
         ghost->update(seconds);
     }
@@ -277,7 +291,7 @@ Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : Entity
     this->setCurrentDirection(direction::none);
     this->setNextDirection(direction::none);
     speed = 8.0;
-    this->setTag("PacMan");
+    this->setTag(pacMan);
     hasMoved = false;
     startRow = row;
     startCol = col;
@@ -289,7 +303,7 @@ Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : Entity
 
 
 bool Model::PacMan::canMove(const int &row, const int &col)  {
-    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin" or this->getWorld()->getItem(row, col)->getTag() == "Ghost"){
+    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() != wall){
         return true;
     }
     return false;
@@ -328,14 +342,14 @@ int Model::Ghost::getManhattanDistancePacMan(const direction &direction) {
 }
 
 bool Model::Ghost::canMove(const int &row, const int &col) {
-    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() == "Coin" or this->getWorld()->getItem(row, col)->getTag() == "PacMan"){
+    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() != wall){
         return true;
     }
     return false;
 }
 
 Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world) : EntityModel(row, col), world(world) {
-    this->setTag("Ghost");
+    this->setTag(ghost);
     currentDirection = direction::up;
     startDirection = direction::up;
     stateManager = std::make_unique<Model::GhostStateManager>();
@@ -343,13 +357,15 @@ Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world
     startCol = col;
     nextDirection = direction::none;
     waitTime = 0;
-    speed = 11.0 / 4;
+    defaultSpeed = 11.0 / 4;
+    speed = defaultSpeed;
     frightened = false;
+
 }
 
 void Model::Ghost::move(const double &seconds) {
     // Niks doen bij idle mode:
-    if (this->getStateManager()->getCurrentTag() == ghostStateTag::idle){
+    if (this->getStateManager()->getCurrentTag() == ghostStateTag::idle or this->getStateManager()->getCurrentTag() == ghostStateTag::eaten){
         return;
     }
     if (this->getCurrentDirection() == direction::up){
@@ -387,7 +403,7 @@ void Model::Ghost::move(const double &seconds) {
 
             // Als de volgende tile een muur is:
         else if (this->getWorld()->getItem(toTile(this->getY()) - 1, toTile(this->getX())) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()) - 1, toTile(this->getX()))->getTag() == "Wall"){
+                toTile(this->getY()) - 1, toTile(this->getX()))->getTag() == wall){
             double maxYCoord = toTile(this->getY());
             if (yCoord < maxYCoord){
                 this->setY(maxYCoord);
@@ -442,7 +458,7 @@ void Model::Ghost::move(const double &seconds) {
         }
             // Als de volgende tile een muur is:
         else if (this->getWorld()->getItem(toTile(this->getY()) + 1, toTile(this->getX())) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()) + 1, toTile(this->getX()))->getTag() == "Wall"){
+                toTile(this->getY()) + 1, toTile(this->getX()))->getTag() == wall){
             double wallYCoord = toTile(this->getY());
             if (yCoord > wallYCoord){
                 this->setY(wallYCoord);
@@ -495,7 +511,7 @@ void Model::Ghost::move(const double &seconds) {
         }
             // Als de volgende tile een muur is:
         else if (this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()) + 1) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()), toTile(this->getX()) + 1)->getTag() == "Wall"){
+                toTile(this->getY()), toTile(this->getX()) + 1)->getTag() == wall){
             double wallXCoord = toTile(this->getX());
             if (xCoord > wallXCoord){
                 this->setX(wallXCoord);
@@ -548,7 +564,7 @@ void Model::Ghost::move(const double &seconds) {
         }
             // Als de volgende tile een muur is:
         else if (this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()) - 1) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()), toTile(this->getX()) - 1)->getTag() == "Wall"){
+                toTile(this->getY()), toTile(this->getX()) - 1)->getTag() == wall){
             double wallXCoord = toTile(this->getX());
             if (xCoord < wallXCoord){
                 this->setX(wallXCoord);
@@ -653,6 +669,10 @@ int Model::Ghost::getManhattanDistanceSpawn(const direction &direction) {
     }
 }
 
+double Model::Ghost::getDefaultSpeed() const {
+    return defaultSpeed;
+}
+
 
 void Model::PacMan::move(const double &seconds) {
     this->setHasMoved(true);
@@ -691,7 +711,7 @@ void Model::PacMan::move(const double &seconds) {
 
         // Als de volgende tile een muur is:
         else if (this->getWorld()->getItem(toTile(this->getY()) - 1, toTile(this->getX())) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()) - 1, toTile(this->getX()))->getTag() == "Wall"){
+                toTile(this->getY()) - 1, toTile(this->getX()))->getTag() == wall){
             double maxYCoord = toTile(this->getY());
             if (yCoord < maxYCoord){
                 this->setY(maxYCoord);
@@ -709,11 +729,16 @@ void Model::PacMan::move(const double &seconds) {
                 this->setY(yCoord);
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
                 auto item = this->getWorld()->getCollectable(toTile(this->getY()), toTile(this->getX()));
-                if (item != nullptr and item->getTag() == "Coin"){
+                if (item != nullptr and (item->getTag() == coin or item->getTag() == fruit)){
                     if (!item->isConsumed()){
                         item->consume();
                         for (const auto& observer: this->getObservers()){
                             observer->collectableCollected(item);
+                        }
+                        if (item->getTag() == fruit){
+                            for (const auto& ghost: this->getWorld()->getGhosts()){
+                                ghost->setFrightened(true);
+                            }
                         }
                     }
                 }
@@ -756,7 +781,7 @@ void Model::PacMan::move(const double &seconds) {
         }
             // Als de volgende tile een muur is:
         else if (this->getWorld()->getItem(toTile(this->getY()) + 1, toTile(this->getX())) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()) + 1, toTile(this->getX()))->getTag() == "Wall"){
+                toTile(this->getY()) + 1, toTile(this->getX()))->getTag() == wall){
             double wallYCoord = toTile(this->getY());
             if (yCoord > wallYCoord){
                 this->setY(wallYCoord);
@@ -773,11 +798,16 @@ void Model::PacMan::move(const double &seconds) {
                 this->setY(yCoord);
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
                 auto item = this->getWorld()->getCollectable(toTile(this->getY()), toTile(this->getX()));
-                if (item != nullptr and item->getTag() == "Coin"){
+                if (item != nullptr and (item->getTag() == coin or item->getTag() == fruit)){
                     if (!item->isConsumed()){
                         item->consume();
                         for (const auto& observer: this->getObservers()){
                             observer->collectableCollected(item);
+                        }
+                        if (item->getTag() == fruit){
+                            for (const auto& ghost: this->getWorld()->getGhosts()){
+                                ghost->setFrightened(true);
+                            }
                         }
                     }
                 }
@@ -819,7 +849,7 @@ void Model::PacMan::move(const double &seconds) {
         }
             // Als de volgende tile een muur is:
         else if (this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()) + 1) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()), toTile(this->getX()) + 1)->getTag() == "Wall"){
+                toTile(this->getY()), toTile(this->getX()) + 1)->getTag() == wall){
             double wallXCoord = toTile(this->getX());
             if (xCoord > wallXCoord){
                 this->setX(wallXCoord);
@@ -836,13 +866,19 @@ void Model::PacMan::move(const double &seconds) {
                 this->setX(xCoord);
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
                 auto item = this->getWorld()->getCollectable(toTile(this->getY()), toTile(this->getX()));
-                if (item != nullptr and item->getTag() == "Coin"){
+                if (item != nullptr and (item->getTag() == coin or item->getTag() == fruit)){
                     if (!item->isConsumed()){
                         item->consume();
                         for (const auto& observer: this->getObservers()){
                             observer->collectableCollected(item);
                         }
+                        if (item->getTag() == fruit){
+                            for (const auto& ghost: this->getWorld()->getGhosts()){
+                                ghost->setFrightened(true);
+                            }
+                        }
                     }
+
                 }
             }
         }else{
@@ -882,7 +918,7 @@ void Model::PacMan::move(const double &seconds) {
         }
             // Als de volgende tile een muur is:
         else if (this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()) - 1) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()), toTile(this->getX()) - 1)->getTag() == "Wall"){
+                toTile(this->getY()), toTile(this->getX()) - 1)->getTag() == wall){
             double wallXCoord = toTile(this->getX());
             if (xCoord < wallXCoord){
                 this->setX(wallXCoord);
@@ -899,11 +935,16 @@ void Model::PacMan::move(const double &seconds) {
                 this->setX(xCoord);
                 // Als er hier een coin ligt, checken of deze al geconsumeerd is:
                 auto item = this->getWorld()->getCollectable(toTile(this->getY()), toTile(this->getX()));
-                if (item != nullptr and item->getTag() == "Coin"){
+                if (item != nullptr and (item->getTag() == coin or item->getTag() == fruit)){
                     if (!item->isConsumed()){
                         item->consume();
                         for (const auto& observer: this->getObservers()){
                             observer->collectableCollected(item);
+                        }
+                        if (item->getTag() == fruit){
+                            for (const auto& ghost: this->getWorld()->getGhosts()){
+                                ghost->setFrightened(true);
+                            }
                         }
                     }
                 }
@@ -930,6 +971,14 @@ void Model::World::setScore(const shared_ptr<Model::Score> &sharedPtr) {
     World::score = sharedPtr;
 }
 
+const vector<std::shared_ptr<Model::Fruit>> &Model::World::getFruits() const {
+    return fruits;
+}
+
+void Model::World::setFruits(const vector<std::shared_ptr<Fruit>> &fruit) {
+    World::fruits = fruit;
+}
+
 void Model::Score::update(const double &seconds) {
     auto stopwatch = Model::Stopwatch::instance();
     // Als de game gestart is zetten we de level start time gelijk aan de huidige kloktijd.
@@ -952,7 +1001,7 @@ void Model::Score::collectableCollected(const std::weak_ptr<Model::Collectable> 
     // collectable die is opgepakt.
     double doubleValue = collectable.lock()->getValue() * this->getAmplifyingFactor();
     this->setScore(this->getScore() + int(std::round(doubleValue)));
-    if (this->getWorld().lock() and collectable.lock() and collectable.lock()->getTag() == "Coin"){
+    if (this->getWorld().lock() and collectable.lock() and collectable.lock()->getTag() == coin){
         this->getWorld().lock()->setCoinsLeft(this->getWorld().lock()->getCoinsLeft() - 1);
     }
 }

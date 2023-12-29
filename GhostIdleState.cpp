@@ -13,7 +13,6 @@ Model::GhostIdleState::GhostIdleState(const std::weak_ptr<Model::GhostStateManag
 void Model::GhostIdleState::update() {
     if (this->getStateManager().lock() and this->getGhost().lock()){
         if (this->getGhost().lock()->isFrightened()){
-            this->getStateManager().lock()->push(std::make_unique<GhostFrightenedState>(this->getStateManager(), this->getGhost()));
             this->getGhost().lock()->setFrightened(false);
         }
         else if (Model::Stopwatch::instance()->getLevelTime() > this->getGhost().lock()->getWaitTime()){

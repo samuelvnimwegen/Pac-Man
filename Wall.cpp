@@ -8,7 +8,7 @@
 
 
 Model::Wall::Wall(int row, int col) : EntityModel(row, col) {
-    this->setTag("Wall");
+    this->setTag(wall);
 }
 
 void Model::Wall::update(const double &seconds) {

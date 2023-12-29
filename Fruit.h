@@ -7,7 +7,8 @@
 #include "Collectable.h"
 
 class Model::Fruit: public Model::Collectable{
-
+public:
+    Fruit(int row, int col);
 };
 
 

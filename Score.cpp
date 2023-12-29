@@ -123,4 +123,8 @@ const std::vector<int> &Model::Score::getScoreBoard() const {
     return scoreBoard;
 }
 
+void Model::Score::ghostConsumed() {
+    this->setScore(this->getScore() + 100);
+}
+
 

@@ -8,6 +8,10 @@
 Model::GhostResetState::GhostResetState(const std::weak_ptr<Model::GhostStateManager> &stateManager,
                                         const std::weak_ptr<Model::Ghost> &ghost) : GhostState(stateManager, ghost) {
     tag = ghostStateTag::reset;
+    if (this->getGhost().lock()){
+        // Maak de ghost 5 keer zo snel als normaal
+        this->getGhost().lock()->setSpeed(this->getGhost().lock()->getDefaultSpeed() * 5);
+    }
 }
 
 void Model::GhostResetState::update() {

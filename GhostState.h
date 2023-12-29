@@ -5,7 +5,7 @@
 #ifndef PAC_MAN_GHOSTSTATE_H
 #define PAC_MAN_GHOSTSTATE_H
 
-enum ghostStateTag{idle, chasing, frightened, reset};
+enum ghostStateTag{idle, chasing, frightened, reset, eaten};
 
 #include "Subject.h"
 class Model::GhostState {

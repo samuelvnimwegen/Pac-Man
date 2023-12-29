@@ -38,6 +38,8 @@ add_executable(Pac-Man main.cpp
         GhostChasingState.cpp
         GhostFrightenedState.cpp
         GhostResetState.cpp
+        GUI/GUIFruit.cpp
+        GhostEatenState.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

@@ -32,6 +32,8 @@ public:
 
     void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) override;
 
+    void ghostConsumed();
+
     void update(const double &seconds) override;
 
     double getAmplifyingFactor();

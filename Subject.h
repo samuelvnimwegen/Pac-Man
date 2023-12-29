@@ -29,6 +29,7 @@ namespace Model{
     class GhostChasingState;
     class GhostFrightenedState;
     class GhostResetState;
+    class GhostEatenState;
 }
 namespace GUI{
     class ConcreteFactory;
@@ -45,10 +46,13 @@ namespace GUI{
     class State;
     class StateManager;
     class VictoryState;
+    class GUIFruit;
 }
 enum direction {right, down, left, up, none};
 
 enum color{red, pink, blue, orange, green, purple};
+
+enum entityTag{pacMan, ghost, coin, fruit, wall, noneTag};
 
 class Model::Subject {
     std::vector<std::shared_ptr<Model::Observer>> observers;

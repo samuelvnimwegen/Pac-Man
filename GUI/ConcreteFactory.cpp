@@ -35,6 +35,15 @@ shared_ptr<Model::Coin> GUI::ConcreteFactory::createCoin(const int &row, const i
     return entity;
 }
 
+std::shared_ptr<Model::Fruit> GUI::ConcreteFactory::createFruit(const int &row, const int &col) {
+    shared_ptr<Model::Fruit> entity(new Model::Fruit(row, col));
+    shared_ptr<GUI::GUIFruit> observer(new GUI::GUIFruit(entity, this->getWindow()));
+    entity->addObserver(observer);
+    this->getWorld()->addItem(entity);
+    this->getWorld()->addFruit(entity);
+    return entity;
+}
+
 shared_ptr<Model::Ghost> GUI::ConcreteFactory::createGhost(const int &row, const int &col) {
     shared_ptr<Model::Ghost> entity(new Model::Ghost(row, col, this->getWorld()));
     entity->getStateManager()->push(make_unique<Model::GhostIdleState>(entity->getStateManager(), entity));

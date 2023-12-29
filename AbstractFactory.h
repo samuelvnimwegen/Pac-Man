@@ -20,6 +20,8 @@ public:
 
     virtual std::shared_ptr <Ghost> createGhost(const int &row, const int &col) = 0;
 
+    virtual std::shared_ptr <Fruit> createFruit(const int &row, const int &col) = 0;
+
     [[nodiscard]] std::shared_ptr<Model::World> getWorld() const;
 
 };

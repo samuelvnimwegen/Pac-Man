@@ -7,17 +7,11 @@
 #include <cmath>
 using namespace std;
 
-const string &Model::EntityModel::getTag() const {
-    return tag;
-}
-
-void Model::EntityModel::setTag(const string &tg) {
-    EntityModel::tag = tg;
-}
 
 Model::EntityModel::EntityModel(int r, int c) : Subject() {
     row = double(r);
     col = double(c);
+    tag = noneTag;
 }
 
 double Model::EntityModel::getY() const {
@@ -34,6 +28,14 @@ void Model::EntityModel::setY(double r) {
 
 void Model::EntityModel::setX(double c) {
     EntityModel::col = c;
+}
+
+entityTag Model::EntityModel::getTag() const {
+    return tag;
+}
+
+void Model::EntityModel::setTag(entityTag entityTag) {
+    EntityModel::tag = entityTag;
 }
 
 int toTile(double db) {

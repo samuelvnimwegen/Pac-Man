@@ -6,6 +6,7 @@
 
 Model::Collectable::Collectable(int row, int col) : EntityModel(row, col) {
     value = 0;
+    consumed = false;
 }
 
 int Model::Collectable::getValue() const {

@@ -8,6 +8,7 @@
 #include "GhostState.h"
 #include "World.h"
 #include "GhostResetState.h"
+#include "GhostEatenState.h"
 
 class Model::GhostFrightenedState: public Model::GhostState{
     double frightenedTime;

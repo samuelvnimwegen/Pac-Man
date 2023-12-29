@@ -9,6 +9,7 @@
 #include "GUIPacMan.h"
 #include "GUICoin.h"
 #include "GUIGhost.h"
+#include "GUIFruit.h"
 #include "../AbstractFactory.h"
 #include "memory"
 
@@ -25,6 +26,8 @@ public:
     std::shared_ptr <Model::Coin> createCoin(const int &row, const int &col) override;
 
     std::shared_ptr <Model::Ghost> createGhost(const int &row, const int &col) override;
+
+    std::shared_ptr <Model::Fruit> createFruit(const int &row, const int &col) override;
 
     [[nodiscard]] const std::shared_ptr<sf::RenderWindow> &getWindow() const;
 

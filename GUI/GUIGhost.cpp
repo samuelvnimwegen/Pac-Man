@@ -38,6 +38,8 @@ GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, std::weak_pt
             break;
     }
     auto camera = Camera::instance();
+    scoreTexture = std::make_shared<sf::Texture>();
+    scoreTexture->loadFromFile("100_glowing.png");
 }
 
 std::shared_ptr<Model::Ghost> GUI::GUIGhost::getSubject(){
@@ -99,8 +101,23 @@ void GUI::GUIGhost::updateSprite() {
         pixelX = 300;
         pixelY = 250 + dir * 50;
     }
-    sprite = sf::Sprite(*this->getTexture(), sf::IntRect(pixelX, pixelY, 40, 40));
-    this->setSprite(std::make_shared<sf::Sprite>(sprite));
+
+    // Als de ghost is opgegeten score displayen van 100 i.p.v. sprite
+    if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::eaten){
+        sprite = sf::Sprite(*this->getScoreTexture());
+        this->setSprite(std::make_shared<sf::Sprite>(sprite));
+    }
+    else{
+        sprite = sf::Sprite(*this->getTexture(), sf::IntRect(pixelX, pixelY, 40, 40));
+        this->setSprite(std::make_shared<sf::Sprite>(sprite));
+    }
+
+
+
+}
+
+const std::shared_ptr<sf::Texture> &GUI::GUIGhost::getScoreTexture() const {
+    return scoreTexture;
 }
 
 
