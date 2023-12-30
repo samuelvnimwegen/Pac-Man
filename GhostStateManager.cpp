@@ -5,7 +5,7 @@
 #include "GhostStateManager.h"
 
 #include <memory>
-
+#include "Stopwatch.h"
 Model::GhostStateManager::GhostStateManager()= default;
 
 void Model::GhostStateManager::pop() {
@@ -24,6 +24,7 @@ void Model::GhostStateManager::reset() {
     while (stack.size() > 1){
         stack.pop();
     }
+    Model::Stopwatch::instance()->startLevel();
 }
 
 ghostStateTag Model::GhostStateManager::getCurrentTag() {
