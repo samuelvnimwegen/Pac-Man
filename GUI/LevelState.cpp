@@ -20,7 +20,11 @@ GUI::LevelState::LevelState(const std::weak_ptr<StateManager> &stateManager, con
 
 void GUI::LevelState::update(const key &key){
     if (this->getWorld().lock() and this->getStateManager().lock()){
-        if (this->getWorld().lock()->getCoinsLeft() == 0){
+        if (this->getWorld().lock()->getScoreClass()->getLivesLeft() == 0){
+            this->getWorld().lock()->restartWorld();
+            this->getStateManager().lock()->pop();
+        }
+        else if (this->getWorld().lock()->getCoinsLeft() == 0){
             this->getStateManager().lock()->push(std::make_unique<VictoryState>(this->getStateManager(), this->getWorld()));
         }
         else if (key == escape){

@@ -46,6 +46,13 @@ GUI::Game::Game() {
     text.setFillColor(sf::Color::White);
     text.setPosition(20, float(this->getScreenHeight()) + 20);
 
+    // Levens left voor level
+    sf::Text livesText;
+    livesText.setFont(font);
+    livesText.setCharacterSize(15);
+    livesText.setFillColor(sf::Color::White);
+    livesText.setPosition(575, float(this->getScreenHeight()) + 20);
+
     // Text voor start:
     sf::Font font1;
     assert(font1.loadFromFile("IntroFont.ttf"));
@@ -102,10 +109,14 @@ GUI::Game::Game() {
                 this->getWorld()->setGameStarted(true);
             }
             this->getWorld()->getPacMan()->changeDirection(direction);
+
+            // Text voor score en voor levens:
             text.setString("score " + to_string(this->getWorld()->getScoreClass()->getScore()));
+            livesText.setString("lives left " + to_string(this->getWorld()->getScoreClass()->getLivesLeft()));
             Window::instance()->getWindow()->clear();
             this->getWorld()->update(time);
             Window::instance()->getWindow()->draw(text);
+            this->drawLives();
             Window::instance()->getWindow()->display();
         }
         else if (this->getStateManager()->getCurrentTag() == paused){
@@ -178,6 +189,20 @@ int GUI::Game::getScreenWidth() const {
 
 int GUI::Game::getScreenHeight() const {
     return screenHeight;
+}
+
+void GUI::Game::drawLives() const {
+    auto window = GUI::Window::instance()->getWindow();
+    sf::Texture texture;
+    texture.loadFromFile("Heart.png");
+    sf::Sprite sprite(texture);
+    int offset = 0;
+    for (int i = 0; i < this->getWorld()->getScoreClass()->getLivesLeft(); ++i){
+        sprite.setPosition(float(this->getScreenWidth() - 60 - offset), float(this->getScreenHeight()));
+        window->draw(sprite);
+        offset += 40;
+    }
+
 }
 
 

@@ -266,6 +266,7 @@ void Model::World::update(const double &seconds) {
         if (toTile(ghost->getX()) == toTile(this->getPacMan()->getX()) and toTile(ghost->getY()) == toTile(this->getPacMan()->getY())){
             // Als de ghost in chase modus staat, level restart
             if (ghost->getStateManager()->getCurrentTag() == ghostStateTag::chasing){
+                this->getScoreClass()->setLivesLeft(this->getScoreClass()->getLivesLeft() - 1);
                 this->restart();
             }
         }
@@ -990,6 +991,7 @@ void Model::World::restartWorld() {
         fruit->restart();
     }
     this->setCoinsLeft(int(this->getCoins().size() + this->getFruits().size()));
+    this->getScoreClass()->restart();
 }
 
 void Model::Score::update(const double &seconds) {

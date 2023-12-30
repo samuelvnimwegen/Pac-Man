@@ -49,6 +49,8 @@ public:
 
     [[nodiscard]] int getScreenHeight() const;
 
+    void drawLives() const;
+
 };
 
 

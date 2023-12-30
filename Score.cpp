@@ -8,6 +8,7 @@
 #include "algorithm"
 
 Model::Score::Score(const std::weak_ptr<Model::World> &world) : world(world) {
+    livesLeft = 3;
     score = 0;
     lastCollected = 0;
     levelStartTime = 0;
@@ -130,6 +131,15 @@ void Model::Score::ghostConsumed() {
 void Model::Score::restart() {
     this->storeScoreBoard();
     this->setScore(0);
+    this->setLivesLeft(3);
+}
+
+int Model::Score::getLivesLeft() const {
+    return livesLeft;
+}
+
+void Model::Score::setLivesLeft(int i) {
+    Score::livesLeft = i;
 }
 
 

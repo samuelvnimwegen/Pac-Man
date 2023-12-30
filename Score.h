@@ -17,6 +17,7 @@ class Model::Score: public Model::Observer {
     double benchMarkTime;
     std::weak_ptr<Model::World> world;
     std::vector<int> scoreBoard;
+    int livesLeft;
 public:
     explicit Score(const std::weak_ptr<Model::World> &world);
 
@@ -61,6 +62,10 @@ public:
     void setScore(int i);
 
     [[nodiscard]] const std::vector<int> &getScoreBoard() const;
+
+    [[nodiscard]] int getLivesLeft() const;
+
+    void setLivesLeft(int i);
 };
 
 
