@@ -6,6 +6,7 @@
 
 #include <memory>
 #include "ConcreteFactory.h"
+#include "MenuState.h"
 using namespace std;
 
 
@@ -20,6 +21,8 @@ GUI::Game::Game(const int &wd, const int &hg) {
     auto concreteFactory = std::make_shared<GUI::ConcreteFactory>(world, window);
     world->setFactory(concreteFactory);
     camera = GUI::Camera::instance();
+    camera->setScreenHeight(this->getHeight());
+    camera->setScreenWidth(this->getWidth());
     this->getCamera()->setModelHeight(this->getWorld()->getHeight());
     this->getCamera()->setModelWidth(this->getWorld()->getWidth());
     world->buildWorld();
@@ -27,6 +30,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
     auto stopwatch = Model::Stopwatch::instance();
 
     stateManager = std::make_shared<GUI::StateManager>();
+    stateManager->push(std::make_unique<MenuState>(stateManager, world));
 
     assert(this->getHeight() % world->getHeight() == 0);
     assert(this->getWidth() % world->getWidth() == 0);
@@ -79,23 +83,15 @@ GUI::Game::Game(const int &wd, const int &hg) {
                 window->close();
             }
         }
-        if (this->getStateManager()->getCurrentState()->getTag() == "MenuState"){
-            string input = getInput();
-            if (input == "SPACE"){
-                this->getStateManager()->push();
-            }
+        this->getStateManager()->update(getInput());
+        if (this->getStateManager()->getCurrentTag() == menu){
             window->clear();
             window->draw(introSprite);
             window->draw(introText);
             window->draw(introText2);
             window->display();
         }
-        else if (this->getStateManager()->getCurrentState()->getTag() == "LevelState"){
-            string input = getInput();
-            if (input == "ESCAPE"){
-                this->getStateManager()->pauze();
-                stopwatch->pause();
-            }
+        else if (this->getStateManager()->getCurrentTag() == level){
             double time = Model::Stopwatch::instance()->getDeltaTime();
             direction direction = getDirection();
             if (this->getWorld()->getPacMan()->getCurrentDirection() != direction::none){
@@ -103,46 +99,20 @@ GUI::Game::Game(const int &wd, const int &hg) {
                     stopwatch->startLevel();
                 }
                 this->getWorld()->setGameStarted(true);
-
             }
             this->getWorld()->getPacMan()->changeDirection(direction);
             text.setString("score " + to_string(this->getWorld()->getScoreClass()->getScore()));
             window->clear();
             this->getWorld()->update(time);
-            if (this->getWorld()->getCoinsLeft() == 0){
-                this->getWorld()->getScoreClass()->storeScoreBoard();
-                this->getStateManager()->push();
-            }
             window->draw(text);
             window->display();
         }
-        else if (this->getStateManager()->getCurrentState()->getTag() == "PausedState"){
-            string input = getInput();
-            if (input == "SPACE"){
-                this->getStateManager()->pop();
-                stopwatch->getDeltaTime();
-                stopwatch->unpause();
-            }
-            else if (input == "BACKSPACE"){
-                window->clear();
-                window->draw(pauzeText);
-                window->display();
-                this->getStateManager()->push();
-                /*
-                 * Hier nog wat code om level te resetten
-                 */
-            }
+        else if (this->getStateManager()->getCurrentTag() == paused){
             window->clear();
             window->draw(pauzeText);
             window->display();
         }
-        else if (this->getStateManager()->getCurrentState()->getTag() == "VictoryState"){
-            string input = getInput();
-            if (input == "ESCAPE"){
-                /*
-                 * Code voor victory state bij ingeven escape
-                 */
-            }
+        else if (this->getStateManager()->getCurrentTag() == victory){
             sf::Text introText3;
             introText3.setFont(font1);
             introText3.setCharacterSize(80);
@@ -188,15 +158,15 @@ pair<int, int> GUI::Game::cameraToPixels(double xCamera, double yCamera) const {
 }
 
 
-string GUI::Game::getInput() {
+key GUI::Game::getInput() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-        return "ESCAPE";
+        return escape;
     }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-        return "SPACE";
+        return space;
     }else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)){
-        return "BACKSPACE";
+        return backspace;
     }
-    return "NONE";
+    return noKey;
 }
 
 const shared_ptr<Model::World> &GUI::Game::getWorld() const {

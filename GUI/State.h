@@ -7,20 +7,29 @@
 #include "iostream"
 #include "vector"
 #include "../Subject.h"
-using namespace std;
+
+enum key{space, backspace, escape, noKey};
+
+enum stateTag{victory, menu, paused, level};
 
 class GUI::State {
-    string tag;
+    stateTag tag;
+    std::weak_ptr<StateManager> stateManager;
+    std::weak_ptr<Model::World> world;
 public:
-    State();
+    State(const std::weak_ptr<StateManager> &stateManager, const std::weak_ptr<Model::World> &world);
 
     virtual ~State();
 
-    [[nodiscard]] const string &getTag() const;
+    virtual void update(const key &key) = 0;
 
-    void setTag(const string &tag);
+    [[nodiscard]] stateTag getTag() const;
 
-    virtual std::shared_ptr<GUI::State> getNext() = 0;
+    void setTag(const stateTag &stateTag);
+
+    const std::weak_ptr<StateManager> &getStateManager() const;
+
+    const std::weak_ptr<Model::World> &getWorld() const;
 };
 
 

@@ -9,7 +9,7 @@
 #include <utility>
 #include "cmath"
 #include "GhostChasingState.h"
-
+#include "algorithm"
 using namespace std;
 
 Model::World::World() {
@@ -152,14 +152,16 @@ void Model::World::buildWorld() {
     this->getFactory()->createFruit(9, 18);
     this->getFactory()->createFruit(1, 18);
 
+    vector<pair<int, int>> illegalPairs = {{5, 8}, {5, 9}, {5, 10}, {5, 11}, {4, 9}, {4, 10}};
     for (int i = 0; i < this->getHeight(); ++i){
         for (int j = 0; j < this->getWidth(); ++j){
-            if (this->getItem(i, j) == nullptr and !(this->getPacMan()->getX() == j and this->getPacMan()->getY() == i)){
+            if (this->getItem(i, j) == nullptr and !(this->getPacMan()->getX() == j and this->getPacMan()->getY() == i)
+            and !std::count(illegalPairs.begin(), illegalPairs.end(), make_pair(i, j))){
                 this->getFactory()->createCoin(i, j);
-                this->setCoinsLeft(this->getCoinsLeft() + 1);
             }
         }
     }
+    this->setCoinsLeft(int(this->getCoins().size() + this->getFruits().size()));
 
 }
 
@@ -979,6 +981,17 @@ void Model::World::setFruits(const vector<std::shared_ptr<Fruit>> &fruit) {
     World::fruits = fruit;
 }
 
+void Model::World::restartWorld() {
+    this->restart();
+    for (const auto& coin: this->getCoins()){
+        coin->restart();
+    }
+    for (const auto& fruit: this->getFruits()){
+        fruit->restart();
+    }
+    this->setCoinsLeft(int(this->getCoins().size() + this->getFruits().size()));
+}
+
 void Model::Score::update(const double &seconds) {
     auto stopwatch = Model::Stopwatch::instance();
     // Als de game gestart is zetten we de level start time gelijk aan de huidige kloktijd.
@@ -1001,7 +1014,7 @@ void Model::Score::collectableCollected(const std::weak_ptr<Model::Collectable> 
     // collectable die is opgepakt.
     double doubleValue = collectable.lock()->getValue() * this->getAmplifyingFactor();
     this->setScore(this->getScore() + int(std::round(doubleValue)));
-    if (this->getWorld().lock() and collectable.lock() and collectable.lock()->getTag() == coin){
+    if (this->getWorld().lock() and collectable.lock() and collectable.lock()->getTag() == coin or collectable.lock()->getTag() == fruit){
         this->getWorld().lock()->setCoinsLeft(this->getWorld().lock()->getCoinsLeft() - 1);
     }
 }

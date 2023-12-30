@@ -25,9 +25,9 @@
 class GUI::Game {
     int width;
     int height;
-    shared_ptr<Model::World> world;
-    shared_ptr<GUI::Camera> camera;
-    shared_ptr<StateManager> stateManager;
+    std::shared_ptr<Model::World> world;
+    std::shared_ptr<GUI::Camera> camera;
+    std::shared_ptr<StateManager> stateManager;
 public:
     Game(const int &width, const int &height);
 
@@ -35,19 +35,19 @@ public:
 
     static direction getDirection();
 
-    static std::string getInput();
+    static key getInput();
 
-    [[nodiscard]] pair<int, int> cameraToPixels(double xCamera, double yCamera) const;
+    [[nodiscard]] std::pair<int, int> cameraToPixels(double xCamera, double yCamera) const;
 
     [[nodiscard]] int getWidth() const;
 
     [[nodiscard]] int getHeight() const;
 
-    [[nodiscard]] const shared_ptr<Model::World> &getWorld() const;
+    [[nodiscard]] const std::shared_ptr<Model::World> &getWorld() const;
 
-    [[nodiscard]] const shared_ptr<GUI::Camera> &getCamera() const;
+    [[nodiscard]] const std::shared_ptr<GUI::Camera> &getCamera() const;
 
-    [[nodiscard]] const shared_ptr<GUI::StateManager> &getStateManager() const;
+    [[nodiscard]] const std::shared_ptr<GUI::StateManager> &getStateManager() const;
 
 };
 

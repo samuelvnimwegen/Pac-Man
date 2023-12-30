@@ -5,21 +5,23 @@
 #ifndef PAC_MAN_STATEMANAGER_H
 #define PAC_MAN_STATEMANAGER_H
 #include "State.h"
-#include "MenuState.h"
-#include "PausedState.h"
 #include "stack"
+
+
 class GUI::StateManager {
-    std::stack<shared_ptr<State>> stack;
+    std::stack<std::unique_ptr<State>> stack;
 public:
     StateManager();
 
-    std::shared_ptr<GUI::State> getCurrentState();
+    void update(const key &key);
 
     void pop();
 
-    void push();
+    stateTag getCurrentTag();
 
-    void pauze();
+    void push(std::unique_ptr<State> state);
+
+    int getSize();
 };
 
 

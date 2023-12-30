@@ -3,17 +3,19 @@
 //
 
 #include "MenuState.h"
+#include "StateManager.h"
+#include "LevelState.h"
 
-GUI::MenuState::MenuState() {
-    this->setTag("MenuState");
+void GUI::MenuState::update(const key &key) {
+    if (key == space){
+        this->getStateManager().lock()->push(std::make_unique<LevelState>(this->getStateManager(), this->getWorld()));
+    }
 }
 
-shared_ptr<GUI::State> GUI::MenuState::getNext() {
-    return make_shared<LevelState>();
+GUI::MenuState::MenuState(const std::weak_ptr<StateManager> &stateManager, const std::weak_ptr<Model::World> &world)
+        : State(stateManager, world) {
+    this->setTag(menu);
 }
 
 GUI::MenuState::~MenuState() = default;
 
-shared_ptr<GUI::State> GUI::VictoryState::getNext() {
-    return make_shared<LevelState>();
-}

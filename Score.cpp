@@ -127,4 +127,9 @@ void Model::Score::ghostConsumed() {
     this->setScore(this->getScore() + 100);
 }
 
+void Model::Score::restart() {
+    this->storeScoreBoard();
+    this->setScore(0);
+}
+
 

@@ -8,11 +8,11 @@
 #include "VictoryState.h"
 class GUI::LevelState: public GUI::State {
 public:
-    LevelState();
+    LevelState(const std::weak_ptr<StateManager> &stateManager, const std::weak_ptr<Model::World> &world);
 
     ~LevelState() override;
 
-    std::shared_ptr<GUI::State> getNext() override;
+    void update(const key &key) override;
 };
 
 

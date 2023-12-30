@@ -7,12 +7,16 @@
 #include "State.h"
 
 class GUI::VictoryState: public GUI::State {
+    double victoryTime;
 public:
-    VictoryState();
+    VictoryState(const std::weak_ptr<StateManager> &stateManager, const std::weak_ptr<Model::World> &world);
+
+    void update(const key &key) override;
 
     ~VictoryState() override;
 
-    std::shared_ptr<State> getNext() override;
+    [[nodiscard]] double getVictoryTime() const;
+
 };
 
 

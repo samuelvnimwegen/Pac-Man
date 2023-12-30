@@ -6,22 +6,25 @@
 
 #include <memory>
 
-GUI::StateManager::StateManager() {
-    stack.push(std::make_shared<GUI::MenuState>());
-}
-
-std::shared_ptr<GUI::State> GUI::StateManager::getCurrentState() {
-    return stack.top();
-}
+GUI::StateManager::StateManager() = default;
 
 void GUI::StateManager::pop() {
     stack.pop();
 }
 
-void GUI::StateManager::push() {
-    stack.push(this->getCurrentState()->getNext());
+void GUI::StateManager::update(const key &key) {
+    stack.top()->update(key);
 }
 
-void GUI::StateManager::pauze() {
-    stack.push(std::make_shared<GUI::PausedState>());
+void GUI::StateManager::push(std::unique_ptr<State> state) {
+    stack.push(std::move(state));
 }
+
+int GUI::StateManager::getSize() {
+    return int(stack.size());
+}
+
+stateTag GUI::StateManager::getCurrentTag() {
+    return stack.top()->getTag();
+}
+

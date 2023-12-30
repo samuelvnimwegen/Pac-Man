@@ -8,9 +8,9 @@
 #include "LevelState.h"
 class GUI::MenuState: public GUI::State{
 public:
-    MenuState();
+    MenuState(const std::weak_ptr<StateManager> &stateManager, const std::weak_ptr<Model::World> &world);
 
-    shared_ptr<GUI::State>  getNext() override;
+    void update(const key &key) override;
 
     ~MenuState() override;
 

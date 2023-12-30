@@ -30,6 +30,8 @@ public:
      */
     void storeScoreBoard();
 
+    void restart();
+
     void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) override;
 
     void ghostConsumed();

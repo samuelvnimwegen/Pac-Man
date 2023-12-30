@@ -9,8 +9,8 @@ std::shared_ptr<GUI::Camera> GUI::Camera::cameraPointer = nullptr;
 
 
 Coordinates GUI::Camera::getCameraCoords(double row, double col) const {
-    double height = double (row) / double(modelHeight) * 2 - 1;
-    double width = double(col) / double(modelWidth) * 2 - 1;
+    double height = double (row) / double(this->getModelHeight()) * 2 - 1;
+    double width = double(col) / double(this->getModelWidth()) * 2 - 1;
     return {width, height};
 }
 
@@ -28,10 +28,6 @@ int GUI::Camera::getModelWidth() const {
 
 void GUI::Camera::setModelWidth(int width) {
     Camera::modelWidth = width;
-    if (this->getModelWidth() != 0){
-        xSpeed =  double(1) / double(this->getModelWidth()) / 100;
-    }
-
 }
 
 int GUI::Camera::getModelHeight() const {
@@ -40,32 +36,29 @@ int GUI::Camera::getModelHeight() const {
 
 void GUI::Camera::setModelHeight(int height) {
     Camera::modelHeight = height;
-    if (this->getModelHeight() != 0){
-        ySpeed =  double(1) / double(this->getModelHeight()) / 100;
-    }
 }
 
 GUI::Camera::Camera(){
+    screenHeight = 0;
+    screenWidth = 0;
     modelWidth = 0;
     modelHeight = 0;
-    xSpeed = 0;
-    ySpeed = 0;
 }
 
-double GUI::Camera::getXSpeed() const {
-    return xSpeed;
+int GUI::Camera::getScreenWidth() const {
+    return screenWidth;
 }
 
-void GUI::Camera::setXSpeed(double speed) {
-    Camera::xSpeed = speed;
+void GUI::Camera::setScreenWidth(int width) {
+    Camera::screenWidth = width;
 }
 
-double GUI::Camera::getYSpeed() const {
-    return ySpeed;
+int GUI::Camera::getScreenHeight() const {
+    return screenHeight;
 }
 
-void GUI::Camera::setYSpeed(double speed) {
-    Camera::ySpeed = speed;
+void GUI::Camera::setScreenHeight(int height) {
+    Camera::screenHeight = height;
 }
 
 

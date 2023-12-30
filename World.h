@@ -42,6 +42,8 @@ public:
 
     void restart();
 
+    void restartWorld();
+
     void update(const double &seconds);
 
     [[nodiscard]] int getHeight() const;

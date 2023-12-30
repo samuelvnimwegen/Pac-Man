@@ -31,3 +31,7 @@ void Model::Collectable::consume() {
     consumed = true;
 }
 
+void Model::Collectable::restart() {
+    consumed = false;
+}
+

@@ -18,7 +18,6 @@ double Model::Stopwatch::getDeltaTime() {
     while (elapsedTime == 0.0){
         elapsedTime = double(clock() - totalTime) / (double) CLOCKS_PER_SEC;
     }
-
     totalTime = clock();
     return elapsedTime;
 }

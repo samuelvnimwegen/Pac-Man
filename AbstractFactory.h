@@ -12,7 +12,7 @@ class Model::AbstractFactory {
 public:
     explicit AbstractFactory(const std::shared_ptr<Model::World>& world);
 
-    virtual std::shared_ptr <PacMan> createPacMan(const int &row, const int &col) = 0;
+    virtual std::shared_ptr<Model::PacMan> createPacMan(const int &row, const int &col) = 0;
 
     virtual std::shared_ptr <Wall> createWall(const int&row, const int &col) = 0;
 

@@ -21,8 +21,8 @@ public:
 class GUI::Camera {
     int modelWidth;
     int modelHeight;
-    double xSpeed;
-    double ySpeed;
+    int screenWidth;
+    int screenHeight;
     static std::shared_ptr<GUI::Camera> cameraPointer;
 public:
     virtual ~Camera();
@@ -39,13 +39,14 @@ public:
 
     [[nodiscard]] Coordinates getCameraCoords(double row, double col) const;
 
-    [[nodiscard]] double getXSpeed() const;
+    int getScreenWidth() const;
 
-    void setXSpeed(double speed);
+    void setScreenWidth(int width);
 
-    [[nodiscard]] double getYSpeed() const;
+    int getScreenHeight() const;
 
-    void setYSpeed(double speed);
+    void setScreenHeight(int height);
+
 
 protected:
     Camera();

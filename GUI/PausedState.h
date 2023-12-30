@@ -6,13 +6,17 @@
 #define PAC_MAN_PAUSEDSTATE_H
 #include "State.h"
 #include "MenuState.h"
+
 class GUI::PausedState: public GUI::State {
+    double pausedTime;
 public:
-    PausedState();
+    PausedState(const std::weak_ptr<StateManager> &stateManager, const std::weak_ptr<Model::World> &world);
+
+    void update(const key &key) override;
 
     ~PausedState() override;
 
-    std::shared_ptr<State> getNext() override;
+    [[nodiscard]] double getPausedTime() const;
 };
 
 

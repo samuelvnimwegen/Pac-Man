@@ -29,8 +29,9 @@ void GUI::EntityView::update(const double &ticks) {
 std::pair<int, int> GUI::EntityView::cameraToPixels(double xCamera, double yCamera) const {
     int x, y = 0;
     if (this->getWindow().lock()){
-        x = int((xCamera + 1) / 2 * float(this->getWindow().lock()->getSize().x));
-        y = int((yCamera + 1) / 2 * float(this->getWindow().lock()->getSize().y));
+        // Factor .99 is om de kleine gaps tussen sprites te elimineren.
+        x = int((xCamera + 1) / 2 * float(Camera::instance()->getScreenWidth()) * 0.99);
+        y = int((yCamera + 1) / 2 * float(Camera::instance()->getScreenHeight()) * 0.99);
     }
     return std::make_pair(x, y);
 }
