@@ -47,6 +47,7 @@ namespace GUI{
     class StateManager;
     class VictoryState;
     class GUIFruit;
+    class Window;
 }
 enum direction {right, down, left, up, none};
 

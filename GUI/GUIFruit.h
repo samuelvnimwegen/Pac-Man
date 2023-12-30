@@ -9,7 +9,7 @@
 class GUI::GUIFruit: public GUI::EntityView{
     std::weak_ptr<Model::Fruit> subject;
 public:
-    GUIFruit(const std::shared_ptr<Model::Fruit> &subject, const std::weak_ptr<sf::RenderWindow> &win);
+    GUIFruit(const std::shared_ptr<Model::Fruit> &subject);
 
     [[nodiscard]] std::shared_ptr<Model::Fruit> getSubject();
 

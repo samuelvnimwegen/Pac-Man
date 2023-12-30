@@ -36,7 +36,7 @@ std::shared_ptr<Model::PacMan> GUI::GUIPacMan::getPacManModel() const {
     return pacManModel.lock();
 }
 
-GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan>& subject, std::weak_ptr<sf::RenderWindow> win) : EntityView(subject, std::move(win)) {
+GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan> &subject) : EntityView(subject) {
     textureNr = 0;
     auto texture = make_shared<sf::Texture>();
     texture->loadFromFile("Sprites.png");

@@ -7,14 +7,14 @@
 #include "../Observer.h"
 #include "../World.h"
 #include "SFML/Graphics.hpp"
+#include "Window.h"
 
 class GUI::EntityView: public Model::Observer{
     std::shared_ptr<sf::Texture> texture;
     std::shared_ptr<sf::Sprite> sprite;
     std::weak_ptr<Model::EntityModel> subject;
-    std::weak_ptr<sf::RenderWindow> window;
 public:
-    explicit EntityView(const std::shared_ptr<Model::EntityModel>& subject, std::weak_ptr<sf::RenderWindow> win);
+    explicit EntityView(const std::shared_ptr<Model::EntityModel>& subject);
 
     void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) override;
 
@@ -32,9 +32,7 @@ public:
 
     [[nodiscard]] virtual std::shared_ptr<Model::EntityModel> getSubject() const;
 
-    [[nodiscard]] std::pair<int, int> cameraToPixels(double xCamera, double yCamera) const;
-
-    [[nodiscard]] const std::weak_ptr<sf::RenderWindow> &getWindow() const;
+    [[nodiscard]] static std::pair<int, int> cameraToPixels(double xCamera, double yCamera) ;
 
 
 };

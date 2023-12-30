@@ -11,7 +11,7 @@ class GUI::GUIPacMan: public GUI::EntityView{
     std::weak_ptr<Model::PacMan> pacManModel;
     int textureNr;
 public:
-    explicit GUIPacMan(const std::shared_ptr<Model::PacMan>& subject, std::weak_ptr<sf::RenderWindow> win);
+    explicit GUIPacMan(const std::shared_ptr<Model::PacMan> &subject);
 
     ~GUIPacMan() override;
 

@@ -6,11 +6,11 @@
 #include "iostream"
 using namespace std;
 
-GUI::ConcreteFactory::ConcreteFactory(const std::shared_ptr<Model::World>& world, const std::shared_ptr<sf::RenderWindow>& win): AbstractFactory(world), window(win) {}
+GUI::ConcreteFactory::ConcreteFactory(const std::shared_ptr<Model::World>& world): AbstractFactory(world) {}
 
 std::shared_ptr<Model::PacMan> GUI::ConcreteFactory::createPacMan(const int &row, const int &col) {
     shared_ptr<Model::PacMan> entity(new Model::PacMan(row, col, this->getWorld()));
-    shared_ptr<GUI::GUIPacMan> observer(new GUI::GUIPacMan(entity, this->getWindow()));
+    shared_ptr<GUI::GUIPacMan> observer(new GUI::GUIPacMan(entity));
     entity->addObserver(observer);
     entity->addObserver(this->getWorld()->getScoreClass());
     this->getWorld()->setPacMan(entity);
@@ -19,7 +19,7 @@ std::shared_ptr<Model::PacMan> GUI::ConcreteFactory::createPacMan(const int &row
 
 shared_ptr<Model::Wall> GUI::ConcreteFactory::createWall(const int &row, const int &col) {
     shared_ptr<Model::Wall> subject(new Model::Wall(row, col));
-    shared_ptr<GUI::GUIWall> observer(new GUI::GUIWall(subject, this->getWindow(), this->getWorld()));
+    shared_ptr<GUI::GUIWall> observer(new GUI::GUIWall(subject, this->getWorld()));
     subject->addObserver(observer);
     this->getWorld()->addItem(subject);
     this->getWorld()->addWall(subject);
@@ -28,7 +28,7 @@ shared_ptr<Model::Wall> GUI::ConcreteFactory::createWall(const int &row, const i
 
 shared_ptr<Model::Coin> GUI::ConcreteFactory::createCoin(const int &row, const int &col) {
     shared_ptr<Model::Coin> entity(new Model::Coin(row, col));
-    shared_ptr<GUI::GUICoin> observer(new GUI::GUICoin(entity, this->getWindow()));
+    shared_ptr<GUI::GUICoin> observer(new GUI::GUICoin(entity));
     entity->addObserver(observer);
     this->getWorld()->addItem(entity);
     this->getWorld()->addCoin(entity);
@@ -37,7 +37,7 @@ shared_ptr<Model::Coin> GUI::ConcreteFactory::createCoin(const int &row, const i
 
 std::shared_ptr<Model::Fruit> GUI::ConcreteFactory::createFruit(const int &row, const int &col) {
     shared_ptr<Model::Fruit> entity(new Model::Fruit(row, col));
-    shared_ptr<GUI::GUIFruit> observer(new GUI::GUIFruit(entity, this->getWindow()));
+    shared_ptr<GUI::GUIFruit> observer(new GUI::GUIFruit(entity));
     entity->addObserver(observer);
     this->getWorld()->addItem(entity);
     this->getWorld()->addFruit(entity);
@@ -81,15 +81,12 @@ shared_ptr<Model::Ghost> GUI::ConcreteFactory::createGhost(const int &row, const
         double waitTime = entity->getWorld()->getGhosts().at(entity->getWorld()->getGhosts().size() - 1)->getWaitTime();
         entity->setWaitTime(waitTime + 3);
     }
-    shared_ptr<GUI::GUIGhost> observer(new GUI::GUIGhost(entity, this->getWindow(), ghostColor));
+    shared_ptr<GUI::GUIGhost> observer(new GUI::GUIGhost(entity, ghostColor));
     entity->addObserver(observer);
     this->getWorld()->addGhost(entity);
     return entity;
 }
 
-const shared_ptr<sf::RenderWindow> &GUI::ConcreteFactory::getWindow() const {
-    return window;
-}
 
 
 

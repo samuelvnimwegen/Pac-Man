@@ -4,8 +4,8 @@
 
 #include "GUIFruit.h"
 
-GUI::GUIFruit::GUIFruit(const std::shared_ptr<Model::Fruit> &subject, const std::weak_ptr<sf::RenderWindow> &win)
-        : GUI::EntityView(subject, win), subject(subject){
+GUI::GUIFruit::GUIFruit(const std::shared_ptr<Model::Fruit> &subject)
+        : GUI::EntityView(subject), subject(subject){
     auto texture = std::make_shared<sf::Texture>();
     texture->loadFromFile("Sprites.png");
     this->setTexture(texture);

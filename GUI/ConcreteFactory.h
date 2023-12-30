@@ -15,9 +15,8 @@
 
 
 class GUI::ConcreteFactory: public Model::AbstractFactory{
-    std::shared_ptr<sf::RenderWindow> window;
 public:
-    explicit ConcreteFactory(const std::shared_ptr<Model::World>& world, const std::shared_ptr<sf::RenderWindow> &win);
+    explicit ConcreteFactory(const std::shared_ptr<Model::World>& world);
 
     std::shared_ptr<Model::PacMan> createPacMan(const int &row, const int &col) override;
 

@@ -10,8 +10,7 @@ class GUI::GUIWall: public GUI::EntityView {
     std::weak_ptr<Model::World> world;
     bool wallUpdated;
 public:
-    GUIWall(const std::shared_ptr<Model::EntityModel> &subject, const std::weak_ptr<sf::RenderWindow> &win,
-            const std::weak_ptr<Model::World> &world);
+    GUIWall(const std::shared_ptr<Model::EntityModel> &subject, const std::weak_ptr<Model::World> &world);
 
     /*
      * Functie wordt opgeroepen na het bouwen van de wereld om de muren er aan te passen op basis van de omringende muren:
@@ -26,7 +25,7 @@ public:
 
     [[nodiscard]] bool isWallUpdated() const;
 
-    void setWallUpdated(bool wallUpdated);
+    void setWallUpdated(bool updated);
 };
 
 

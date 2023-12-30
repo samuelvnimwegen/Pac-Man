@@ -12,8 +12,7 @@ class GUI::GUIGhost: public GUI::EntityView{
     int spriteX;
     std::shared_ptr<sf::Texture> scoreTexture;
 public:
-    explicit GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, std::weak_ptr<sf::RenderWindow> win,
-                      color ghostColor);
+    explicit GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostColor);
 
     void update(const double &seconds) override;
 

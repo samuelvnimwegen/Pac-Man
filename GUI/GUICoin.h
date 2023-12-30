@@ -9,7 +9,7 @@
 class GUI::GUICoin: public GUI::EntityView{
     std::weak_ptr<Model::Coin> subject;
 public:
-    explicit GUICoin(const std::shared_ptr<Model::Coin>& coin, std::weak_ptr<sf::RenderWindow> win);
+    explicit GUICoin(const std::shared_ptr<Model::Coin> &coin);
 
     void update(const double &ticks) override;
 

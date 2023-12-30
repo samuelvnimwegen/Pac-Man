@@ -39,11 +39,11 @@ public:
 
     [[nodiscard]] Coordinates getCameraCoords(double row, double col) const;
 
-    int getScreenWidth() const;
+    [[nodiscard]] int getScreenWidth() const;
 
     void setScreenWidth(int width);
 
-    int getScreenHeight() const;
+    [[nodiscard]] int getScreenHeight() const;
 
     void setScreenHeight(int height);
 

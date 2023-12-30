@@ -10,8 +10,7 @@
 
 
 
-GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, std::weak_ptr<sf::RenderWindow> win,
-                        color ghostColor) : GUI::EntityView(ghost, std::move(win)) {
+GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostColor) : GUI::EntityView(ghost) {
     subject = ghost;
     textureNr = 0;
     auto texture = std::make_shared<sf::Texture>();

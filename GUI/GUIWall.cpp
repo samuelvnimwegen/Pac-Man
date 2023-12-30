@@ -53,8 +53,8 @@ void GUI::GUIWall::update(const double &ticks) {
     EntityView::update(ticks);
 }
 
-GUI::GUIWall::GUIWall(const std::shared_ptr<Model::EntityModel> &subject, const std::weak_ptr<sf::RenderWindow> &win,
-                      const std::weak_ptr<Model::World> &world) : EntityView(subject, win), world(world) {
+GUI::GUIWall::GUIWall(const std::shared_ptr<Model::EntityModel> &subject, const std::weak_ptr<Model::World> &world)
+        : EntityView(subject), world(world) {
     wallUpdated = false;
     auto texture = std::make_shared<sf::Texture>();
     texture->loadFromFile("Muur2.png");
@@ -77,8 +77,8 @@ bool GUI::GUIWall::isWallUpdated() const {
     return wallUpdated;
 }
 
-void GUI::GUIWall::setWallUpdated(bool wallUpdated) {
-    GUIWall::wallUpdated = wallUpdated;
+void GUI::GUIWall::setWallUpdated(bool updated) {
+    GUIWall::wallUpdated = updated;
 }
 
 

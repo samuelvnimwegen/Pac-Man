@@ -10,19 +10,20 @@
 using namespace std;
 
 
-GUI::Game::Game(const int &wd, const int &hg) {
-    width = wd;
-    height = hg;
-    auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(this->getWidth(), this->getHeight() + 50), "Pac-Man");
+GUI::Game::Game() {
+    screenWidth = 800;
+    screenHeight = 440;
+
+    camera = GUI::Camera::instance();
+    camera->setScreenHeight(this->getScreenHeight());
+    camera->setScreenWidth(this->getScreenWidth());
 
     world = std::make_shared<Model::World>();
     auto score = std::make_shared<Model::Score>(world);
     world->setScore(score);
-    auto concreteFactory = std::make_shared<GUI::ConcreteFactory>(world, window);
+    auto concreteFactory = std::make_shared<GUI::ConcreteFactory>(world);
     world->setFactory(concreteFactory);
-    camera = GUI::Camera::instance();
-    camera->setScreenHeight(this->getHeight());
-    camera->setScreenWidth(this->getWidth());
+
     this->getCamera()->setModelHeight(this->getWorld()->getHeight());
     this->getCamera()->setModelWidth(this->getWorld()->getWidth());
     world->buildWorld();
@@ -32,8 +33,8 @@ GUI::Game::Game(const int &wd, const int &hg) {
     stateManager = std::make_shared<GUI::StateManager>();
     stateManager->push(std::make_unique<MenuState>(stateManager, world));
 
-    assert(this->getHeight() % world->getHeight() == 0);
-    assert(this->getWidth() % world->getWidth() == 0);
+    assert(this->getScreenHeight() % world->getHeight() == 0);
+    assert(this->getScreenWidth() % world->getWidth() == 0);
 
 
     // Score voor level:
@@ -43,7 +44,7 @@ GUI::Game::Game(const int &wd, const int &hg) {
     text.setFont(font);
     text.setCharacterSize(15);
     text.setFillColor(sf::Color::White);
-    text.setPosition(20, float(this->getHeight()) + 20);
+    text.setPosition(20, float(this->getScreenHeight()) + 20);
 
     // Text voor start:
     sf::Font font1;
@@ -76,20 +77,20 @@ GUI::Game::Game(const int &wd, const int &hg) {
     pauzeText.setPosition(70, 250);
     pauzeText.setString("press space to unpause");
 
-    while (window->isOpen()){
+    while (Window::instance()->getWindow()->isOpen()){
         sf::Event event{};
-        while(window->pollEvent(event)){
+        while(Window::instance()->getWindow()->pollEvent(event)){
             if (event.type == sf::Event::Closed){
-                window->close();
+                Window::instance()->getWindow()->close();
             }
         }
         this->getStateManager()->update(getInput());
         if (this->getStateManager()->getCurrentTag() == menu){
-            window->clear();
-            window->draw(introSprite);
-            window->draw(introText);
-            window->draw(introText2);
-            window->display();
+            Window::instance()->getWindow()->clear();
+            Window::instance()->getWindow()->draw(introSprite);
+            Window::instance()->getWindow()->draw(introText);
+            Window::instance()->getWindow()->draw(introText2);
+            Window::instance()->getWindow()->display();
         }
         else if (this->getStateManager()->getCurrentTag() == level){
             double time = Model::Stopwatch::instance()->getDeltaTime();
@@ -102,15 +103,15 @@ GUI::Game::Game(const int &wd, const int &hg) {
             }
             this->getWorld()->getPacMan()->changeDirection(direction);
             text.setString("score " + to_string(this->getWorld()->getScoreClass()->getScore()));
-            window->clear();
+            Window::instance()->getWindow()->clear();
             this->getWorld()->update(time);
-            window->draw(text);
-            window->display();
+            Window::instance()->getWindow()->draw(text);
+            Window::instance()->getWindow()->display();
         }
         else if (this->getStateManager()->getCurrentTag() == paused){
-            window->clear();
-            window->draw(pauzeText);
-            window->display();
+            Window::instance()->getWindow()->clear();
+            Window::instance()->getWindow()->draw(pauzeText);
+            Window::instance()->getWindow()->display();
         }
         else if (this->getStateManager()->getCurrentTag() == victory){
             sf::Text introText3;
@@ -119,21 +120,11 @@ GUI::Game::Game(const int &wd, const int &hg) {
             introText3.setFillColor(sf::Color::White);
             introText3.setPosition(150 , 300);
             introText3.setString("Victory");
-            window->clear();
-            window->draw(introText3);
-            window->display();
+            Window::instance()->getWindow()->clear();
+            Window::instance()->getWindow()->draw(introText3);
+            Window::instance()->getWindow()->display();
         }
     }
-}
-
-int GUI::Game::getWidth() const {
-    return width;
-}
-
-
-
-int GUI::Game::getHeight() const {
-    return height;
 }
 
 GUI::Game::~Game() = default;
@@ -152,8 +143,8 @@ direction GUI::Game::getDirection() {
 }
 
 pair<int, int> GUI::Game::cameraToPixels(double xCamera, double yCamera) const {
-    int x = int((xCamera + 1) / 2 * float(this->getWidth()));
-    int y = int((yCamera + 1) / 2 * float(this->getHeight()));
+    int x = int((xCamera + 1) / 2 * float(this->getScreenWidth()));
+    int y = int((yCamera + 1) / 2 * float(this->getScreenHeight()));
     return make_pair(x, y);
 }
 
@@ -180,6 +171,16 @@ const shared_ptr<GUI::Camera> &GUI::Game::getCamera() const {
 const shared_ptr<GUI::StateManager> &GUI::Game::getStateManager() const {
     return stateManager;
 }
+
+int GUI::Game::getScreenWidth() const {
+    return screenWidth;
+}
+
+int GUI::Game::getScreenHeight() const {
+    return screenHeight;
+}
+
+
 
 
 
