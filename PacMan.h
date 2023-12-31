@@ -7,6 +7,7 @@
 #include "EntityModel.h"
 #include "Subject.h"
 #include "Observer.h"
+#include "Stopwatch.h"
 
 class Model::PacMan: public Model::EntityModel{
     std::weak_ptr<Model::World> world;
@@ -14,6 +15,8 @@ class Model::PacMan: public Model::EntityModel{
     direction nextDirection;
     double speed;
     bool hasMoved;
+    bool dead;
+    double deathTime;
     int startRow;
     int startCol;
 public:
@@ -38,6 +41,8 @@ public:
     */
     void changeDirection(const direction &dir);
 
+    void die();
+
     [[nodiscard]] bool canMove(const int &row, const int &col);
 
     [[nodiscard]] const direction &getCurrentDirection() const;
@@ -59,6 +64,14 @@ public:
     [[nodiscard]] int getStartCol() const;
 
     [[nodiscard]] double getSpeed() const;
+
+    [[nodiscard]] bool isDead() const;
+
+    void setDead(bool b);
+
+    [[nodiscard]] double getDeathTime() const;
+
+    void setDeathTime(double time);
 
 
 };

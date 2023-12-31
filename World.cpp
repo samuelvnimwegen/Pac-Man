@@ -246,7 +246,7 @@ void Model::World::setWalls(const vector<std::shared_ptr<Wall>> &newWalls) {
     World::walls = newWalls;
 }
 
-void Model::World::update(const double &seconds) {
+void Model::World::update(const double &seconds) const {
     for (const auto& wall: this->getWalls()){
         wall->update(seconds);
     }
@@ -256,18 +256,21 @@ void Model::World::update(const double &seconds) {
     for (const auto& fruit: this->getFruits()){
         fruit->update(seconds);
     }
-    for (const auto& ghost: this->getGhosts()){
-        ghost->update(seconds);
+    // Ghosts alleen updaten als pacman leeft:
+    if (!this->getPacMan()->isDead()){
+        for (const auto& ghost: this->getGhosts()){
+            ghost->update(seconds);
+        }
     }
+
     this->getPacMan()->update(seconds);
 
     // Checken op collisions van ghosts en pacMans:
     for (const auto& ghost: this->getGhosts()){
         if (toTile(ghost->getX()) == toTile(this->getPacMan()->getX()) and toTile(ghost->getY()) == toTile(this->getPacMan()->getY())){
             // Als de ghost in chase modus staat, level restart
-            if (ghost->getStateManager()->getCurrentTag() == ghostStateTag::chasing){
-                this->getScoreClass()->setLivesLeft(this->getScoreClass()->getLivesLeft() - 1);
-                this->restart();
+            if (ghost->getStateManager()->getCurrentTag() == ghostStateTag::chasing and !this->getPacMan()->isDead()){
+                this->getPacMan()->die();
             }
         }
     }
@@ -291,6 +294,8 @@ std::shared_ptr<Model::World> Model::AbstractFactory::getWorld() const {
 
 
 Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : EntityModel(row, col), world(world) {
+    deathTime = 0;
+    dead = false;
     this->setCurrentDirection(direction::none);
     this->setNextDirection(direction::none);
     speed = 8.0;
@@ -322,6 +327,7 @@ void Model::PacMan::reset() {
     this->setNextDirection(direction::none);
     this->setX(getStartCol());
     this->setY(getStartRow());
+    this->setDead(false);
 }
 
 
@@ -1021,3 +1027,24 @@ void Model::Score::collectableCollected(const std::weak_ptr<Model::Collectable> 
     }
 }
 
+void Model::PacMan::die() {
+    this->setDead(true);
+    this->setDeathTime(Stopwatch::instance()->getLevelTime());
+    this->getWorld()->getScoreClass()->setLivesLeft(this->getWorld()->getScoreClass()->getLivesLeft() - 1);
+}
+
+void Model::PacMan::update(const double &seconds) {
+    // Niet moven bij dood
+    if (!this->isDead()){
+        this->move(seconds);
+    }
+    // Als er 3 seconden voorbij zijn, respawned de pacman
+    if (this->isDead() and this->getDeathTime() + 2 < Stopwatch::instance()->getLevelTime()){
+        this->setDead(false);
+        this->getWorld()->restart();
+    }
+    for (const auto& observer: this->getObservers()){
+        observer->update(seconds);
+    }
+
+}

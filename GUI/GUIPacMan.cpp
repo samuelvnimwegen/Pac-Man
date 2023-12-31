@@ -23,12 +23,27 @@ void GUI::GUIPacMan::setTextureNr(int nr) {
 }
 
 void GUI::GUIPacMan::updateTextureNr() {
-    if (this->getTextureNr() < 1){
-        this->setTextureNr(this->getTextureNr() + 1);
+    if (this->getPacManModel()->isDead()){
+        double interval = 2.0 / 11;
+        if ((this->getDeadTextureNr() + 1) * interval < Model::Stopwatch::instance()->getLevelTime() - this->getPacManModel()->getDeathTime()){
+            this->setDeadTextureNr(this->getDeadTextureNr() + 1);
+        }
+        if (this->getDeadTextureNr() > 10){
+            this->setDeadTextureNr(0);
+        }
     }
     else{
-        this->setTextureNr(0);
+        if (this->getDeadTextureNr() != 0){
+            this->setDeadTextureNr(0);
+        }
+        if (this->getTextureNr() < 1){
+            this->setTextureNr(this->getTextureNr() + 1);
+        }
+        else{
+            this->setTextureNr(0);
+        }
     }
+
 }
 
 
@@ -37,6 +52,7 @@ std::shared_ptr<Model::PacMan> GUI::GUIPacMan::getPacManModel() const {
 }
 
 GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan> &subject) : EntityView(subject) {
+    deadTextureNr = 0;
     textureNr = 0;
     auto texture = make_shared<sf::Texture>();
     texture->loadFromFile("Sprites.png");
@@ -56,47 +72,34 @@ void GUI::GUIPacMan::update(const double &ticks) {
 
 void GUI::GUIPacMan::updateSprite() {
     sf::Sprite sprite;
-    direction dir = this->getPacManModel()->getCurrentDirection();
-    if (dir == direction::none){
-        sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 1, 40, 40));
-    }
-    else if (dir == direction::right){
-        if (this->getTextureNr() == 0){
-            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 51, 40, 40));
-        }
-        else{
-            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 101, 40, 40));
-        }
-    }
-    else if (dir == direction::down){
-        if (this->getTextureNr() == 0){
-            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 201, 40, 40));
-        }
-        else{
-            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 251, 40, 40));
-        }
-    }
-    else if (dir == direction::left){
-        if (this->getTextureNr() == 0){
-            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 351, 40, 40));
-        }
-        else{
-            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 401, 40, 40));
-        }
+
+    if (this->getPacManModel()->isDead()){
+        int spriteY = this->getDeadTextureNr() * 50;
+        sprite = sf::Sprite(*this->getTexture(), sf::IntRect(350, spriteY, 40, 40));
     }
     else{
-        assert(dir == direction::up);
-        if (this->getTextureNr() == 0){
-            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 501, 40, 40));
+        // Sprite aanpassen aan richting en texture nummer (plaats in animatie)
+        direction dir = this->getPacManModel()->getCurrentDirection();
+        if (dir == direction::none){
+            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 0, 40, 40));
         }
         else{
-            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, 551, 40, 40));
+            int spriteY = 50 + 150 * dir + this->getTextureNr() * 50;
+            sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, spriteY, 40, 40));
         }
     }
     if (this->getPacManModel()->isHasMoved()){
         this->updateTextureNr();
     }
     this->setSprite(make_shared<sf::Sprite>(sprite));
+}
+
+int GUI::GUIPacMan::getDeadTextureNr() const {
+    return deadTextureNr;
+}
+
+void GUI::GUIPacMan::setDeadTextureNr(int nr) {
+    GUIPacMan::deadTextureNr = nr;
 }
 
 GUI::GUIPacMan::~GUIPacMan() = default;

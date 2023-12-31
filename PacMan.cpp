@@ -43,13 +43,6 @@ void Model::PacMan::setNextDirection(const direction &dir) {
     return world.lock();
 }
 
-void Model::PacMan::update(const double &seconds) {
-    this->move(seconds);
-    for (const auto& observer: this->getObservers()){
-        observer->update(seconds);
-    }
-}
-
 
 /*
  * Verandert de richting afhankelijk van de volgende richting
@@ -98,6 +91,22 @@ void Model::PacMan::changeDirection(const direction &dir) {
 
 double Model::PacMan::getSpeed() const {
     return speed;
+}
+
+bool Model::PacMan::isDead() const {
+    return dead;
+}
+
+void Model::PacMan::setDead(bool b) {
+    PacMan::dead = b;
+}
+
+double Model::PacMan::getDeathTime() const {
+    return deathTime;
+}
+
+void Model::PacMan::setDeathTime(double time) {
+    PacMan::deathTime = time;
 }
 
 

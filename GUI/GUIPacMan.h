@@ -10,6 +10,7 @@
 class GUI::GUIPacMan: public GUI::EntityView{
     std::weak_ptr<Model::PacMan> pacManModel;
     int textureNr;
+    int deadTextureNr;
 public:
     explicit GUIPacMan(const std::shared_ptr<Model::PacMan> &subject);
 
@@ -26,6 +27,10 @@ public:
     void setTextureNr(int nr);
 
     [[nodiscard]] std::shared_ptr<Model::PacMan> getPacManModel() const;
+
+    int getDeadTextureNr() const;
+
+    void setDeadTextureNr(int nr);
 };
 
 

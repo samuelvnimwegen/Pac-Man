@@ -20,7 +20,8 @@ GUI::LevelState::LevelState(const std::weak_ptr<StateManager> &stateManager, con
 
 void GUI::LevelState::update(const key &key){
     if (this->getWorld().lock() and this->getStateManager().lock()){
-        if (this->getWorld().lock()->getScoreClass()->getLivesLeft() == 0){
+        if (this->getWorld().lock()->getScoreClass()->getLivesLeft() == 0 and
+                !this->getWorld().lock()->getPacMan()->isDead()){
             this->getWorld().lock()->restartWorld();
             this->getStateManager().lock()->pop();
         }
