@@ -7,10 +7,29 @@
 #include "iostream"
 #include "vector"
 #include "../Subject.h"
+#include "../Stopwatch.h"
 
+namespace GUI{
+    class ConcreteFactory;
+    class EntityView;
+    class Camera;
+    class Game;
+    class GUICoin;
+    class GUIGhost;
+    class GUIPacMan;
+    class GUIWall;
+    class LevelState;
+    class MenuState;
+    class PausedState;
+    class State;
+    class StateManager;
+    class VictoryState;
+    class GUIFruit;
+    class Window;
+    class GameOverState;
+}
 enum key{space, backspace, escape, noKey};
-
-enum stateTag{victory, menu, paused, level};
+enum stateTag{victory, menu, paused, level, gameOver};
 
 class GUI::State {
     stateTag tag;
@@ -27,9 +46,9 @@ public:
 
     void setTag(const stateTag &stateTag);
 
-    const std::weak_ptr<StateManager> &getStateManager() const;
+    [[nodiscard]] const std::weak_ptr<StateManager> &getStateManager() const;
 
-    const std::weak_ptr<Model::World> &getWorld() const;
+    [[nodiscard]] const std::weak_ptr<Model::World> &getWorld() const;
 };
 
 

@@ -5,7 +5,7 @@
 #ifndef PAC_MAN_CAMERA_H
 #define PAC_MAN_CAMERA_H
 #include "iostream"
-#include "Subject.h"
+#include "GUI/State.h"
 
 class Coordinates{
     double xCoord;

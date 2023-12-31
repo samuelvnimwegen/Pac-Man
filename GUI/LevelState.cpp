@@ -8,6 +8,7 @@
 #include "StateManager.h"
 #include "VictoryState.h"
 #include "PausedState.h"
+#include "GameOverState.h"
 
 GUI::LevelState::LevelState(const std::weak_ptr<StateManager> &stateManager, const std::weak_ptr<Model::World> &world)
         : State(stateManager, world) {
@@ -22,8 +23,7 @@ void GUI::LevelState::update(const key &key){
     if (this->getWorld().lock() and this->getStateManager().lock()){
         if (this->getWorld().lock()->getScoreClass()->getLivesLeft() == 0 and
                 !this->getWorld().lock()->getPacMan()->isDead()){
-            this->getWorld().lock()->restartWorld();
-            this->getStateManager().lock()->pop();
+            this->getStateManager().lock()->push(std::make_unique<GameOverState>(this->getStateManager(), this->getWorld()));
         }
         else if (this->getWorld().lock()->getCoinsLeft() == 0){
             this->getStateManager().lock()->push(std::make_unique<VictoryState>(this->getStateManager(), this->getWorld()));

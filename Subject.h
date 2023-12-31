@@ -31,24 +31,6 @@ namespace Model{
     class GhostResetState;
     class GhostEatenState;
 }
-namespace GUI{
-    class ConcreteFactory;
-    class EntityView;
-    class Camera;
-    class Game;
-    class GUICoin;
-    class GUIGhost;
-    class GUIPacMan;
-    class GUIWall;
-    class LevelState;
-    class MenuState;
-    class PausedState;
-    class State;
-    class StateManager;
-    class VictoryState;
-    class GUIFruit;
-    class Window;
-}
 enum direction {right, down, left, up, none};
 
 enum color{red, pink, blue, orange, green, purple};

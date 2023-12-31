@@ -129,12 +129,39 @@ GUI::Game::Game() {
             introText3.setFont(font1);
             introText3.setCharacterSize(80);
             introText3.setFillColor(sf::Color::White);
-            introText3.setPosition(150 , 300);
+            introText3.setPosition(120 , 200);
             introText3.setString("Victory");
+            sf::Text pressSpace;
+            pressSpace.setFont(font1);
+            pressSpace.setCharacterSize(20);
+            pressSpace.setFillColor(sf::Color::White);
+            pressSpace.setPosition(50 , 400);
+            pressSpace.setString("Press space to go to the next level");
             Window::instance()->getWindow()->clear();
             Window::instance()->getWindow()->draw(introText3);
+            Window::instance()->getWindow()->draw(pressSpace);
             Window::instance()->getWindow()->display();
         }
+        else if (this->getStateManager()->getCurrentTag() == gameOver){
+            this->getStateManager()->update(getInput());
+        sf::Text gameOverText;
+        gameOverText.setFont(font1);
+        gameOverText.setCharacterSize(70);
+        gameOverText.setFillColor(sf::Color::White);
+        gameOverText.setPosition(80 , 200);
+        gameOverText.setString("Game Over");
+        sf::Text pressSpace;
+        pressSpace.setFont(font1);
+        pressSpace.setCharacterSize(20);
+        pressSpace.setFillColor(sf::Color::White);
+        pressSpace.setPosition(90 , 400);
+        pressSpace.setString("Press space to go back to menu");
+        Window::instance()->getWindow()->clear();
+        Window::instance()->getWindow()->draw(gameOverText);
+        Window::instance()->getWindow()->draw(pressSpace);
+        Window::instance()->getWindow()->display();
+        }
+
     }
 }
 

@@ -4,7 +4,7 @@
 
 #ifndef PAC_MAN_WINDOW_H
 #define PAC_MAN_WINDOW_H
-#include "../Subject.h"
+#include "State.h"
 #include "SFML/Window.hpp"
 #include "SFML/Graphics.hpp"
 
