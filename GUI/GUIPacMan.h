@@ -28,7 +28,7 @@ public:
 
     [[nodiscard]] std::shared_ptr<Model::PacMan> getPacManModel() const;
 
-    int getDeadTextureNr() const;
+    [[nodiscard]] int getDeadTextureNr() const;
 
     void setDeadTextureNr(int nr);
 };

@@ -21,6 +21,12 @@ public:
     std::shared_ptr<Model::Ghost> getSubject();
 
     [[nodiscard]] const std::shared_ptr<sf::Texture> &getScoreTexture() const;
+
+    [[nodiscard]] int getTextureNr() const;
+
+    void setTextureNr(int nr);
+
+    [[nodiscard]] int getSpriteX() const;
 };
 
 

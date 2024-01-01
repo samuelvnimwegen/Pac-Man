@@ -4,7 +4,6 @@
 
 #include "GUIPacMan.h"
 
-#include <utility>
 using namespace std;
 
 
@@ -33,17 +32,21 @@ void GUI::GUIPacMan::updateTextureNr() {
         }
     }
     else{
-        if (this->getDeadTextureNr() != 0){
-            this->setDeadTextureNr(0);
-        }
-        if (this->getTextureNr() < 1){
-            this->setTextureNr(this->getTextureNr() + 1);
-        }
-        else{
-            this->setTextureNr(0);
+        static double lastUpdated = Model::Stopwatch::instance()->getTotalSeconds();
+        // Elke 0.05 seconden de sprite bijwerken
+        if (lastUpdated + 0.075 < Model::Stopwatch::instance()->getTotalSeconds()){
+            if (this->getDeadTextureNr() != 0){
+                this->setDeadTextureNr(0);
+            }
+            if (this->getTextureNr() < 1 and 0 <= this->getTextureNr()){
+                this->setTextureNr(this->getTextureNr() + 1);
+            }
+            else{
+                this->setTextureNr(0);
+            }
+            lastUpdated = Model::Stopwatch::instance()->getTotalSeconds();
         }
     }
-
 }
 
 

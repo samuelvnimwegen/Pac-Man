@@ -76,19 +76,21 @@ void GUI::GUIGhost::updateSprite() {
         case direction::none:
             throw std::runtime_error("Ghost had geen direction bij updateSprite van GUIGhost.cpp");
     }
-    if (this->textureNr == 1){
+    if (this->getTextureNr() == 1){
         pixelY += 50;
     }
-    // Texture nummer bijwerken als game gestart is
-    if (this->getSubject()->getWorld()->isGameStarted()){
-        if (this->textureNr == 0){
-            this->textureNr = 1;
+    // Texture nummer bijwerken als game gestart is en er 0.075 seconden sinds laatste update voorbij is
+    static double lastUpdated = Model::Stopwatch::instance()->getTotalSeconds();
+    if (this->getSubject()->getWorld()->isGameStarted() and lastUpdated + 0.075 < Model::Stopwatch::instance()->getTotalSeconds()){
+        if (this->getTextureNr() == 0){
+            this->setTextureNr(1);
         }
         else{
-            this->textureNr = 0;
+            this->setTextureNr(0);
         }
+        lastUpdated = Model::Stopwatch::instance()->getTotalSeconds();
     }
-    auto pixelX = spriteX;
+    auto pixelX = getSpriteX();
 
     // Als hij feared is, aanpassen
     if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::frightened){
@@ -117,6 +119,18 @@ void GUI::GUIGhost::updateSprite() {
 
 const std::shared_ptr<sf::Texture> &GUI::GUIGhost::getScoreTexture() const {
     return scoreTexture;
+}
+
+int GUI::GUIGhost::getTextureNr() const {
+    return textureNr;
+}
+
+void GUI::GUIGhost::setTextureNr(int nr) {
+    GUIGhost::textureNr = nr;
+}
+
+int GUI::GUIGhost::getSpriteX() const {
+    return spriteX;
 }
 
 
