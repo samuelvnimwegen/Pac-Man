@@ -8,11 +8,11 @@
 #include <memory>
 #include <utility>
 #include "cmath"
-#include "GhostChasingState.h"
 #include "algorithm"
 using namespace std;
 
 Model::World::World() {
+    levelNr = 0;
     gameStarted = false;
     width = 20;
     height = 11;
@@ -678,8 +678,9 @@ int Model::Ghost::getManhattanDistanceSpawn(const direction &direction) {
     }
 }
 
-double Model::Ghost::getDefaultSpeed() const {
-    return defaultSpeed;
+double Model::Ghost::getDefaultSpeed()  {
+    // Elk level wordt de snelheid 10% sneller
+    return defaultSpeed * pow(1.10, this->getWorld()->getLevelNr());
 }
 
 
@@ -998,6 +999,7 @@ void Model::World::restartWorld() {
     }
     this->setCoinsLeft(int(this->getCoins().size() + this->getFruits().size()));
     this->getScoreClass()->restart();
+    this->setLevelNr(0);
 }
 
 void Model::World::nextLevel() {
@@ -1009,6 +1011,15 @@ void Model::World::nextLevel() {
         fruit->restart();
     }
     this->setCoinsLeft(int(this->getCoins().size() + this->getFruits().size()));
+    this->setLevelNr(this->getLevelNr() + 1);
+}
+
+int Model::World::getLevelNr() const {
+    return levelNr;
+}
+
+void Model::World::setLevelNr(int nr) {
+    World::levelNr = nr;
 }
 
 void Model::Score::update(const double &seconds) {

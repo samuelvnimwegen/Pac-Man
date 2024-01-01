@@ -33,6 +33,7 @@ class Model::World {
     int coinsLeft;
     bool gameStarted;
     std::shared_ptr<Model::Score> score;
+    int levelNr;
 public:
     explicit World();
 
@@ -101,6 +102,10 @@ public:
     [[nodiscard]] const std::vector<std::shared_ptr<Fruit>> &getFruits() const;
 
     void setFruits(const std::vector<std::shared_ptr<Fruit>> &fruit);
+
+    [[nodiscard]] int getLevelNr() const;
+
+    void setLevelNr(int nr);
 
 };
 

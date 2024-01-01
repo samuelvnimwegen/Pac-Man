@@ -3,7 +3,7 @@
 //
 
 #include "GhostFrightenedState.h"
-
+#include "cmath"
 void Model::GhostFrightenedState::update() {
     if (this->getGhost().lock() and this->getStateManager().lock()){
         // Als hij opnieuw frightened is in de timing, timer aanpassen met wachttijd
@@ -11,8 +11,10 @@ void Model::GhostFrightenedState::update() {
             frightenedTime = Model::Stopwatch::instance()->getLevelTime();
             this->getGhost().lock()->setFrightened(false);
         }
-        // Als hij langer dan 5 seconden feared is, teruggaan naar vorige state
-        else if (Model::Stopwatch::instance()->getLevelTime() - this->getFrightenedTime() > 5){
+        // Als hij langer dan de nodige tijdsduur feared is, terug naar vorige state
+        // De fear-time begint op 5 seconden en wordt voor elk level 10% korter
+        else if (Model::Stopwatch::instance()->getLevelTime() - this->getFrightenedTime() > 5 * pow(0.9, this->getGhost().lock()->getWorld()->getLevelNr())){
+            std::cout << this->getGhost().lock()->getWorld()->getLevelNr();
             this->getStateManager().lock()->pop();
         }
         // Als hij opgegeten is door pacman, feared state clearen en naar eaten state:

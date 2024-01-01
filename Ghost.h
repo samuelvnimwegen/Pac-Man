@@ -72,7 +72,7 @@ public:
 
     void setSpeed(double d);
 
-    [[nodiscard]] double getDefaultSpeed() const;
+    [[nodiscard]] double getDefaultSpeed();
 };
 template<typename T> T templateMax(const T &x, const T &y);
 
