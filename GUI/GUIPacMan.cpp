@@ -88,7 +88,7 @@ void GUI::GUIPacMan::updateSprite() {
             sprite = sf::Sprite(*this->getTexture(), sf::IntRect(850, spriteY, 40, 40));
         }
     }
-    if (this->getPacManModel()->isHasMoved()){
+    if (this->getPacManModel()->isHasMoved() or this->getPacManModel()->isDead()){
         this->updateTextureNr();
     }
     this->setSprite(make_shared<sf::Sprite>(sprite));

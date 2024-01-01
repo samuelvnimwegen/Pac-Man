@@ -120,8 +120,15 @@ GUI::Game::Game() {
             Window::instance()->getWindow()->display();
         }
         else if (this->getStateManager()->getCurrentTag() == paused){
+            sf::Text pressEscape;
+            pressEscape.setFont(font1);
+            pressEscape.setCharacterSize(15);
+            pressEscape.setFillColor(sf::Color::White);
+            pressEscape.setPosition(120 , 450);
+            pressEscape.setString("Press escape to go to the main menu");
             Window::instance()->getWindow()->clear();
             Window::instance()->getWindow()->draw(pauzeText);
+            Window::instance()->getWindow()->draw(pressEscape);
             Window::instance()->getWindow()->display();
         }
         else if (this->getStateManager()->getCurrentTag() == victory){
@@ -137,9 +144,18 @@ GUI::Game::Game() {
             pressSpace.setFillColor(sf::Color::White);
             pressSpace.setPosition(50 , 400);
             pressSpace.setString("Press space to go to the next level");
+
+            sf::Text pressEscape;
+            pressEscape.setFont(font1);
+            pressEscape.setCharacterSize(15);
+            pressEscape.setFillColor(sf::Color::White);
+            pressEscape.setPosition(120 , 450);
+            pressEscape.setString("Press escape to go to the main menu");
+
             Window::instance()->getWindow()->clear();
             Window::instance()->getWindow()->draw(introText3);
             Window::instance()->getWindow()->draw(pressSpace);
+            Window::instance()->getWindow()->draw(pressEscape);
             Window::instance()->getWindow()->display();
         }
         else if (this->getStateManager()->getCurrentTag() == gameOver){
@@ -161,7 +177,6 @@ GUI::Game::Game() {
         Window::instance()->getWindow()->draw(pressSpace);
         Window::instance()->getWindow()->display();
         }
-
     }
 }
 
@@ -180,20 +195,21 @@ direction GUI::Game::getDirection() {
     return direction::none;
 }
 
-pair<int, int> GUI::Game::cameraToPixels(double xCamera, double yCamera) const {
-    int x = int((xCamera + 1) / 2 * float(this->getScreenWidth()));
-    int y = int((yCamera + 1) / 2 * float(this->getScreenHeight()));
-    return make_pair(x, y);
-}
-
 
 key GUI::Game::getInput() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
-        return escape;
-    }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
-        return space;
-    }else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)){
-        return backspace;
+    // Er mag elke 0.5 seconden en unieke nieuwe input zijn:
+    static double lastInput = Model::Stopwatch::instance()->getTotalSeconds();
+    if (lastInput + 0.5 < Model::Stopwatch::instance()->getTotalSeconds()){
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+            lastInput = Model::Stopwatch::instance()->getTotalSeconds();
+            return escape;
+        }else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)){
+            lastInput = Model::Stopwatch::instance()->getTotalSeconds();
+            return space;
+        }else if (sf::Keyboard::isKeyPressed(sf::Keyboard::BackSpace)){
+            lastInput = Model::Stopwatch::instance()->getTotalSeconds();
+            return backspace;
+        }
     }
     return noKey;
 }

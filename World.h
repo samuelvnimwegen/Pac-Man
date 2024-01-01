@@ -44,6 +44,8 @@ public:
 
     void restartWorld();
 
+    void nextLevel();
+
     void update(const double &seconds) const;
 
     [[nodiscard]] int getHeight() const;

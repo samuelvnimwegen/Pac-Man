@@ -1000,6 +1000,17 @@ void Model::World::restartWorld() {
     this->getScoreClass()->restart();
 }
 
+void Model::World::nextLevel() {
+    this->restart();
+    for (const auto& coin: this->getCoins()){
+        coin->restart();
+    }
+    for (const auto& fruit: this->getFruits()){
+        fruit->restart();
+    }
+    this->setCoinsLeft(int(this->getCoins().size() + this->getFruits().size()));
+}
+
 void Model::Score::update(const double &seconds) {
     auto stopwatch = Model::Stopwatch::instance();
     // Als de game gestart is zetten we de level start time gelijk aan de huidige kloktijd.

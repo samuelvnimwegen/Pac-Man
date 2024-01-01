@@ -7,13 +7,10 @@
 #include "State.h"
 
 class GUI::GameOverState: public GUI::State{
-    double gameOverTime;
 public:
     GameOverState(const std::weak_ptr<StateManager> &stateManager, const std::weak_ptr<Model::World> &world);
 
     void update(const key &key) override;
-
-    [[nodiscard]] double getGameOverTime() const;
 };
 
 

@@ -37,8 +37,6 @@ public:
 
     static key getInput();
 
-    [[nodiscard]] std::pair<int, int> cameraToPixels(double xCamera, double yCamera) const;
-
     [[nodiscard]] const std::shared_ptr<Model::World> &getWorld() const;
 
     [[nodiscard]] const std::shared_ptr<GUI::Camera> &getCamera() const;
