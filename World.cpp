@@ -298,7 +298,7 @@ Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : Entity
     dead = false;
     this->setCurrentDirection(direction::none);
     this->setNextDirection(direction::none);
-    speed = 8.0;
+    speed = 5.0;
     this->setTag(pacMan);
     hasMoved = false;
     startRow = row;
@@ -366,7 +366,7 @@ Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world
     startCol = col;
     nextDirection = direction::none;
     waitTime = 0;
-    defaultSpeed = 11.0 / 4;
+    defaultSpeed = 2.5;
     speed = defaultSpeed;
     frightened = false;
 

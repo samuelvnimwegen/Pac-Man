@@ -84,6 +84,13 @@ GUI::Game::Game() {
     pauzeText.setPosition(70, 250);
     pauzeText.setString("press space to unpause");
 
+    // Text voor level waar we nu zijn:
+    sf::Text levelText;
+    levelText.setFont(font);
+    levelText.setCharacterSize(15);
+    levelText.setFillColor(sf::Color::White);
+    levelText.setPosition(340, float(this->getScreenHeight()) + 20);
+
     while (Window::instance()->getWindow()->isOpen()){
         sf::Event event{};
         while(Window::instance()->getWindow()->pollEvent(event)){
@@ -110,12 +117,14 @@ GUI::Game::Game() {
             }
             this->getWorld()->getPacMan()->changeDirection(direction);
 
-            // Text voor score en voor levens:
+            // Text voor score, level en voor levens:
+            levelText.setString("level " + to_string(this->getWorld()->getLevelNr() + 1));
             text.setString("score " + to_string(this->getWorld()->getScoreClass()->getScore()));
             livesText.setString("lives left " + to_string(this->getWorld()->getScoreClass()->getLivesLeft()));
             Window::instance()->getWindow()->clear();
             this->getWorld()->update(time);
             Window::instance()->getWindow()->draw(text);
+            Window::instance()->getWindow()->draw(levelText);
             this->drawLives();
             Window::instance()->getWindow()->display();
         }
