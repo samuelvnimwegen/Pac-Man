@@ -3,7 +3,7 @@
 //
 
 #include "GUIPacMan.h"
-
+#include "Camera.h"
 using namespace std;
 
 

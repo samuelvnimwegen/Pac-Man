@@ -11,7 +11,6 @@
 #include "cassert"
 #include "PacMan.h"
 #include "Wall.h"
-#include "Camera.h"
 #include "Coin.h"
 #include "Ghost.h"
 #include "Observer.h"

@@ -4,8 +4,8 @@
 
 #ifndef PAC_MAN_ENTITYVIEW_H
 #define PAC_MAN_ENTITYVIEW_H
-#include "../Observer.h"
-#include "../World.h"
+#include "../Model/Observer.h"
+#include "../Model/World.h"
 #include "SFML/Graphics.hpp"
 #include "Window.h"
 

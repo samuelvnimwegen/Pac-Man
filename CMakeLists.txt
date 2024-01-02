@@ -3,25 +3,26 @@ project(Pac-Man)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Pac-Man main.cpp
-        Subject.cpp
-        Score.cpp
-        EntityModel.cpp
-        Ghost.cpp
-        Wall.cpp
-        Collectable.cpp
-        Camera.cpp
-        World.cpp
-        Observer.cpp
+add_executable(Pac-Man
+        main.cpp
+        Model/Subject.cpp
+        Model/Score.cpp
+        Model/EntityModel.cpp
+        Model/Ghost.cpp
+        Model/Wall.cpp
+        Model/Collectable.cpp
+        GUI/Camera.cpp
+        Model/World.cpp
+        Model/Observer.cpp
         GUI/Game.cpp
         GUI/EntityView.cpp
         GUI/GUIWall.cpp
         GUI/ConcreteFactory.cpp
-        AbstractFactory.cpp
-        Stopwatch.cpp
+        Model/AbstractFactory.cpp
+        Model/Stopwatch.cpp
         GUI/GUIPacMan.cpp
-        PacMan.cpp
-        Coin.cpp
+        Model/PacMan.cpp
+        Model/Coin.cpp
         GUI/GUICoin.cpp
         GUI/StateManager.cpp
         GUI/State.cpp
@@ -30,19 +31,20 @@ add_executable(Pac-Man main.cpp
         GUI/VictoryState.cpp
         GUI/PausedState.cpp
         GUI/GUIGhost.cpp
-        Fruit.cpp
-        Random.cpp
-        GhostStateManager.cpp
-        GhostIdleState.cpp
-        GhostState.cpp
-        GhostChasingState.cpp
-        GhostFrightenedState.cpp
-        GhostResetState.cpp
+        Model/Fruit.cpp
+        Model/Random.cpp
+        Model/GhostStateManager.cpp
+        Model/GhostIdleState.cpp
+        Model/GhostState.cpp
+        Model/GhostChasingState.cpp
+        Model/GhostFrightenedState.cpp
+        Model/GhostResetState.cpp
         GUI/GUIFruit.cpp
-        GhostEatenState.cpp
+        Model/GhostEatenState.cpp
         GUI/Window.cpp
         GUI/GameOverState.cpp
-        GhostIdleFrightenedState.cpp
+        Model/GhostIdleFrightenedState.cpp
+        Model/AbstractFactory.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

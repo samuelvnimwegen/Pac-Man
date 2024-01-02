@@ -5,7 +5,7 @@
 #include "GUICoin.h"
 
 #include <utility>
-
+#include "Camera.h"
 
 
 GUI::GUICoin::GUICoin(const std::shared_ptr<Model::Coin> &coin) : GUI::EntityView(coin) {

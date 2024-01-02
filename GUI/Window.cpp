@@ -3,7 +3,7 @@
 //
 
 #include "Window.h"
-#include "../Camera.h"
+#include "../GUI/Camera.h"
 #include <memory>
 std::shared_ptr<GUI::Window> GUI::Window::windowPointer = nullptr;
 

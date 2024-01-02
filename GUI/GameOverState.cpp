@@ -3,7 +3,7 @@
 //
 
 #include "GameOverState.h"
-#include "../World.h"
+#include "../Model/World.h"
 #include "StateManager.h"
 
 GUI::GameOverState::GameOverState(const std::weak_ptr<StateManager> &stateManager,

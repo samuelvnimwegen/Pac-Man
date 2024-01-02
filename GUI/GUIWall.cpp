@@ -6,7 +6,7 @@
 
 #include <memory>
 #include <utility>
-
+#include "Camera.h"
 
 GUI::GUIWall::~GUIWall() = default;
 

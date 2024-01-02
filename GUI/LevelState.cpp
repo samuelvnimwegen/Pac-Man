@@ -3,7 +3,7 @@
 //
 
 #include "LevelState.h"
-#include "../World.h"
+#include "../Model/World.h"
 #include <memory>
 #include "StateManager.h"
 #include "VictoryState.h"

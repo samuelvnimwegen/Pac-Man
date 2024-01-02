@@ -3,6 +3,7 @@
 //
 
 #include "GUIFruit.h"
+#include "Camera.h"
 
 GUI::GUIFruit::GUIFruit(const std::shared_ptr<Model::Fruit> &subject)
         : GUI::EntityView(subject), subject(subject){

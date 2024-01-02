@@ -4,7 +4,7 @@
 
 #include "EntityView.h"
 #include <utility>
-
+#include "Camera.h"
 
 
 

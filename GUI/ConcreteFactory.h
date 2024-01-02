@@ -10,7 +10,7 @@
 #include "GUICoin.h"
 #include "GUIGhost.h"
 #include "GUIFruit.h"
-#include "../AbstractFactory.h"
+#include "../Model/AbstractFactory.h"
 #include "memory"
 
 

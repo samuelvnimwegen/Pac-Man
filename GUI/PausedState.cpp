@@ -3,9 +3,8 @@
 //
 
 #include "PausedState.h"
-#include "../Stopwatch.h"
 #include "StateManager.h"
-#include "../World.h"
+#include "../Model/World.h"
 
 GUI::PausedState::PausedState(const std::weak_ptr<StateManager> &stateManager, const std::weak_ptr<Model::World> &world)
         : State(stateManager, world) {

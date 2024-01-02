@@ -3,9 +3,8 @@
 //
 
 #include "VictoryState.h"
-#include "../Stopwatch.h"
 #include "StateManager.h"
-#include "../World.h"
+#include "../Model/World.h"
 
 GUI::VictoryState::VictoryState(const std::weak_ptr<StateManager> &stateManager,
                                 const std::weak_ptr<Model::World> &world) : State(stateManager, world) {

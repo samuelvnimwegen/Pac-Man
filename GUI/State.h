@@ -6,8 +6,8 @@
 #define PAC_MAN_STATE_H
 #include "iostream"
 #include "vector"
-#include "../Subject.h"
-#include "../Stopwatch.h"
+#include "../Model/Subject.h"
+#include "../Model/Stopwatch.h"
 
 namespace GUI{
     class ConcreteFactory;
