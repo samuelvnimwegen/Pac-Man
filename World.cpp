@@ -141,16 +141,15 @@ void Model::World::buildWorld() {
     this->getFactory()->createWall(8, this->getWidth() - 1 - 5);
     this->getFactory()->createWall(9, this->getWidth() - 1 - 5);
 
-    this->getFactory()->createPacMan(1, 1);
+    this->getFactory()->createPacMan(9, 9);
 
     this->getFactory()->createGhost(5, 8);
     this->getFactory()->createGhost(5, 9);
     this->getFactory()->createGhost(5, 10);
     this->getFactory()->createGhost(5, 11);
 
-    this->getFactory()->createFruit(9, 1);
+    this->getFactory()->createFruit(1, 1);
     this->getFactory()->createFruit(9, 18);
-    this->getFactory()->createFruit(1, 18);
 
     vector<pair<int, int>> illegalPairs = {{5, 8}, {5, 9}, {5, 10}, {5, 11}, {4, 9}, {4, 10}};
     for (int i = 0; i < this->getHeight(); ++i){
