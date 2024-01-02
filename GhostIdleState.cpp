@@ -15,7 +15,7 @@ void Model::GhostIdleState::update() {
         if (this->getGhost().lock()->isFrightened()){
             this->getGhost().lock()->setFrightened(false);
         }
-        else if (Model::Stopwatch::instance()->getLevelTime() > this->getGhost().lock()->getWaitTime()){
+        else if (Model::Stopwatch::instance()->getLevelTime() > this->getGhost().lock()->getWaitTime() and this->getGhost().lock()->getWorld()->isGameStarted()){
             this->getStateManager().lock()->push(std::make_unique<GhostChasingState>(this->getStateManager(), this->getGhost()));
         }
     }
