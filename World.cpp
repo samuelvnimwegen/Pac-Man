@@ -358,6 +358,7 @@ bool Model::Ghost::canMove(const int &row, const int &col) {
 }
 
 Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world) : EntityModel(row, col), world(world) {
+    frightenTime = 0;
     this->setTag(ghost);
     currentDirection = direction::up;
     startDirection = direction::up;
@@ -659,6 +660,9 @@ bool Model::Ghost::isFrightened() const {
 }
 
 void Model::Ghost::setFrightened(bool b) {
+    if (!b){
+        this->setFrightenTime(Stopwatch::instance()->getLevelTime());
+    }
     Ghost::frightened = b;
 }
 
@@ -681,6 +685,14 @@ int Model::Ghost::getManhattanDistanceSpawn(const direction &direction) {
 double Model::Ghost::getDefaultSpeed()  {
     // Elk level wordt de snelheid 10% sneller
     return defaultSpeed * pow(1.10, this->getWorld()->getLevelNr());
+}
+
+double Model::Ghost::getFrightenTime() const {
+    return frightenTime;
+}
+
+void Model::Ghost::setFrightenTime(double d) {
+    Ghost::frightenTime = d;
 }
 
 

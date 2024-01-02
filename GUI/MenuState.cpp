@@ -9,6 +9,7 @@
 void GUI::MenuState::update(const key &key) {
     if (key == space){
         this->getStateManager().lock()->push(std::make_unique<LevelState>(this->getStateManager(), this->getWorld()));
+        Model::Stopwatch::instance()->startLevel();
     }
 }
 

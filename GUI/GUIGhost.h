@@ -9,6 +9,8 @@
 class GUI::GUIGhost: public GUI::EntityView{
     std::weak_ptr<Model::Ghost> subject;
     int textureNr;
+    int fearedTextureNr;
+    double fearedUpdateTime;
     int spriteX;
     std::shared_ptr<sf::Texture> scoreTexture;
 public:
@@ -27,6 +29,16 @@ public:
     void setTextureNr(int nr);
 
     [[nodiscard]] int getSpriteX() const;
+
+    [[nodiscard]] int getFearedTextureNr() const;
+
+    void setFearedTextureNr(int nr);
+
+    [[nodiscard]] double getFearedUpdateTime() const;
+
+    void setFearedUpdateTime(double updateTime);
+
+    void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) override;
 };
 
 

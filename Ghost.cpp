@@ -118,6 +118,7 @@ void Model::Ghost::reset() {
     this->setNextDirection(none);
     this->setX(getStartCol());
     this->setY(getStartRow());
+    this->setFrightenTime(0);
     this->getStateManager()->reset();
 }
 
