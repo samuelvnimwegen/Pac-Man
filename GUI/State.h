@@ -28,7 +28,7 @@ namespace GUI{
     class Window;
     class GameOverState;
 }
-enum key{space, backspace, escape, noKey};
+enum key{space, backspace, escape, noKey, leftMouseButton, startButton};
 enum stateTag{victory, menu, paused, level, gameOver};
 
 class GUI::State {

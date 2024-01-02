@@ -57,12 +57,7 @@ GUI::Game::Game() {
     // Text voor start:
     sf::Font font1;
     assert(font1.loadFromFile("IntroFont.ttf"));
-    sf::Text introText;
-    introText.setFont(font1);
-    introText.setCharacterSize(20);
-    introText.setFillColor(sf::Color::White);
-    introText.setPosition(200 , 450);
-    introText.setString("press space to begin");
+
     sf::Text introText2;
     introText2.setFont(font1);
     introText2.setCharacterSize(80);
@@ -103,8 +98,8 @@ GUI::Game::Game() {
         if (this->getStateManager()->getCurrentTag() == menu){
             Window::instance()->getWindow()->clear();
             Window::instance()->getWindow()->draw(introSprite);
-            Window::instance()->getWindow()->draw(introText);
             Window::instance()->getWindow()->draw(introText2);
+            drawStartButton();
             drawScoreboard();
             Window::instance()->getWindow()->display();
         }
@@ -221,6 +216,14 @@ key GUI::Game::getInput() {
             lastInput = Model::Stopwatch::instance()->getTotalSeconds();
             return backspace;
         }
+        else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+            auto mouseX = getMousePosition().x;
+            auto mouseY = getMousePosition().y;
+            if (mouseX < 550 and mouseX > 250 and mouseY < 463 and mouseY > 410){
+                return startButton;
+            }
+            return leftMouseButton;
+        }
     }
     return noKey;
 }
@@ -289,6 +292,43 @@ void GUI::Game::drawScoreboard() {
         ++counter;
         window->draw(scoreBoardText);
     }
+}
+
+sf::Vector2i GUI::Game::getMousePosition() {
+    return sf::Mouse::getPosition(*GUI::Window::instance()->getWindow());
+}
+
+void GUI::Game::drawStartButton() {
+    auto window = Window::instance()->getWindow();
+    auto rect = sf::RectangleShape(sf::Vector2f(300, 50));
+    rect.setFillColor(sf::Color::Transparent);
+    rect.setOutlineColor(sf::Color::White);
+    rect.setOutlineThickness(4);
+    rect.setPosition(250 , 407);
+
+    auto rect2 = sf::RectangleShape(sf::Vector2f(300, 50));
+    rect2.setFillColor(sf::Color::Transparent);
+    rect2.setOutlineColor(sf::Color::White);
+    rect2.setOutlineThickness(4);
+    rect2.setPosition(250 , 410);
+
+    sf::Font font;
+    font.loadFromFile("IntroFont.ttf");
+    sf::Text introText;
+    introText.setFont(font);
+    introText.setCharacterSize(20);
+    introText.setFillColor(sf::Color::White);
+    introText.setPosition(360 , 428);
+    introText.setString("Play");
+
+    auto mouseX = getMousePosition().x;
+    auto mouseY = getMousePosition().y;
+    if (!(mouseX < 550 and mouseX > 250 and mouseY < 463 and mouseY > 410)){
+        window->draw(rect);
+        introText.setPosition(360 , 425);
+    }
+    window->draw(rect2);
+    window->draw(introText);
 }
 
 

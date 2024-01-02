@@ -3,7 +3,6 @@
 //
 
 #include "Score.h"
-#include "cmath"
 #include "fstream"
 #include "algorithm"
 

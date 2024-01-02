@@ -51,6 +51,9 @@ public:
 
     static void drawScoreboard() ;
 
+    static sf::Vector2i getMousePosition();
+
+    static void drawStartButton();
 };
 
 
