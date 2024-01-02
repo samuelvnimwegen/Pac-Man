@@ -16,6 +16,9 @@ public:
     GhostFrightenedState(const std::weak_ptr<Model::GhostStateManager> &stateManager,
                          const std::weak_ptr<Model::Ghost> &ghost);
 
+    GhostFrightenedState(const std::weak_ptr<Model::GhostStateManager> &stateManager,
+                         const std::weak_ptr<Model::Ghost> &ghost, double frightenedTime);
+
     void update() override;
 
     [[nodiscard]] double getFrightenedTime() const;

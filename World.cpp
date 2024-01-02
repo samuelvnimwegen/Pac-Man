@@ -374,7 +374,7 @@ Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world
 
 void Model::Ghost::move(const double &seconds) {
     // Niks doen bij idle mode:
-    if (this->getStateManager()->getCurrentTag() == ghostStateTag::idle or this->getStateManager()->getCurrentTag() == ghostStateTag::eaten){
+    if (this->getStateManager()->getCurrentTag() == ghostStateTag::idle or this->getStateManager()->getCurrentTag() == ghostStateTag::eaten or this->getStateManager()->getCurrentTag() == ghostStateTag::idleFrightened){
         return;
     }
     if (this->getCurrentDirection() == direction::up){
@@ -758,8 +758,7 @@ void Model::PacMan::move(const double &seconds) {
                         }
                         if (item->getTag() == fruit){
                             for (const auto& ghost: this->getWorld()->getGhosts()){
-                                if (ghost->getStateManager()->getCurrentTag() == ghostStateTag::frightened or
-                                ghost->getStateManager()->getCurrentTag() == ghostStateTag::chasing){
+                                if (ghost->getStateManager()->getCurrentTag() <= 2) {
                                     ghost->setFrightened(true);
                                 }
                             }
@@ -830,8 +829,7 @@ void Model::PacMan::move(const double &seconds) {
                         }
                         if (item->getTag() == fruit){
                             for (const auto& ghost: this->getWorld()->getGhosts()){
-                                if (ghost->getStateManager()->getCurrentTag() == ghostStateTag::frightened or
-                                    ghost->getStateManager()->getCurrentTag() == ghostStateTag::chasing){
+                                if (ghost->getStateManager()->getCurrentTag() <= 2) {
                                     ghost->setFrightened(true);
                                 }
                             }
@@ -901,8 +899,7 @@ void Model::PacMan::move(const double &seconds) {
                         }
                         if (item->getTag() == fruit){
                             for (const auto& ghost: this->getWorld()->getGhosts()){
-                                if (ghost->getStateManager()->getCurrentTag() == ghostStateTag::frightened or
-                                    ghost->getStateManager()->getCurrentTag() == ghostStateTag::chasing){
+                                if (ghost->getStateManager()->getCurrentTag() <= 2) {
                                     ghost->setFrightened(true);
                                 }
                             }
@@ -973,8 +970,7 @@ void Model::PacMan::move(const double &seconds) {
                         }
                         if (item->getTag() == fruit){
                             for (const auto& ghost: this->getWorld()->getGhosts()){
-                                if (ghost->getStateManager()->getCurrentTag() == ghostStateTag::frightened or
-                                    ghost->getStateManager()->getCurrentTag() == ghostStateTag::chasing){
+                                if (ghost->getStateManager()->getCurrentTag() <= 2) {
                                     ghost->setFrightened(true);
                                 }
                             }

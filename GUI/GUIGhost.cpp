@@ -11,6 +11,7 @@
 
 
 GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostColor) : GUI::EntityView(ghost) {
+    fearedUpdateTime = 0;
     fearedTextureNr = 0;
     subject = ghost;
     textureNr = 0;
@@ -60,6 +61,7 @@ void GUI::GUIGhost::updateSprite() {
         }
         lastUpdated = Model::Stopwatch::instance()->getTotalSeconds();
     }
+
     auto pixelX = getSpriteX();
     if (this->getSubject()->getStateManager()->getCurrentTag() != ghostStateTag::frightened){
         this->setFearedUpdateTime(0);
@@ -100,7 +102,10 @@ void GUI::GUIGhost::updateSprite() {
     else if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::idle){
         pixelY = 0;
     }
-
+    else if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::idleFrightened){
+        pixelX = 0;
+        pixelY = 550;
+    }
     // Als de ghost is opgegeten score displayen van 100 i.p.v. sprite
     if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::eaten){
         sprite = sf::Sprite(*this->getScoreTexture());

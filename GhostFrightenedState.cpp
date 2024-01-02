@@ -42,3 +42,13 @@ Model::GhostFrightenedState::GhostFrightenedState(const std::weak_ptr<Model::Gho
 double Model::GhostFrightenedState::getFrightenedTime() const {
     return frightenedTime;
 }
+
+Model::GhostFrightenedState::GhostFrightenedState(const std::weak_ptr<Model::GhostStateManager> &stateManager,
+                                                  const std::weak_ptr<Model::Ghost> &ghost, double frightenedTime)
+        : GhostState(stateManager, ghost), frightenedTime(frightenedTime) {
+    tag = ghostStateTag::frightened;
+    if (this->getGhost().lock()){
+        // Maak de ghosts half zo snel als normaal
+        this->getGhost().lock()->setSpeed(this->getGhost().lock()->getDefaultSpeed() / 2);
+    }
+}

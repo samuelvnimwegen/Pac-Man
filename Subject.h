@@ -30,6 +30,7 @@ namespace Model{
     class GhostFrightenedState;
     class GhostResetState;
     class GhostEatenState;
+    class GhostIdleFrightenedState;
 }
 enum direction {right, down, left, up, none};
 
