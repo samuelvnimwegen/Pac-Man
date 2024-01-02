@@ -97,6 +97,9 @@ void GUI::GUIGhost::updateSprite() {
         pixelX = 300;
         pixelY = 250 + dir * 50;
     }
+    else if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::idle){
+        pixelY = 0;
+    }
 
     // Als de ghost is opgegeten score displayen van 100 i.p.v. sprite
     if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::eaten){
