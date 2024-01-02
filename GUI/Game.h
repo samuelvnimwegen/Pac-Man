@@ -49,6 +49,8 @@ public:
 
     void drawLives() const;
 
+    static void drawScoreboard() ;
+
 };
 
 

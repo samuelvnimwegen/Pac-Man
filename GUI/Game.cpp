@@ -7,6 +7,7 @@
 #include <memory>
 #include "ConcreteFactory.h"
 #include "MenuState.h"
+#include "fstream"
 using namespace std;
 
 
@@ -104,6 +105,7 @@ GUI::Game::Game() {
             Window::instance()->getWindow()->draw(introSprite);
             Window::instance()->getWindow()->draw(introText);
             Window::instance()->getWindow()->draw(introText2);
+            drawScoreboard();
             Window::instance()->getWindow()->display();
         }
         else if (this->getStateManager()->getCurrentTag() == level){
@@ -255,6 +257,31 @@ void GUI::Game::drawLives() const {
         offset += 40;
     }
 
+}
+
+void GUI::Game::drawScoreboard() {
+    auto window = GUI::Window::instance()->getWindow();
+
+    sf::Text scoreBoardText;
+    sf::Font font;
+    font.loadFromFile("IntroFont.ttf");
+    scoreBoardText.setFont(font);
+
+    scoreBoardText.setCharacterSize(15);
+    scoreBoardText.setFillColor(sf::Color::White);
+    scoreBoardText.setPosition(580, 10);
+    scoreBoardText.setString("scoreboard:");
+    window->draw(scoreBoardText);
+
+    ifstream scoreFile("ScoreBoard.txt");
+    string score;
+    int counter = 1;
+    while (scoreFile >> score){
+        scoreBoardText.setString(score);
+        scoreBoardText.setPosition(625, float(10 + counter * 25));
+        ++counter;
+        window->draw(scoreBoardText);
+    }
 }
 
 
