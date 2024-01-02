@@ -355,7 +355,7 @@ Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world
     startCol = col;
     nextDirection = direction::none;
     waitTime = 0;
-    defaultSpeed = 2.5;
+    defaultSpeed = 1.5;
     speed = defaultSpeed;
     frightened = false;
 
