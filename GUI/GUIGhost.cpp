@@ -4,7 +4,6 @@
 
 #include "GUIGhost.h"
 
-#include <utility>
 #include "cmath"
 #include "Camera.h"
  using namespace std;

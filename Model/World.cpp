@@ -17,7 +17,6 @@ Model::World::World() {
     width = 20;
     height = 11;
     factory = nullptr;
-    coinsLeft = 0;
     pacMan = nullptr;
     score = nullptr;
 }
@@ -160,21 +159,11 @@ void Model::World::buildWorld() {
             }
         }
     }
-    this->setCoinsLeft(int(this->getCoins().size() + this->getFruits().size()));
 
 }
 
 Model::World::~World() = default;
 
-
-
-int Model::World::getCoinsLeft() const {
-    return coinsLeft;
-}
-
-void Model::World::setCoinsLeft(int coinsAmount) {
-    World::coinsLeft = coinsAmount;
-}
 
 void Model::World::restart() {
     this->getPacMan()->reset();
@@ -1016,7 +1005,6 @@ void Model::World::restartWorld() {
     for (const auto& fruit: this->getFruits()){
         fruit->restart();
     }
-    this->setCoinsLeft(int(this->getCoins().size() + this->getFruits().size()));
     this->getScoreClass()->restart();
     this->setLevelNr(0);
 }
@@ -1029,7 +1017,7 @@ void Model::World::nextLevel() {
     for (const auto& fruit: this->getFruits()){
         fruit->restart();
     }
-    this->setCoinsLeft(int(this->getCoins().size() + this->getFruits().size()));
+    this->getScoreClass()->nextLevel();
     this->setLevelNr(this->getLevelNr() + 1);
 }
 
@@ -1064,7 +1052,7 @@ void Model::Score::collectableCollected(const std::weak_ptr<Model::Collectable> 
     double doubleValue = collectable.lock()->getValue() * this->getAmplifyingFactor();
     this->setScore(this->getScore() + int(std::round(doubleValue)));
     if (this->getWorld().lock() and collectable.lock() and collectable.lock()->getTag() == coin or collectable.lock()->getTag() == fruit){
-        this->getWorld().lock()->setCoinsLeft(this->getWorld().lock()->getCoinsLeft() - 1);
+        this->setCoinsCollected(this->getCoinsCollected() + 1);
     }
 }
 
@@ -1086,6 +1074,13 @@ void Model::PacMan::update(const double &seconds) {
     }
     for (const auto& observer: this->getObservers()){
         observer->update(seconds);
+    }
+
+}
+
+void Model::Score::nextLevel() {
+    if (this->getWorld().lock()){
+        this->setCoinsCollected(0);
     }
 
 }

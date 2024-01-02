@@ -8,6 +8,7 @@
 #include "algorithm"
 
 Model::Score::Score(const std::weak_ptr<Model::World> &world) : world(world) {
+    coinsCollected = 0;
     livesLeft = 3;
     score = 0;
     lastCollected = 0;
@@ -132,6 +133,7 @@ void Model::Score::restart() {
     this->storeScoreBoard();
     this->setScore(0);
     this->setLivesLeft(3);
+    this->setCoinsCollected(0);
 }
 
 int Model::Score::getLivesLeft() const {
@@ -140,6 +142,14 @@ int Model::Score::getLivesLeft() const {
 
 void Model::Score::setLivesLeft(int i) {
     Score::livesLeft = i;
+}
+
+int Model::Score::getCoinsCollected() const {
+    return coinsCollected;
+}
+
+void Model::Score::setCoinsCollected(int i) {
+    Score::coinsCollected = i;
 }
 
 

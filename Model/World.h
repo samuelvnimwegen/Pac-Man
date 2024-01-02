@@ -29,7 +29,6 @@ class Model::World {
     std::vector<std::shared_ptr<Ghost>> ghosts;
     std::vector<std::shared_ptr<Wall>> walls;
     std::vector<std::shared_ptr<Fruit>> fruits;
-    int coinsLeft;
     bool gameStarted;
     std::shared_ptr<Model::Score> score;
     int levelNr;
@@ -59,10 +58,6 @@ public:
     [[nodiscard]] std::shared_ptr<AbstractFactory> getFactory() const;
 
     void setFactory(std::shared_ptr<AbstractFactory> fac);
-
-    [[nodiscard]] int getCoinsLeft() const;
-
-    void setCoinsLeft(int coinsAmount);
 
     void addGhost(const std::shared_ptr<Model::Ghost>& ghost);
 

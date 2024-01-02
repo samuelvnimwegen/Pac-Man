@@ -25,7 +25,9 @@ void GUI::LevelState::update(const key &key){
                 !this->getWorld().lock()->getPacMan()->isDead()){
             this->getStateManager().lock()->push(std::make_unique<GameOverState>(this->getStateManager(), this->getWorld()));
         }
-        else if (this->getWorld().lock()->getCoinsLeft() == 0){
+        else if (int(this->getWorld().lock()->getCoins().size()) + int(this->getWorld().lock()->getFruits().size()) ==
+        this->getWorld().lock()->getScoreClass()->getCoinsCollected())
+        {
             this->getStateManager().lock()->push(std::make_unique<VictoryState>(this->getStateManager(), this->getWorld()));
         }
         else if (key == escape){

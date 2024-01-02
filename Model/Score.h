@@ -18,6 +18,7 @@ class Model::Score: public Model::Observer {
     std::weak_ptr<Model::World> world;
     std::vector<int> scoreBoard;
     int livesLeft;
+    int coinsCollected;
 public:
     explicit Score(const std::weak_ptr<Model::World> &world);
 
@@ -30,6 +31,8 @@ public:
      * Voegt laatste score toe aan scoreboard als deze in de top 5 zit en stopt deze in de .txt file
      */
     void storeScoreBoard();
+
+    void nextLevel();
 
     void restart();
 
@@ -66,6 +69,10 @@ public:
     [[nodiscard]] int getLivesLeft() const;
 
     void setLivesLeft(int i);
+
+    [[nodiscard]] int getCoinsCollected() const;
+
+    void setCoinsCollected(int i);
 };
 
 

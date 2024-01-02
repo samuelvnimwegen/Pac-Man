@@ -20,9 +20,8 @@ void GUI::PausedState::update(const key &key) {
         // Als er opnieuw escape wordt geduwd en er is 0.5 seconde voorbij (om dubbele clicks te voorkomen): poppen tot
         // stacks size 1 heeft:
         if (key == escape and (Model::Stopwatch::instance()->getLevelTime() - this->getPausedTime()) > 0.5){
+            world->restartWorld();
             while (stateManager->getSize() > 1){
-                world->restart();
-                world->getScoreClass()->restart();
                 stateManager->pop();
             }
         }
