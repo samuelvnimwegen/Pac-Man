@@ -262,6 +262,13 @@ void GUI::Game::drawLives() const {
 void GUI::Game::drawScoreboard() {
     auto window = GUI::Window::instance()->getWindow();
 
+    sf::RectangleShape rectangle(sf::Vector2f(170, 150));
+    rectangle.setOutlineColor(sf::Color::Blue);
+    rectangle.setFillColor(sf::Color::Transparent);
+    rectangle.setOutlineThickness(5);
+    rectangle.setPosition(580, 10);
+    window->draw(rectangle);
+
     sf::Text scoreBoardText;
     sf::Font font;
     font.loadFromFile("IntroFont.ttf");
