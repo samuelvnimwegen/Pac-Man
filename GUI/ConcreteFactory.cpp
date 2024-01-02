@@ -74,12 +74,12 @@ shared_ptr<Model::Ghost> GUI::ConcreteFactory::createGhost(const int &row, const
     }
 
     // Wachttijd waarin de ghost idle is aanpassen: 3 seconden meer dan vorige ghost die is toegevoegd
-    if (this->getWorld()->getGhosts().empty()){
+    if (this->getWorld()->getGhosts().size() <= 1){
         entity->setWaitTime(0);
     }
     else{
         double waitTime = entity->getWorld()->getGhosts().at(entity->getWorld()->getGhosts().size() - 1)->getWaitTime();
-        entity->setWaitTime(waitTime + 3);
+        entity->setWaitTime(waitTime + 5);
     }
     shared_ptr<GUI::GUIGhost> observer(new GUI::GUIGhost(entity, ghostColor));
     entity->addObserver(observer);
