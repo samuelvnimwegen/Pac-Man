@@ -13,7 +13,7 @@ GUI::GUIFruit::GUIFruit(const std::shared_ptr<Model::Fruit> &subject)
     auto camCoords = Camera::instance()->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());
     auto windowCoords = cameraToPixels(camCoords.getXCoord(), camCoords.getYCoord());
 
-    auto sprite = std::make_shared<sf::Sprite>(*this->getTexture(), sf::IntRect(400, 300, 40, 40));
+    auto sprite = std::make_shared<sf::Sprite>(*this->getTexture(), sf::IntRect(600, 0, 40, 40));
     sprite->setPosition(float(windowCoords.first), float(windowCoords.second));
     this->setSprite(sprite);
 }
