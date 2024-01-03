@@ -31,6 +31,9 @@ namespace Model{
     class GhostResetState;
     class GhostEatenState;
     class GhostIdleFrightenedState;
+    class DijkstraGraph;
+    class DijkstraTransition;
+    class DijkstraPoint;
 }
 enum direction {right, down, left, up, none};
 

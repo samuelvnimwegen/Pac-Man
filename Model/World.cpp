@@ -9,6 +9,8 @@
 #include <utility>
 #include "cmath"
 #include "algorithm"
+
+
 using namespace std;
 
 Model::World::World() {
@@ -69,7 +71,15 @@ void Model::World::buildWorld() {
         }
         this->collectableWorld.push_back(row);
     }
-
+    // Map voor Walls maken:
+    for (int i = 0; i < this->getHeight(); ++i){
+        vector<std::shared_ptr<Model::Wall>> row;
+        row.reserve(this->getWidth());
+        for (int j = 0; j < this->getWidth(); ++j){
+            row.push_back(nullptr);
+        }
+        this->wallMap.push_back(row);
+    }
     // Muren om level heen
     for (int i = 0; i < this->getWidth(); ++i){
         this->getFactory()->createWall(0, i);
@@ -159,7 +169,9 @@ void Model::World::buildWorld() {
             }
         }
     }
-
+    auto graph = DijkstraGraph(this->getWallMap(), make_shared<DijkstraPoint>(1, 1), make_shared<DijkstraPoint>(6, 7));
+    graph.buildDijkstraMap();
+    graph.getDijkstraPath();
 }
 
 Model::World::~World() = default;
@@ -177,6 +189,7 @@ void Model::World::restart() {
 void Model::World::addWall(const std::shared_ptr<Model::Wall> &wall) {
     auto newWalls = this->getWalls();
     newWalls.push_back(wall);
+    wallMap.at(toTile(wall->getY())).at(toTile(wall->getX())) = wall;
     this->setWalls(newWalls);
 }
 
@@ -683,6 +696,10 @@ void Model::Ghost::setFrightenTime(double d) {
     Ghost::frightenTime = d;
 }
 
+direction Model::Ghost::getDijkstraDirection() {
+    return up;
+}
+
 
 void Model::PacMan::move(const double &seconds) {
     this->setHasMoved(true);
@@ -1027,6 +1044,10 @@ int Model::World::getLevelNr() const {
 
 void Model::World::setLevelNr(int nr) {
     World::levelNr = nr;
+}
+
+const vector<std::vector<std::shared_ptr<Model::Wall>>> &Model::World::getWallMap() const {
+    return wallMap;
 }
 
 void Model::Score::update(const double &seconds) {

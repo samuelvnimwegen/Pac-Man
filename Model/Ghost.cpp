@@ -45,7 +45,9 @@ void Model::Ghost::changeDirection() {
             }
         }
     }
+    if (minDistance < 5){
 
+    }
     // Dit is voor hoeken en intersecties:
     if (!canMove(this->getCurrentDirection()) or viableDirections.size() >= 3){
         // Random getal tussen 0 en 1 berekenen, als deze kleiner is dan 0.5 beste richting kiezen:

@@ -45,6 +45,9 @@ add_executable(Pac-Man
         GUI/GameOverState.cpp
         Model/GhostIdleFrightenedState.cpp
         Model/AbstractFactory.cpp
+        Model/DijkstraGraph.cpp
+        Model/DijkstraPoint.cpp
+        Model/DijkstraTransition.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

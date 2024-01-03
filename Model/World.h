@@ -8,15 +8,16 @@
 #include "vector"
 #include "iostream"
 #include "AbstractFactory.h"
+#include "DijkstraGraph.h"
 #include "cassert"
 #include "PacMan.h"
-#include "Wall.h"
 #include "Coin.h"
 #include "Ghost.h"
 #include "Observer.h"
 #include "memory"
 #include "Score.h"
 #include "Fruit.h"
+#include "Wall.h"
 
 class Model::World {
     std::vector<std::vector<std::shared_ptr<Model::EntityModel>>> world;
@@ -28,6 +29,7 @@ class Model::World {
     std::vector<std::shared_ptr<Coin>> coins;
     std::vector<std::shared_ptr<Ghost>> ghosts;
     std::vector<std::shared_ptr<Wall>> walls;
+    std::vector<std::vector<std::shared_ptr<Wall>>> wallMap;
     std::vector<std::shared_ptr<Fruit>> fruits;
     bool gameStarted;
     std::shared_ptr<Model::Score> score;
@@ -100,6 +102,9 @@ public:
     [[nodiscard]] int getLevelNr() const;
 
     void setLevelNr(int nr);
+
+    [[nodiscard]] const std::vector<std::vector<std::shared_ptr<Wall>>> &getWallMap() const;
+
 
 };
 

@@ -28,7 +28,6 @@ public:
 
     std::shared_ptr <Model::Fruit> createFruit(const int &row, const int &col) override;
 
-    [[nodiscard]] const std::shared_ptr<sf::RenderWindow> &getWindow() const;
 
 };
 
