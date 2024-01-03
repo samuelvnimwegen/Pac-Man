@@ -8,6 +8,7 @@
 
 class GUI::GUIGhost: public GUI::EntityView{
     std::weak_ptr<Model::Ghost> subject;
+    double walkLastUpdated;
     int textureNr;
     int fearedTextureNr;
     double fearedUpdateTime;
@@ -39,6 +40,10 @@ public:
     void setFearedUpdateTime(double updateTime);
 
     void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) override;
+
+    [[nodiscard]] double getWalkLastUpdated() const;
+
+    void setWalkLastUpdated(double lastUpdated);
 };
 
 

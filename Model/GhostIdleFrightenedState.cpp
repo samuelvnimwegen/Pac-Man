@@ -15,7 +15,7 @@ void Model::GhostIdleFrightenedState::update() {
     }
     // Als hij langer dan de nodige tijdsduur feared is, terug naar vorige state
     // De fear-time begint op 5 seconden en wordt voor elk level 10% korter
-    else if (Model::Stopwatch::instance()->getLevelTime() - this->getFrightenedTime() > 5 * pow(0.9, this->getGhost().lock()->getWorld()->getLevelNr())){
+    else if (Model::Stopwatch::instance()->getLevelTime() - this->getFrightenedTime() > 7 * pow(0.9, this->getGhost().lock()->getWorld()->getLevelNr())){
         this->getStateManager().lock()->pop();
     }
     // Als hij opgegeten is door pacman, fearedIdle en Idle state clearen en naar eaten state:

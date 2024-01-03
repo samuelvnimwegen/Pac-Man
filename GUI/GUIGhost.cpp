@@ -11,6 +11,7 @@
 
 
 GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostColor) : GUI::EntityView(ghost) {
+    walkLastUpdated = 0;
     fearedUpdateTime = 0;
     fearedTextureNr = 0;
     subject = ghost;
@@ -51,31 +52,30 @@ void GUI::GUIGhost::updateSprite() {
     pixelY += this->getTextureNr() * 50;
 
     // Texture nummer bijwerken als game gestart is en er 0.075 seconden sinds laatste update voorbij is
-    static double lastUpdated = Model::Stopwatch::instance()->getTotalSeconds();
-    if (this->getSubject()->getWorld()->isGameStarted() and lastUpdated + 0.075 < Model::Stopwatch::instance()->getTotalSeconds()){
+    if (this->getSubject()->getWorld()->isGameStarted() and this->getWalkLastUpdated() + 0.075 < Model::Stopwatch::instance()->getTotalSeconds()){
         if (this->getTextureNr() == 0){
             this->setTextureNr(1);
         }
         else{
             this->setTextureNr(0);
         }
-        lastUpdated = Model::Stopwatch::instance()->getTotalSeconds();
+        this->setWalkLastUpdated(Model::Stopwatch::instance()->getTotalSeconds());
     }
 
     auto pixelX = getSpriteX();
-    if (this->getSubject()->getStateManager()->getCurrentTag() != ghostStateTag::frightened){
+    if (this->getSubject()->getStateManager()->getCurrentTag() != ghostStateTag::frightened and this->getSubject()->getStateManager()->getCurrentTag() != ghostStateTag::idleFrightened){
         this->setFearedUpdateTime(0);
     }
     // Als hij feared is, aanpassen
-    if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::frightened){
+    if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::frightened or this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::idleFrightened){
         pixelX = 0;
         pixelY += 550;
         auto levelNr = this->getSubject()->getWorld()->getLevelNr();
         // Als de eerste 75% van de frightened-time al voorbij is, knipper animatie:
-        if (this->getSubject()->getFrightenTime() + ((5 * pow(0.9, levelNr)) * 0.75) < Model::Stopwatch::instance()->getLevelTime()){
+        if (this->getSubject()->getFrightenTime() + ((7 * pow(0.9, levelNr)) * 0.75) < Model::Stopwatch::instance()->getLevelTime()){
             // Update-interval berekenen, we willen dat de animatie 5 keer (5 keer aan + uit → 10 keer updaten)
             // flikkert voor dat hij un-feared.
-            double updateInterval = 5 * pow(0.9, levelNr) * 0.25 / 10;
+            double updateInterval = 7 * pow(0.9, levelNr) * 0.25 / 10;
 
             // Kijken of er een interval voorbij is:
             if (this->getFearedUpdateTime() + updateInterval < Model::Stopwatch::instance()->getLevelTime()){
@@ -102,10 +102,7 @@ void GUI::GUIGhost::updateSprite() {
     else if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::idle){
         pixelY = 0;
     }
-    else if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::idleFrightened){
-        pixelX = 0;
-        pixelY = 550;
-    }
+
     // Als de ghost is opgegeten score displayen van 100 i.p.v. sprite
     if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::eaten){
         sprite = sf::Sprite(*this->getScoreTexture());
@@ -154,6 +151,14 @@ void GUI::GUIGhost::setFearedUpdateTime(double updateTime) {
 
 void GUI::GUIGhost::collectableCollected(const weak_ptr<Model::Collectable> &collectable) {
     EntityView::collectableCollected(collectable);
+}
+
+double GUI::GUIGhost::getWalkLastUpdated() const {
+    return walkLastUpdated;
+}
+
+void GUI::GUIGhost::setWalkLastUpdated(double lastUpdated) {
+    GUIGhost::walkLastUpdated = lastUpdated;
 }
 
 
