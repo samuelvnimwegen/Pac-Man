@@ -98,6 +98,7 @@ void GUI::GUIGhost::updateSprite() {
     else if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::reset){
         pixelX = 300;
         pixelY = 250 + dir * 50;
+        this->setFearedTextureNr(0);
     }
     else if (this->getSubject()->getStateManager()->getCurrentTag() == ghostStateTag::idle){
         pixelY = 0;
