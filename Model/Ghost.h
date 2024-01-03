@@ -35,6 +35,8 @@ public:
 
     direction getDijkstraDirection();
 
+    direction getDijkstraDirectionSpawn();
+
     [[nodiscard]] bool canMove(const int &row, const int &col) ;
 
     bool canMove(const direction &direction);

@@ -45,14 +45,41 @@ void Model::Ghost::changeDirection() {
             }
         }
     }
-    if (minDistance < 5){
-
+    // Als de ghost chasing is en niet op dezelfde tile staat als pacman, dijkstra-direction krijgen:
+    if (this->getStateManager()->getCurrentTag() == chasing){
+        auto pacMan = this->getWorld()->getPacMan();
+        if (toTile(this->getX()) != toTile(pacMan->getX()) or toTile(this->getY()) != toTile(pacMan->getY())){
+            auto dijkstraDirection = this->getDijkstraDirection();
+            if (canMove(dijkstraDirection)){
+                bestDirection = dijkstraDirection;
+            }
+        }
     }
+
+    // Als de ghost chasing is en niet op dezelfde tile staat als pacman, dijkstra-direction krijgen:
+    if (this->getStateManager()->getCurrentTag() == ghostStateTag::reset){
+        auto pacMan = this->getWorld()->getPacMan();
+        if (toTile(this->getX()) != this->getStartCol() or toTile(this->getY()) != this->getStartRow()){
+            auto dijkstraDirection = this->getDijkstraDirectionSpawn();
+            if (canMove(dijkstraDirection)){
+                bestDirection = dijkstraDirection;
+            }
+        }
+    }
+
     // Dit is voor hoeken en intersecties:
     if (!canMove(this->getCurrentDirection()) or viableDirections.size() >= 3){
-        // Random getal tussen 0 en 1 berekenen, als deze kleiner is dan 0.5 beste richting kiezen:
+        // Checken of de ghost in de spawn-region is en aan het chasen is:
+        auto col = toTile(this->getX());
+        auto row = toTile(this->getY());
+        auto posPair = make_pair(row, col);
+        auto spawnPairs = this->getWorld()->getSpawnRegion();
+        bool inSpawn = std::count(spawnPairs.begin(), spawnPairs.end(), posPair) and this->getStateManager()->getCurrentTag() == chasing;
+
+        // Random getal tussen 0 en 1 berekenen, als deze kleiner is dan 0.5 beste richting kiezen of als de ghost in
+        // de spawn-region is:
         double randomDouble = randomGenerator->getRandomDouble(0, 1);
-        if (templateMax(randomDouble, 0.5) == 0.5){
+        if (templateMax(randomDouble, 0.5) == 0.5 or inSpawn){
             auto direction = bestDirection;
             // Als de ghost frightened is moet hij de slechtste richting nemen:
             if (this->getStateManager()->getCurrentTag() == ghostStateTag::frightened){

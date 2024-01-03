@@ -3,8 +3,6 @@
 //
 
 #include "GUICoin.h"
-
-#include <utility>
 #include "Camera.h"
 
 

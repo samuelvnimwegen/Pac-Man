@@ -17,7 +17,7 @@
 #include "memory"
 #include "Score.h"
 #include "Fruit.h"
-#include "Wall.h"
+#include "EscapeWall.h"
 
 class Model::World {
     std::vector<std::vector<std::shared_ptr<Model::EntityModel>>> world;
@@ -34,6 +34,7 @@ class Model::World {
     bool gameStarted;
     std::shared_ptr<Model::Score> score;
     int levelNr;
+    std::vector<std::pair<int, int>> spawnRegion;
 public:
     explicit World();
 
@@ -105,6 +106,7 @@ public:
 
     [[nodiscard]] const std::vector<std::vector<std::shared_ptr<Wall>>> &getWallMap() const;
 
+    [[nodiscard]] const std::vector<std::pair<int, int>> &getSpawnRegion() const;
 
 };
 

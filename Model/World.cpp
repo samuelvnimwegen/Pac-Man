@@ -14,6 +14,7 @@
 using namespace std;
 
 Model::World::World() {
+    spawnRegion = {{5, 8}, {5, 9}, {5, 10}, {5, 11}, {4, 9}, {4, 10}};
     levelNr = 0;
     gameStarted = false;
     width = 20;
@@ -150,6 +151,8 @@ void Model::World::buildWorld() {
     this->getFactory()->createWall(8, this->getWidth() - 1 - 5);
     this->getFactory()->createWall(9, this->getWidth() - 1 - 5);
 
+    this->getFactory()->createEscapeWall(4, 9);
+    this->getFactory()->createEscapeWall(4, 10);
     this->getFactory()->createPacMan(9, 9);
 
     this->getFactory()->createGhost(5, 8);
@@ -169,9 +172,6 @@ void Model::World::buildWorld() {
             }
         }
     }
-    auto graph = DijkstraGraph(this->getWallMap(), make_shared<DijkstraPoint>(1, 1), make_shared<DijkstraPoint>(6, 7));
-    graph.buildDijkstraMap();
-    graph.getDijkstraPath();
 }
 
 Model::World::~World() = default;
@@ -189,7 +189,9 @@ void Model::World::restart() {
 void Model::World::addWall(const std::shared_ptr<Model::Wall> &wall) {
     auto newWalls = this->getWalls();
     newWalls.push_back(wall);
-    wallMap.at(toTile(wall->getY())).at(toTile(wall->getX())) = wall;
+    if (wall->getTag() == entityTag::wall){
+        wallMap.at(toTile(wall->getY())).at(toTile(wall->getX())) = wall;
+    }
     this->setWalls(newWalls);
 }
 
@@ -312,7 +314,8 @@ Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : Entity
 
 
 bool Model::PacMan::canMove(const int &row, const int &col)  {
-    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() != wall){
+    if (this->getWorld()->getItem(row, col) == nullptr or (this->getWorld()->getItem(row, col)->getTag() != wall and
+    this->getWorld()->getItem(row, col)->getTag() != entityTag::escapeWall)){
         return true;
     }
     return false;
@@ -352,10 +355,21 @@ int Model::Ghost::getManhattanDistancePacMan(const direction &direction) {
 }
 
 bool Model::Ghost::canMove(const int &row, const int &col) {
-    if (this->getWorld()->getItem(row, col) == nullptr or this->getWorld()->getItem(row, col)->getTag() != wall){
+    if (this->getWorld()->getItem(row, col) == nullptr){
         return true;
     }
-    return false;
+    if (this->getWorld()->getItem(row, col)->getTag() == wall){
+        return false;
+    }
+    if (this->getWorld()->getItem(row, col)->getTag() == escapeWall){
+        bool inSpawn = std::count(this->getWorld()->getSpawnRegion().begin(), this->getWorld()->getSpawnRegion().end(), make_pair(row, col));
+        bool reset = this->getStateManager()->getCurrentTag() == ghostStateTag::reset;
+        if (inSpawn or reset){
+            return true;
+        }
+        return false;
+    }
+    return true;
 }
 
 Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world) : EntityModel(row, col), world(world) {
@@ -697,9 +711,22 @@ void Model::Ghost::setFrightenTime(double d) {
 }
 
 direction Model::Ghost::getDijkstraDirection() {
-    return up;
+    auto pacMan = this->getWorld()->getPacMan();
+    auto pacManX = toTile(pacMan->getX());
+    auto pacManY = toTile(pacMan->getY());
+    auto x = toTile(this->getX());
+    auto y = toTile(this->getY());
+    auto graph = DijkstraGraph(this->getWorld()->getWallMap(), make_shared<DijkstraPoint>(x, y), make_shared<DijkstraPoint>(pacManX, pacManY));
+    return graph.getDijkstraPath().at(0);
 }
-
+direction Model::Ghost::getDijkstraDirectionSpawn() {
+    auto spawnX = this->getStartCol();
+    auto spawnY = this->getStartRow();
+    auto x = toTile(this->getX());
+    auto y = toTile(this->getY());
+    auto graph = DijkstraGraph(this->getWorld()->getWallMap(), make_shared<DijkstraPoint>(x, y), make_shared<DijkstraPoint>(spawnX, spawnY));
+    return graph.getDijkstraPath().at(0);
+}
 
 void Model::PacMan::move(const double &seconds) {
     this->setHasMoved(true);
@@ -1048,6 +1075,10 @@ void Model::World::setLevelNr(int nr) {
 
 const vector<std::vector<std::shared_ptr<Model::Wall>>> &Model::World::getWallMap() const {
     return wallMap;
+}
+
+const vector<std::pair<int, int>> &Model::World::getSpawnRegion() const {
+    return spawnRegion;
 }
 
 void Model::Score::update(const double &seconds) {

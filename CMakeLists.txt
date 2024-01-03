@@ -48,6 +48,8 @@ add_executable(Pac-Man
         Model/DijkstraGraph.cpp
         Model/DijkstraPoint.cpp
         Model/DijkstraTransition.cpp
+        Model/EscapeWall.cpp
+        GUI/GUIEscapeWall.cpp
 )
 
 set(SFML_STATIC_LIBRARIES TRUE)

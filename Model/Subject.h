@@ -15,6 +15,7 @@ namespace Model{
     class Collectable;
     class Fruit;
     class Ghost;
+    class EscapeWall;
     class Wall;
     class PacMan;
     class World;
@@ -34,12 +35,13 @@ namespace Model{
     class DijkstraGraph;
     class DijkstraTransition;
     class DijkstraPoint;
+
 }
 enum direction {right, down, left, up, none};
 
 enum color{red, pink, blue, orange, green, purple};
 
-enum entityTag{pacMan, ghost, coin, fruit, wall, noneTag};
+enum entityTag{pacMan, ghost, coin, fruit, wall, noneTag, escapeWall};
 
 class Model::Subject {
     std::vector<std::shared_ptr<Model::Observer>> observers;

@@ -87,6 +87,15 @@ shared_ptr<Model::Ghost> GUI::ConcreteFactory::createGhost(const int &row, const
     return entity;
 }
 
+std::shared_ptr<Model::EscapeWall> GUI::ConcreteFactory::createEscapeWall(const int &row, const int &col) {
+    shared_ptr<Model::EscapeWall> subject(new Model::EscapeWall(row, col));
+    shared_ptr<GUI::GUIEscapeWall> observer(new GUI::GUIEscapeWall(subject));
+    subject->addObserver(observer);
+    this->getWorld()->addItem(subject);
+    this->getWorld()->addWall(subject);
+    return subject;
+}
+
 
 
 

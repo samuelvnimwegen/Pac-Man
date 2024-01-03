@@ -4,8 +4,6 @@
 
 #ifndef PAC_MAN_STATE_H
 #define PAC_MAN_STATE_H
-#include "iostream"
-#include "vector"
 #include "../Model/Subject.h"
 #include "../Model/Stopwatch.h"
 
@@ -27,6 +25,7 @@ namespace GUI{
     class GUIFruit;
     class Window;
     class GameOverState;
+    class GUIEscapeWall;
 }
 enum key{space, backspace, escape, noKey, leftMouseButton, startButton};
 enum stateTag{victory, menu, paused, level, gameOver};

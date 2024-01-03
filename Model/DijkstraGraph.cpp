@@ -80,7 +80,7 @@ void Model::DijkstraGraph::buildDijkstraMap() {
     auto endWorldItem = this->getWorld().at(endY).at(endX);
     assert(endWorldItem == nullptr);
 
-    dijkstraMap.at(beginY).at(beginY) = this->getBeginPoint();
+    dijkstraMap.at(beginY).at(beginX) = this->getBeginPoint();
     std::vector<std::shared_ptr<DijkstraPoint>> nextPoints = {this->getBeginPoint()};
     bool done = false;
     while (!done){
@@ -146,7 +146,7 @@ std::vector<direction> Model::DijkstraGraph::getDijkstraPath() {
         auto x = currentPoint->getX();
         auto y = currentPoint->getY();
         // Richtingen in tegengestelde volgorde van hoe ze in de enum 'direction' staan, bv. {boven, rechts} -> {onder, links}
-        std::vector<std::pair<int, int>> neighbours = {{y, x - 1}, {y - 1, x}, {y, x + 1}, {y, x + 1}};
+        std::vector<std::pair<int, int>> neighbours = {{y, x - 1}, {y - 1, x}, {y, x + 1}, {y + 1, x}};
 
         // We zoeken telkens een aanliggend vakje wat naar het huidige vakje wijst, we werken dus in principe van het einde
         // naar het startpunt.
@@ -173,4 +173,7 @@ std::vector<direction> Model::DijkstraGraph::getDijkstraPath() {
     }
     return path;
 }
+
+
+
 

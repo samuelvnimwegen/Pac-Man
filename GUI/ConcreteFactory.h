@@ -10,6 +10,7 @@
 #include "GUICoin.h"
 #include "GUIGhost.h"
 #include "GUIFruit.h"
+#include "GUIEscapeWall.h"
 #include "../Model/AbstractFactory.h"
 #include "memory"
 
@@ -27,6 +28,8 @@ public:
     std::shared_ptr <Model::Ghost> createGhost(const int &row, const int &col) override;
 
     std::shared_ptr <Model::Fruit> createFruit(const int &row, const int &col) override;
+
+    std::shared_ptr<Model::EscapeWall> createEscapeWall(const int &row, const int &col) override;
 
 
 };
