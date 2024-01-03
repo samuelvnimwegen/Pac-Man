@@ -49,7 +49,15 @@ void Model::PacMan::setNextDirection(const direction &dir) {
  */
 void Model::PacMan::changeDirection(const direction &dir) {
     if (this->getCurrentDirection() == direction::none){
-        this->setCurrentDirection(dir);
+        if (dir != none){
+            auto x = toTile(this->getX());
+            auto y = toTile(this->getY());
+            vector<pair<int, int>> directions = {{y, x + 1}, {y + 1, x}, {y, x - 1}, {y - 1, x}};
+            auto directionPair = directions.at(dir);
+            if (this->canMove(directionPair.first, directionPair.second)){
+                this->setCurrentDirection(dir);
+            }
+        }
     }
     else if (dir == direction::up){
         if (this->getCurrentDirection() == direction::down){
