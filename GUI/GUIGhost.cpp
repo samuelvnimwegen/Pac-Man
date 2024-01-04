@@ -19,15 +19,15 @@ GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostC
     spriteX = ghostColor * 50;
 
     ghostEatenSoundBuffer = make_unique<sf::SoundBuffer>();
-    ghostEatenSoundBuffer->loadFromFile("SoundEffects/pacman_eatghost.wav");
+    ghostEatenSoundBuffer->loadFromFile("../SoundEffects/pacman_eatghost.wav");
     ghostEatenSound = make_unique<sf::Sound>(*ghostEatenSoundBuffer);
 
     auto texture = std::make_shared<sf::Texture>();
-    texture->loadFromFile("Sprites/Sprites.png");
+    texture->loadFromFile("../Sprites/Sprites.png");
     this->setTexture(texture);
     auto camera = Camera::instance();
     scoreTexture = std::make_shared<sf::Texture>();
-    scoreTexture->loadFromFile("Sprites/100_glowing.png");
+    scoreTexture->loadFromFile("../Sprites/100_glowing.png");
 }
 
 std::shared_ptr<Model::Ghost> GUI::GUIGhost::getSubject(){

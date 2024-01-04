@@ -9,7 +9,7 @@
 GUI::GUICoin::GUICoin(const std::shared_ptr<Model::Coin> &coin) : GUI::EntityView(coin) {
     subject = coin;
     auto texture = std::make_shared<sf::Texture>();
-    texture->loadFromFile("Sprites/Sprites.png");
+    texture->loadFromFile("../Sprites/Sprites.png");
     this->setTexture(texture);
 
     auto camera = Camera::instance();

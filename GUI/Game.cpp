@@ -26,7 +26,7 @@ GUI::Game::Game() {
     world->setFactory(concreteFactory);
 
     auto beginBuffer = make_unique<sf::SoundBuffer>();
-    beginBuffer->loadFromFile("SoundEffects/pacman_beginning.wav");
+    beginBuffer->loadFromFile("../SoundEffects/pacman_beginning.wav");
     auto beginSound = make_unique<sf::Sound>(*beginBuffer);
 
     this->getCamera()->setModelHeight(this->getWorld()->getHeight());
@@ -40,7 +40,7 @@ GUI::Game::Game() {
 
     // Score voor level:
     sf::Font font;
-    font.loadFromFile("Fonts/ScoreFont.ttf");
+    font.loadFromFile("../Fonts/ScoreFont.ttf");
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(15);
@@ -56,7 +56,7 @@ GUI::Game::Game() {
 
     // Text voor start:
     sf::Font font1;
-    font1.loadFromFile("Fonts/IntroFont.ttf");
+    font1.loadFromFile("../Fonts/IntroFont.ttf");
 
     sf::Text introText2;
     introText2.setFont(font1);
@@ -67,7 +67,7 @@ GUI::Game::Game() {
 
     // Intro image:
     sf::Texture image;
-    image.loadFromFile("Sprites/pacmanIntro.png");
+    image.loadFromFile("../Sprites/pacmanIntro.png");
     sf::Sprite introSprite;
     introSprite.setTexture(image);
     sf::Vector2f targetSize(350.0f, 200.0f);
@@ -264,7 +264,7 @@ int GUI::Game::getScreenHeight() const {
 void GUI::Game::drawLives() const {
     auto window = GUI::Window::instance()->getWindow();
     sf::Texture texture;
-    texture.loadFromFile("Sprites/Heart.png");
+    texture.loadFromFile("../Sprites/Heart.png");
     sf::Sprite sprite(texture);
     int offset = 0;
     for (int i = 0; i < this->getWorld()->getScoreClass()->getLivesLeft(); ++i){
@@ -287,7 +287,7 @@ void GUI::Game::drawScoreboard() {
 
     sf::Text scoreBoardText;
     sf::Font font;
-    font.loadFromFile("Fonts/IntroFont.ttf");
+    font.loadFromFile("../Fonts/IntroFont.ttf");
     scoreBoardText.setFont(font);
 
     scoreBoardText.setCharacterSize(15);
@@ -296,7 +296,7 @@ void GUI::Game::drawScoreboard() {
     scoreBoardText.setString("scoreboard");
     window->draw(scoreBoardText);
 
-    ifstream scoreFile("ScoreBoard.txt");
+    ifstream scoreFile("../ScoreBoard.txt");
     string score;
     int counter = 1;
     while (scoreFile >> score){
@@ -326,7 +326,7 @@ void GUI::Game::drawStartButton() {
     rect2.setPosition(250 , 410);
 
     sf::Font font;
-    font.loadFromFile("Fonts/IntroFont.ttf");
+    font.loadFromFile("../Fonts/IntroFont.ttf");
     sf::Text introText;
     introText.setFont(font);
     introText.setCharacterSize(20);

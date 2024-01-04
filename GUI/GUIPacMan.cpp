@@ -49,27 +49,27 @@ std::shared_ptr<Model::PacMan> GUI::GUIPacMan::getPacManModel() const {
 
 GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan> &subject) : EntityView(subject) {
     chompSoundBuffer = make_unique<sf::SoundBuffer>();
-    chompSoundBuffer->loadFromFile("SoundEffects/pacman_chomp2.wav");
+    chompSoundBuffer->loadFromFile("../SoundEffects/pacman_chomp2.wav");
     chompSound = std::make_unique<sf::Sound>(*chompSoundBuffer);
 
     fruitSoundBuffer = make_unique<sf::SoundBuffer>();
-    fruitSoundBuffer->loadFromFile("SoundEffects/pacman_eatfruit.wav");
+    fruitSoundBuffer->loadFromFile("../SoundEffects/pacman_eatfruit.wav");
     fruitSound = std::make_unique<sf::Sound>(*fruitSoundBuffer);
 
     frightenedSoundBuffer = make_unique<sf::SoundBuffer>();
-    frightenedSoundBuffer->loadFromFile("SoundEffects/pacman_scaredghostsound.wav");
+    frightenedSoundBuffer->loadFromFile("../SoundEffects/pacman_scaredghostsound.wav");
     frightenedSound = std::make_unique<sf::Sound>(*frightenedSoundBuffer);
     frightenedSound->setVolume(50.f);
 
     deathSoundBuffer = make_unique<sf::SoundBuffer>();
-    deathSoundBuffer->loadFromFile("SoundEffects/pacman_death.wav");
+    deathSoundBuffer->loadFromFile("../SoundEffects/pacman_death.wav");
     deathSound = std::make_unique<sf::Sound>(*deathSoundBuffer);
 
     lastCoinCollected = 0;
     deadTextureNr = 0;
     textureNr = 0;
     auto texture = make_shared<sf::Texture>();
-    texture->loadFromFile("Sprites/Sprites.png");
+    texture->loadFromFile("../Sprites/Sprites.png");
     this->setTexture(texture);
 
     pacManModel = subject;
