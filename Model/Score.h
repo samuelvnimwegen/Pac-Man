@@ -34,7 +34,11 @@ public:
 
     void nextLevel();
 
-    void levelPaused() override;
+    void pacManDied() override;
+
+    void levelHalt() override;
+
+    void ghostEaten() override;
 
     void restart();
 
@@ -75,6 +79,7 @@ public:
     [[nodiscard]] int getCoinsCollected() const;
 
     void setCoinsCollected(int i);
+
 };
 
 

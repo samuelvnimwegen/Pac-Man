@@ -1110,7 +1110,9 @@ void Model::Score::collectableCollected(const std::weak_ptr<Model::Collectable> 
 void Model::PacMan::die() {
     this->setDead(true);
     this->setDeathTime(Stopwatch::instance()->getLevelTime());
-    this->getWorld()->getScoreClass()->setLivesLeft(this->getWorld()->getScoreClass()->getLivesLeft() - 1);
+    for (const auto& observer: this->getObservers()){
+        observer->pacManDied();
+    }
 }
 
 void Model::PacMan::update(const double &seconds) {

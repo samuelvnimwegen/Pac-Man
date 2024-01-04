@@ -49,7 +49,15 @@ void GUI::EntityView::setSprite(const std::shared_ptr<sf::Sprite> &sharedPtr) {
 
 void GUI::EntityView::collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) {}
 
-void GUI::EntityView::levelPaused() {
+void GUI::EntityView::levelHalt() {
+
+}
+
+void GUI::EntityView::pacManDied() {
+
+}
+
+void GUI::EntityView::ghostEaten() {
 
 }
 

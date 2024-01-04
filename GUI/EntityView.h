@@ -20,7 +20,11 @@ public:
 
     virtual ~EntityView();
 
-    void levelPaused() override;
+    void levelHalt() override;
+
+    void pacManDied() override;
+
+    void ghostEaten() override;
 
     [[nodiscard]] const std::shared_ptr<sf::Texture> &getTexture() const;
 

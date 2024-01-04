@@ -14,7 +14,11 @@ public:
 
     virtual void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) = 0;
 
-    virtual void levelPaused() = 0;
+    virtual void levelHalt() = 0;
+
+    virtual void pacManDied() = 0;
+
+    virtual void ghostEaten() = 0;
 };
 
 

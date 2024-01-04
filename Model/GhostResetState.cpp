@@ -19,7 +19,7 @@ void Model::GhostResetState::update() {
         // Als hij weer op zijn startpunt is, weer in chase modus en dus de bovenste state poppen
         auto ghost = this->getGhost().lock();
         if (toTile(ghost->getX()) == ghost->getStartCol() and toTile(ghost->getY() == ghost->getStartRow())){
-            this->getStateManager().lock()->pop();
+            this->getStateManager().lock()->reset();
         }
     }
 }

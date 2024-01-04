@@ -26,7 +26,7 @@ void GUI::LevelState::update(const key &key){
                 !this->getWorld().lock()->getPacMan()->isDead()){
             this->getStateManager().lock()->push(std::make_unique<GameOverState>(this->getStateManager(), this->getWorld()));
             for (const auto& observer: this->getWorld().lock()->getPacMan()->getObservers()){
-                observer->levelPaused();
+                observer->levelHalt();
             }
         }
         // Als alle coins opgegeten zijn in het level, naar victory-state
@@ -35,14 +35,14 @@ void GUI::LevelState::update(const key &key){
         {
             this->getStateManager().lock()->push(std::make_unique<VictoryState>(this->getStateManager(), this->getWorld()));
             for (const auto& observer: this->getWorld().lock()->getPacMan()->getObservers()){
-                observer->levelPaused();
+                observer->levelHalt();
             }
         }
         // Als er op escape wordt geduwd pauzeren
         else if (key == escape){
             this->getStateManager().lock()->push(std::make_unique<PausedState>(this->getStateManager(), this->getWorld()));
             for (const auto& observer: this->getWorld().lock()->getPacMan()->getObservers()){
-                observer->levelPaused();
+                observer->levelHalt();
             }
         }
     }

@@ -19,7 +19,9 @@ void Model::GhostFrightenedState::update() {
         // Als hij opgegeten is door pacman, feared state clearen en naar eaten state:
         else if (toTile(this->getGhost().lock()->getWorld()->getPacMan()->getX()) == toTile(this->getGhost().lock()->getX())
         and toTile(this->getGhost().lock()->getWorld()->getPacMan()->getY()) == toTile(this->getGhost().lock()->getY())){
-            this->getStateManager().lock()->pop();
+            for (const auto& observer: this->getGhost().lock()->getObservers()){
+                observer->ghostEaten();
+            }
             this->getStateManager().lock()->push(std::make_unique<Model::GhostEatenState>(this->getStateManager(), this->getGhost()));
         }
     }

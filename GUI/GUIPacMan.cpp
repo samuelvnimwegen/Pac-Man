@@ -48,11 +48,24 @@ std::shared_ptr<Model::PacMan> GUI::GUIPacMan::getPacManModel() const {
 }
 
 GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan> &subject) : EntityView(subject) {
-    lastCoinCollected = 0;
     chompSoundBuffer = make_unique<sf::SoundBuffer>();
     chompSoundBuffer->loadFromFile("SoundEffects/pacman_chomp2.wav");
     chompSound = std::make_unique<sf::Sound>(*chompSoundBuffer);
 
+    fruitSoundBuffer = make_unique<sf::SoundBuffer>();
+    fruitSoundBuffer->loadFromFile("SoundEffects/pacman_eatfruit.wav");
+    fruitSound = std::make_unique<sf::Sound>(*fruitSoundBuffer);
+
+    frightenedSoundBuffer = make_unique<sf::SoundBuffer>();
+    frightenedSoundBuffer->loadFromFile("SoundEffects/pacman_scaredghostsound.wav");
+    frightenedSound = std::make_unique<sf::Sound>(*frightenedSoundBuffer);
+    frightenedSound->setVolume(50.f);
+
+    deathSoundBuffer = make_unique<sf::SoundBuffer>();
+    deathSoundBuffer->loadFromFile("SoundEffects/pacman_death.wav");
+    deathSound = std::make_unique<sf::Sound>(*deathSoundBuffer);
+
+    lastCoinCollected = 0;
     deadTextureNr = 0;
     textureNr = 0;
     auto texture = make_shared<sf::Texture>();
@@ -72,6 +85,25 @@ void GUI::GUIPacMan::update(const double &ticks) {
     auto camCoords = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());
     auto windowCoords = cameraToPixels(camCoords.getXCoord(), camCoords.getYCoord());
     this->getSprite()->setPosition(float(windowCoords.first), float(windowCoords.second));
+
+    int i = 0;
+    bool found = false;
+    auto ghosts = this->getPacManModel()->getWorld()->getGhosts();
+    while (i < ghosts.size() and !found){
+        auto ghost = ghosts.at(i);
+        if (ghost->getStateManager()->getCurrentTag() == frightened){
+            found = true;
+        }
+        ++i;
+    }
+    if (found){
+        if (this->frightenedSound->getStatus() != sf::SoundSource::Playing){
+            this->frightenedSound->play();
+        }
+    }
+    else{
+        this->frightenedSound->stop();
+    }
     EntityView::update(ticks);
 }
 
@@ -108,9 +140,12 @@ void GUI::GUIPacMan::setDeadTextureNr(int nr) {
 }
 
 void GUI::GUIPacMan::collectableCollected(const weak_ptr<Model::Collectable> &collectable) {
-    if (this->chompSound->getStatus() != sf::SoundSource::Playing){
+    if (collectable.lock()->getTag() == coin and this->chompSound->getStatus() != sf::SoundSource::Playing){
         this->chompSound->setLoop(true);
         this->chompSound->play();
+    }
+    if (collectable.lock()->getTag() == entityTag::fruit){
+        this->fruitSound->play();
     }
     this->setLastCoinCollected(Model::Stopwatch::instance()->getTotalSeconds());
     EntityView::collectableCollected(collectable);
@@ -124,10 +159,16 @@ void GUI::GUIPacMan::setLastCoinCollected(double lastCollected) {
     GUIPacMan::lastCoinCollected = lastCollected;
 }
 
-void GUI::GUIPacMan::levelPaused() {
+void GUI::GUIPacMan::levelHalt() {
     this->chompSound->setLoop(false);
     this->chompSound->stop();
-    EntityView::levelPaused();
+    this->frightenedSound->stop();
+    EntityView::levelHalt();
+}
+
+void GUI::GUIPacMan::pacManDied() {
+    this->deathSound->play();
+    EntityView::pacManDied();
 }
 
 

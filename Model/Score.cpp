@@ -151,8 +151,16 @@ void Model::Score::setCoinsCollected(int i) {
     Score::coinsCollected = i;
 }
 
-void Model::Score::levelPaused() {
+void Model::Score::levelHalt() {
 
+}
+
+void Model::Score::pacManDied() {
+    this->setLivesLeft(this->getLivesLeft() - 1);
+}
+
+void Model::Score::ghostEaten() {
+    this->ghostConsumed();
 }
 
 

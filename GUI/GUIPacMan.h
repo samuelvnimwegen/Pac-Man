@@ -14,6 +14,14 @@ class GUI::GUIPacMan: public GUI::EntityView{
     int deadTextureNr;
     std::unique_ptr<sf::SoundBuffer> chompSoundBuffer;
     std::unique_ptr<sf::Sound> chompSound;
+    std::unique_ptr<sf::SoundBuffer> fruitSoundBuffer;
+    std::unique_ptr<sf::Sound> fruitSound;
+    std::unique_ptr<sf::SoundBuffer> frightenedSoundBuffer;
+    std::unique_ptr<sf::Sound> frightenedSound;
+    std::unique_ptr<sf::SoundBuffer> deathSoundBuffer;
+    std::unique_ptr<sf::Sound> deathSound;
+    std::unique_ptr<sf::SoundBuffer> ghostEatenSoundBuffer;
+    std::unique_ptr<sf::Sound> ghostEatenSound;
     double lastCoinCollected;
 public:
     explicit GUIPacMan(const std::shared_ptr<Model::PacMan> &subject);
@@ -22,7 +30,9 @@ public:
 
     void update(const double &ticks) override;
 
-    void levelPaused() override;
+    void levelHalt() override;
+
+    void pacManDied() override;
 
     void updateTextureNr();
 

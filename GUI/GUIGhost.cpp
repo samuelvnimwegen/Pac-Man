@@ -17,6 +17,11 @@ GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostC
     subject = ghost;
     textureNr = 0;
     spriteX = ghostColor * 50;
+
+    ghostEatenSoundBuffer = make_unique<sf::SoundBuffer>();
+    ghostEatenSoundBuffer->loadFromFile("SoundEffects/pacman_eatghost.wav");
+    ghostEatenSound = make_unique<sf::Sound>(*ghostEatenSoundBuffer);
+
     auto texture = std::make_shared<sf::Texture>();
     texture->loadFromFile("Sprites/Sprites.png");
     this->setTexture(texture);
@@ -160,6 +165,11 @@ double GUI::GUIGhost::getWalkLastUpdated() const {
 
 void GUI::GUIGhost::setWalkLastUpdated(double lastUpdated) {
     GUIGhost::walkLastUpdated = lastUpdated;
+}
+
+void GUI::GUIGhost::ghostEaten() {
+    this->ghostEatenSound->play();
+    EntityView::ghostEaten();
 }
 
 
