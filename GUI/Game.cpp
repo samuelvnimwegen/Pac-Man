@@ -34,13 +34,9 @@ GUI::Game::Game() {
     stateManager = std::make_shared<GUI::StateManager>();
     stateManager->push(std::make_unique<MenuState>(stateManager, world));
 
-    assert(this->getScreenHeight() % world->getHeight() == 0);
-    assert(this->getScreenWidth() % world->getWidth() == 0);
-
-
     // Score voor level:
     sf::Font font;
-    assert(font.loadFromFile("Fonts/ScoreFont.ttf"));
+    font.loadFromFile("Fonts/ScoreFont.ttf");
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(15);
@@ -56,7 +52,7 @@ GUI::Game::Game() {
 
     // Text voor start:
     sf::Font font1;
-    assert(font1.loadFromFile("Fonts/IntroFont.ttf"));
+    font1.loadFromFile("Fonts/IntroFont.ttf");
 
     sf::Text introText2;
     introText2.setFont(font1);
@@ -119,7 +115,9 @@ GUI::Game::Game() {
             text.setString("score " + to_string(this->getWorld()->getScoreClass()->getScore()));
             livesText.setString("lives left " + to_string(this->getWorld()->getScoreClass()->getLivesLeft()));
             Window::instance()->getWindow()->clear();
+
             this->getWorld()->update(time);
+
             Window::instance()->getWindow()->draw(text);
             Window::instance()->getWindow()->draw(levelText);
             this->drawLives();

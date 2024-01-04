@@ -19,6 +19,10 @@ double Model::Stopwatch::getDeltaTime() {
         elapsedTime = double(clock() - totalTime) / (double) CLOCKS_PER_SEC;
     }
     totalTime = clock();
+
+    if (elapsedTime > 0.3){
+        throw std::runtime_error("Tick-time higher than 0.3 seconds");
+    }
     return elapsedTime;
 }
 

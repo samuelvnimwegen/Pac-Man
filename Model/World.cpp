@@ -34,6 +34,9 @@ int Model::World::getWidth() const {
 }
 
 std::shared_ptr<Model::EntityModel> Model::World::getItem(const int &row, const int &col) {
+    if (this->getWidth() <= col or this->getHeight() <= row or row < 0 or col < 0){
+        throw runtime_error("Position out of bounds, possibly because of too high tick-time");
+    }
     return world[row][col];
 }
 
