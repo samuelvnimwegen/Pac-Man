@@ -8,7 +8,7 @@
 #include "iostream"
 #include "SFML/Audio.hpp"
 
-class GUI::GUIPacMan: public GUI::EntityView{
+class GUI::PacMan: public GUI::EntityView{
     std::weak_ptr<Model::PacMan> pacManModel;
     int textureNr;
     int deadTextureNr;
@@ -24,9 +24,9 @@ class GUI::GUIPacMan: public GUI::EntityView{
     std::unique_ptr<sf::Sound> ghostEatenSound;
     double lastCoinCollected;
 public:
-    explicit GUIPacMan(const std::shared_ptr<Model::PacMan> &subject);
+    explicit PacMan(const std::shared_ptr<Model::PacMan> &subject);
 
-    ~GUIPacMan() override;
+    ~PacMan() override;
 
     void update(const double &ticks) override;
 

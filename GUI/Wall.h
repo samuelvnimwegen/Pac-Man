@@ -6,11 +6,11 @@
 #define PAC_MAN_GUIWALL_H
 #include "EntityView.h"
 
-class GUI::GUIWall: public GUI::EntityView {
+class GUI::Wall: public GUI::EntityView {
     std::weak_ptr<Model::World> world;
     bool wallUpdated;
 public:
-    GUIWall(const std::shared_ptr<Model::EntityModel> &subject, const std::weak_ptr<Model::World> &world);
+    Wall(const std::shared_ptr<Model::EntityModel> &subject, const std::weak_ptr<Model::World> &world);
 
     /*
      * Functie wordt opgeroepen na het bouwen van de wereld om de muren er aan te passen op basis van de omringende muren:
@@ -19,7 +19,7 @@ public:
 
     void update(const double &ticks) override;
 
-    ~GUIWall() override;
+    ~Wall() override;
 
     [[nodiscard]] const std::weak_ptr<Model::World> &getWorld() const;
 

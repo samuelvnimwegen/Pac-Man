@@ -1,4 +1,2 @@
-Pac-Man-Game van Samuel van Nimwegen voor het vak Advanced Programming op de Universiteit van Antwerpen
-
-
-
+# Pac-Man
+The Pac-Man game for the Advanced Programming course on the University of Antwerp

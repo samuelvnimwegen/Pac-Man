@@ -2,10 +2,10 @@
 // Created by Samuel on 28/12/2023.
 //
 
-#include "GUIFruit.h"
+#include "Fruit.h"
 #include "Camera.h"
 
-GUI::GUIFruit::GUIFruit(const std::shared_ptr<Model::Fruit> &subject)
+GUI::Fruit::Fruit(const std::shared_ptr<Model::Fruit> &subject)
         : GUI::EntityView(subject), subject(subject){
     auto texture = std::make_shared<sf::Texture>();
     texture->loadFromFile("../Sprites/Sprites.png");
@@ -19,7 +19,7 @@ GUI::GUIFruit::GUIFruit(const std::shared_ptr<Model::Fruit> &subject)
     this->setSprite(sprite);
 }
 
-std::shared_ptr<Model::Fruit> GUI::GUIFruit::getSubject() {
+std::shared_ptr<Model::Fruit> GUI::Fruit::getSubject() {
     if (subject.expired()){
         throw std::runtime_error("Subject expired at getSubject() in GUIFruit.cpp");
     }
@@ -29,7 +29,7 @@ std::shared_ptr<Model::Fruit> GUI::GUIFruit::getSubject() {
 
 }
 
-void GUI::GUIFruit::update(const double &ticks) {
+void GUI::Fruit::update(const double &ticks) {
     if (!this->getSubject()->isConsumed()){
         EntityView::update(ticks);
     }

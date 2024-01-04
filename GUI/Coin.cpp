@@ -2,11 +2,11 @@
 // Created by Samuel on 20/11/2023.
 //
 
-#include "GUICoin.h"
+#include "Coin.h"
 #include "Camera.h"
 
 
-GUI::GUICoin::GUICoin(const std::shared_ptr<Model::Coin> &coin) : GUI::EntityView(coin) {
+GUI::Coin::Coin(const std::shared_ptr<Model::Coin> &coin) : GUI::EntityView(coin) {
     subject = coin;
     auto texture = std::make_shared<sf::Texture>();
     texture->loadFromFile("../Sprites/Sprites.png");
@@ -21,15 +21,15 @@ GUI::GUICoin::GUICoin(const std::shared_ptr<Model::Coin> &coin) : GUI::EntityVie
     this->setSprite(sprite);
 }
 
-void GUI::GUICoin::update(const double &ticks) {
+void GUI::Coin::update(const double &ticks) {
     if (!this->getSubject()->isConsumed()){
         EntityView::update(ticks);
     }
 }
 
-std::shared_ptr<Model::Coin> GUI::GUICoin::getSubject() {
+std::shared_ptr<Model::Coin> GUI::Coin::getSubject() {
     return subject.lock();
 }
 
-GUI::GUICoin::~GUICoin() = default;
+GUI::Coin::~Coin() = default;
 

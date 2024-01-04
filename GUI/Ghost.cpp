@@ -2,7 +2,7 @@
 // Created by Samuel on 21/11/2023.
 //
 
-#include "GUIGhost.h"
+#include "Ghost.h"
 
 #include "cmath"
 #include "Camera.h"
@@ -10,7 +10,7 @@
 
 
 
-GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostColor) : GUI::EntityView(ghost) {
+GUI::Ghost::Ghost(const std::shared_ptr<Model::Ghost> &ghost, color ghostColor) : GUI::EntityView(ghost) {
     walkLastUpdated = 0;
     fearedUpdateTime = 0;
     fearedTextureNr = 0;
@@ -30,11 +30,11 @@ GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostC
     scoreTexture->loadFromFile("../Sprites/100_glowing.png");
 }
 
-std::shared_ptr<Model::Ghost> GUI::GUIGhost::getSubject(){
+std::shared_ptr<Model::Ghost> GUI::Ghost::getSubject(){
     return subject.lock();
 }
 
-void GUI::GUIGhost::update(const double &seconds) {
+void GUI::Ghost::update(const double &seconds) {
     this->updateSprite();
     auto camera = Camera::instance();
     auto camCoords = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());
@@ -45,7 +45,7 @@ void GUI::GUIGhost::update(const double &seconds) {
     EntityView::update(seconds);
 }
 
-void GUI::GUIGhost::updateSprite() {
+void GUI::Ghost::updateSprite() {
     sf::Sprite sprite;
     int pixelY;
 
@@ -123,51 +123,51 @@ void GUI::GUIGhost::updateSprite() {
 
 }
 
-const std::shared_ptr<sf::Texture> &GUI::GUIGhost::getScoreTexture() const {
+const std::shared_ptr<sf::Texture> &GUI::Ghost::getScoreTexture() const {
     return scoreTexture;
 }
 
-int GUI::GUIGhost::getTextureNr() const {
+int GUI::Ghost::getTextureNr() const {
     return textureNr;
 }
 
-void GUI::GUIGhost::setTextureNr(int nr) {
-    GUIGhost::textureNr = nr;
+void GUI::Ghost::setTextureNr(int nr) {
+    Ghost::textureNr = nr;
 }
 
-int GUI::GUIGhost::getSpriteX() const {
+int GUI::Ghost::getSpriteX() const {
     return spriteX;
 }
 
-int GUI::GUIGhost::getFearedTextureNr() const {
+int GUI::Ghost::getFearedTextureNr() const {
     return fearedTextureNr;
 }
 
-void GUI::GUIGhost::setFearedTextureNr(int nr) {
-    GUIGhost::fearedTextureNr = nr;
+void GUI::Ghost::setFearedTextureNr(int nr) {
+    Ghost::fearedTextureNr = nr;
 }
 
-double GUI::GUIGhost::getFearedUpdateTime() const {
+double GUI::Ghost::getFearedUpdateTime() const {
     return fearedUpdateTime;
 }
 
-void GUI::GUIGhost::setFearedUpdateTime(double updateTime) {
-    GUIGhost::fearedUpdateTime = updateTime;
+void GUI::Ghost::setFearedUpdateTime(double updateTime) {
+    Ghost::fearedUpdateTime = updateTime;
 }
 
-void GUI::GUIGhost::collectableCollected(const weak_ptr<Model::Collectable> &collectable) {
+void GUI::Ghost::collectableCollected(const weak_ptr<Model::Collectable> &collectable) {
     EntityView::collectableCollected(collectable);
 }
 
-double GUI::GUIGhost::getWalkLastUpdated() const {
+double GUI::Ghost::getWalkLastUpdated() const {
     return walkLastUpdated;
 }
 
-void GUI::GUIGhost::setWalkLastUpdated(double lastUpdated) {
-    GUIGhost::walkLastUpdated = lastUpdated;
+void GUI::Ghost::setWalkLastUpdated(double lastUpdated) {
+    Ghost::walkLastUpdated = lastUpdated;
 }
 
-void GUI::GUIGhost::ghostEaten() {
+void GUI::Ghost::ghostEaten() {
     this->ghostEatenSound->play();
     EntityView::ghostEaten();
 }

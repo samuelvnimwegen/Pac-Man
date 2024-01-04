@@ -6,7 +6,7 @@
 #define PAC_MAN_GUIGHOST_H
 #include "EntityView.h"
 #include "SFML/Audio.hpp"
-class GUI::GUIGhost: public GUI::EntityView{
+class GUI::Ghost: public GUI::EntityView{
     std::weak_ptr<Model::Ghost> subject;
     double walkLastUpdated;
     int textureNr;
@@ -17,7 +17,7 @@ class GUI::GUIGhost: public GUI::EntityView{
     std::unique_ptr<sf::SoundBuffer> ghostEatenSoundBuffer;
     std::unique_ptr<sf::Sound> ghostEatenSound;
 public:
-    explicit GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostColor);
+    explicit Ghost(const std::shared_ptr<Model::Ghost> &ghost, color ghostColor);
 
     void update(const double &seconds) override;
 
@@ -51,4 +51,4 @@ public:
 };
 
 
-#endif //PAC_MAN_GUIGHOST_H
+#endif //PAC_MAN_GHOST_H

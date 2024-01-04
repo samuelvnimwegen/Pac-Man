@@ -5,12 +5,12 @@
 #ifndef PAC_MAN_CONCRETEFACTORY_H
 #define PAC_MAN_CONCRETEFACTORY_H
 #include "EntityView.h"
-#include "GUIWall.h"
-#include "GUIPacMan.h"
-#include "GUICoin.h"
-#include "GUIGhost.h"
-#include "GUIFruit.h"
-#include "GUIEscapeWall.h"
+#include "Wall.h"
+#include "PacMan.h"
+#include "Coin.h"
+#include "Ghost.h"
+#include "Fruit.h"
+#include "EscapeWall.h"
 #include "../Model/AbstractFactory.h"
 #include "memory"
 

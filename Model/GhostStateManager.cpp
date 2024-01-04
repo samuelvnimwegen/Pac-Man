@@ -5,7 +5,6 @@
 #include "GhostStateManager.h"
 
 #include <memory>
-#include "Stopwatch.h"
 Model::GhostStateManager::GhostStateManager()= default;
 
 void Model::GhostStateManager::pop() {

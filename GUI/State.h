@@ -12,20 +12,20 @@ namespace GUI{
     class EntityView;
     class Camera;
     class Game;
-    class GUICoin;
-    class GUIGhost;
-    class GUIPacMan;
-    class GUIWall;
+    class Coin;
+    class Ghost;
+    class PacMan;
+    class Wall;
     class LevelState;
     class MenuState;
     class PausedState;
     class State;
     class StateManager;
     class VictoryState;
-    class GUIFruit;
+    class Fruit;
     class Window;
     class GameOverState;
-    class GUIEscapeWall;
+    class EscapeWall;
 }
 enum key{space, backspace, escape, noKey, leftMouseButton, startButton};
 enum stateTag{victory, menu, paused, level, gameOver};

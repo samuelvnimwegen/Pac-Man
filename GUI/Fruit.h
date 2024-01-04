@@ -6,10 +6,10 @@
 #define PAC_MAN_GUIFRUIT_H
 #include "EntityView.h"
 
-class GUI::GUIFruit: public GUI::EntityView{
+class GUI::Fruit: public GUI::EntityView{
     std::weak_ptr<Model::Fruit> subject;
 public:
-    explicit GUIFruit(const std::shared_ptr<Model::Fruit> &subject);
+    explicit Fruit(const std::shared_ptr<Model::Fruit> &subject);
 
     [[nodiscard]] std::shared_ptr<Model::Fruit> getSubject();
 

@@ -6,9 +6,9 @@
 #define PAC_MAN_GUIESCAPEWALL_H
 #include "EntityView.h"
 
-class GUI::GUIEscapeWall: public GUI::EntityView{
+class GUI::EscapeWall: public GUI::EntityView{
 public:
-    explicit GUIEscapeWall(const std::shared_ptr<Model::EscapeWall> &sub);
+    explicit EscapeWall(const std::shared_ptr<Model::EscapeWall> &sub);
 
     void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) override;
 

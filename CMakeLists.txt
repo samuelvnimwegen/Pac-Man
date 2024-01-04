@@ -22,21 +22,21 @@ add_executable(Pac-Man
         Model/Observer.cpp
         GUI/Game.cpp
         GUI/EntityView.cpp
-        GUI/GUIWall.cpp
+        GUI/Wall.cpp
         GUI/ConcreteFactory.cpp
         Model/AbstractFactory.cpp
         Model/Stopwatch.cpp
-        GUI/GUIPacMan.cpp
+        GUI/PacMan.cpp
         Model/PacMan.cpp
         Model/Coin.cpp
-        GUI/GUICoin.cpp
+        GUI/Coin.cpp
         GUI/StateManager.cpp
         GUI/State.cpp
         GUI/MenuState.cpp
         GUI/LevelState.cpp
         GUI/VictoryState.cpp
         GUI/PausedState.cpp
-        GUI/GUIGhost.cpp
+        GUI/Ghost.cpp
         Model/Fruit.cpp
         Model/Random.cpp
         Model/GhostStateManager.cpp
@@ -45,7 +45,7 @@ add_executable(Pac-Man
         Model/GhostChasingState.cpp
         Model/GhostFrightenedState.cpp
         Model/GhostResetState.cpp
-        GUI/GUIFruit.cpp
+        GUI/Fruit.cpp
         Model/GhostEatenState.cpp
         GUI/Window.cpp
         GUI/GameOverState.cpp
@@ -55,7 +55,7 @@ add_executable(Pac-Man
         Model/DijkstraPoint.cpp
         Model/DijkstraTransition.cpp
         Model/EscapeWall.cpp
-        GUI/GUIEscapeWall.cpp
+        GUI/EscapeWall.cpp
 )
 
 # Link target to SFML libs

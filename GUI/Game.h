@@ -11,16 +11,16 @@
 #include "../Model/Observer.h"
 #include "cassert"
 #include "EntityView.h"
-#include "GUIWall.h"
+#include "Wall.h"
 #include "ConcreteFactory.h"
 #include "../GUI/Camera.h"
-#include "GUIPacMan.h"
+#include "PacMan.h"
 #include "../Model/Stopwatch.h"
-#include "GUICoin.h"
+#include "Coin.h"
 #include "StateManager.h"
 #include "chrono"
 #include "thread"
-#include "GUIGhost.h"
+#include "Ghost.h"
 
 class GUI::Game {
     int screenWidth;

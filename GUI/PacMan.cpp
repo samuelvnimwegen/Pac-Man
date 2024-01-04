@@ -2,19 +2,19 @@
 // Created by Samuel on 16/11/2023.
 //
 
-#include "GUIPacMan.h"
+#include "PacMan.h"
 #include "Camera.h"
 using namespace std;
 
-int GUI::GUIPacMan::getTextureNr() const {
+int GUI::PacMan::getTextureNr() const {
     return textureNr;
 }
 
-void GUI::GUIPacMan::setTextureNr(int nr) {
-    GUIPacMan::textureNr = nr;
+void GUI::PacMan::setTextureNr(int nr) {
+    PacMan::textureNr = nr;
 }
 
-void GUI::GUIPacMan::updateTextureNr() {
+void GUI::PacMan::updateTextureNr() {
     if (this->getPacManModel()->isDead()){
         double interval = 2.0 / 11;
         if ((this->getDeadTextureNr() + 1) * interval < Model::Stopwatch::instance()->getLevelTime() - this->getPacManModel()->getDeathTime()){
@@ -43,11 +43,11 @@ void GUI::GUIPacMan::updateTextureNr() {
 }
 
 
-std::shared_ptr<Model::PacMan> GUI::GUIPacMan::getPacManModel() const {
+std::shared_ptr<Model::PacMan> GUI::PacMan::getPacManModel() const {
     return pacManModel.lock();
 }
 
-GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan> &subject) : EntityView(subject) {
+GUI::PacMan::PacMan(const shared_ptr<Model::PacMan> &subject) : EntityView(subject) {
     chompSoundBuffer = make_unique<sf::SoundBuffer>();
     chompSoundBuffer->loadFromFile("../SoundEffects/pacman_chomp2.wav");
     chompSound = std::make_unique<sf::Sound>(*chompSoundBuffer);
@@ -76,7 +76,7 @@ GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan> &subject) : EntityView
     shared_ptr<Camera> cam = Camera::instance();
 }
 
-void GUI::GUIPacMan::update(const double &ticks) {
+void GUI::PacMan::update(const double &ticks) {
     if (Model::Stopwatch::instance()->getTotalSeconds() - this->getLastCoinCollected() > 0.4){
         this->chompSound->setLoop(false);
     }
@@ -107,7 +107,7 @@ void GUI::GUIPacMan::update(const double &ticks) {
     EntityView::update(ticks);
 }
 
-void GUI::GUIPacMan::updateSprite() {
+void GUI::PacMan::updateSprite() {
     sf::Sprite sprite;
 
     if (this->getPacManModel()->isDead()){
@@ -131,15 +131,15 @@ void GUI::GUIPacMan::updateSprite() {
     this->setSprite(make_shared<sf::Sprite>(sprite));
 }
 
-int GUI::GUIPacMan::getDeadTextureNr() const {
+int GUI::PacMan::getDeadTextureNr() const {
     return deadTextureNr;
 }
 
-void GUI::GUIPacMan::setDeadTextureNr(int nr) {
-    GUIPacMan::deadTextureNr = nr;
+void GUI::PacMan::setDeadTextureNr(int nr) {
+    PacMan::deadTextureNr = nr;
 }
 
-void GUI::GUIPacMan::collectableCollected(const weak_ptr<Model::Collectable> &collectable) {
+void GUI::PacMan::collectableCollected(const weak_ptr<Model::Collectable> &collectable) {
     if (collectable.lock()->getTag() == coin and this->chompSound->getStatus() != sf::SoundSource::Playing){
         this->chompSound->setLoop(true);
         this->chompSound->play();
@@ -151,25 +151,25 @@ void GUI::GUIPacMan::collectableCollected(const weak_ptr<Model::Collectable> &co
     EntityView::collectableCollected(collectable);
 }
 
-double GUI::GUIPacMan::getLastCoinCollected() const {
+double GUI::PacMan::getLastCoinCollected() const {
     return lastCoinCollected;
 }
 
-void GUI::GUIPacMan::setLastCoinCollected(double lastCollected) {
-    GUIPacMan::lastCoinCollected = lastCollected;
+void GUI::PacMan::setLastCoinCollected(double lastCollected) {
+    PacMan::lastCoinCollected = lastCollected;
 }
 
-void GUI::GUIPacMan::levelHalt() {
+void GUI::PacMan::levelHalt() {
     this->chompSound->setLoop(false);
     this->chompSound->stop();
     this->frightenedSound->stop();
     EntityView::levelHalt();
 }
 
-void GUI::GUIPacMan::pacManDied() {
+void GUI::PacMan::pacManDied() {
     this->deathSound->play();
     EntityView::pacManDied();
 }
 
 
-GUI::GUIPacMan::~GUIPacMan() = default;
+GUI::PacMan::~PacMan() = default;

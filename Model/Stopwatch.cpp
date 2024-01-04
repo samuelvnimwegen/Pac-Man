@@ -11,7 +11,7 @@ Model::Stopwatch::Stopwatch(){
     pausedLevelTime = 0;
     totalPauseTime = 0;
     totalTime = clock();
-};
+}
 
 double Model::Stopwatch::getDeltaTime() {
     auto elapsedTime = double(clock() - totalTime) / double(CLOCKS_PER_SEC);

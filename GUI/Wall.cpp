@@ -2,16 +2,16 @@
 // Created by Samuel on 16/11/2023.
 //
 
-#include "GUIWall.h"
+#include "Wall.h"
 
 #include <memory>
 #include "Camera.h"
 
-GUI::GUIWall::~GUIWall() = default;
+GUI::Wall::~Wall() = default;
 
 
 
-void GUI::GUIWall::updateWall() {
+void GUI::Wall::updateWall() {
     auto row = toTile(this->getSubject()->getY());
     auto col = toTile(this->getSubject()->getX());
     std::string nameString;
@@ -44,7 +44,7 @@ void GUI::GUIWall::updateWall() {
     this->setSprite(sprite);
 }
 
-void GUI::GUIWall::update(const double &ticks) {
+void GUI::Wall::update(const double &ticks) {
     if (!this->isWallUpdated()){
         this->updateWall();
         this->setWallUpdated(true);
@@ -52,7 +52,7 @@ void GUI::GUIWall::update(const double &ticks) {
     EntityView::update(ticks);
 }
 
-GUI::GUIWall::GUIWall(const std::shared_ptr<Model::EntityModel> &subject, const std::weak_ptr<Model::World> &world)
+GUI::Wall::Wall(const std::shared_ptr<Model::EntityModel> &subject, const std::weak_ptr<Model::World> &world)
         : EntityView(subject), world(world) {
     wallUpdated = false;
     auto texture = std::make_shared<sf::Texture>();
@@ -68,16 +68,16 @@ GUI::GUIWall::GUIWall(const std::shared_ptr<Model::EntityModel> &subject, const 
     this->setSprite(sprite);
 }
 
-const std::weak_ptr<Model::World> &GUI::GUIWall::getWorld() const {
+const std::weak_ptr<Model::World> &GUI::Wall::getWorld() const {
     return world;
 }
 
-bool GUI::GUIWall::isWallUpdated() const {
+bool GUI::Wall::isWallUpdated() const {
     return wallUpdated;
 }
 
-void GUI::GUIWall::setWallUpdated(bool updated) {
-    GUIWall::wallUpdated = updated;
+void GUI::Wall::setWallUpdated(bool updated) {
+    Wall::wallUpdated = updated;
 }
 
 
