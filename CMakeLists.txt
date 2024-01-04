@@ -4,7 +4,7 @@ project(Pac-Man)
 set(CMAKE_CXX_STANDARD 17)
 
 # Look for SFML >= 2.0, with the specific subcomponents listed below
-FIND_PACKAGE(SFML 2 COMPONENTS system window graphics)
+FIND_PACKAGE(SFML 2 COMPONENTS system window graphics audio)
 
 # Add include dirs for SFML
 INCLUDE_DIRECTORIES(${SFML_INCLUDE_DIR})
@@ -59,7 +59,7 @@ add_executable(Pac-Man
 )
 
 # Link target to SFML libs
-TARGET_LINK_LIBRARIES(Pac-Man sfml-system sfml-graphics sfml-window)
+TARGET_LINK_LIBRARIES(Pac-Man sfml-system sfml-graphics sfml-window sfml-audio)
 
 # Install our executable to the CMAKE_INSTALL_PREFIX/bin
 INSTALL(TARGETS Pac-Man DESTINATION bin)

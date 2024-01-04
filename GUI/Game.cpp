@@ -60,7 +60,7 @@ GUI::Game::Game() {
     introText2.setFillColor(sf::Color::White);
     introText2.setPosition(150 , 300);
     introText2.setString("pacman");
-    
+
     // Intro image:
     sf::Texture image;
     image.loadFromFile("Sprites/Intro.png");
