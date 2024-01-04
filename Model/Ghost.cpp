@@ -74,12 +74,12 @@ void Model::Ghost::changeDirection() {
         auto row = toTile(this->getY());
         auto posPair = make_pair(row, col);
         auto spawnPairs = this->getWorld()->getSpawnRegion();
-        bool inSpawn = std::count(spawnPairs.begin(), spawnPairs.end(), posPair) and this->getStateManager()->getCurrentTag() == chasing;
-
+        bool inSpawn = std::count(spawnPairs.begin(), spawnPairs.end(), posPair);
+        bool chasingOrFrightened = this->getStateManager()->getCurrentTag() == chasing or this->getStateManager()->getCurrentTag() == ghostStateTag::frightened;
         // Random getal tussen 0 en 1 berekenen, als deze kleiner is dan 0.5 beste richting kiezen of als de ghost in
         // de spawn-region is:
         double randomDouble = randomGenerator->getRandomDouble(0, 1);
-        if (templateMax(randomDouble, 0.5) == 0.5 or inSpawn){
+        if (templateMax(randomDouble, 0.5) == 0.5 or (inSpawn and chasingOrFrightened)){
             auto direction = bestDirection;
             // Als de ghost frightened is moet hij de slechtste richting nemen:
             if (this->getStateManager()->getCurrentTag() == ghostStateTag::frightened){

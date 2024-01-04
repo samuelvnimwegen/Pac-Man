@@ -156,9 +156,10 @@ void Model::World::buildWorld() {
     this->getFactory()->createPacMan(9, 9);
 
     this->getFactory()->createGhost(5, 8);
+    /*
     this->getFactory()->createGhost(5, 9);
     this->getFactory()->createGhost(5, 10);
-    this->getFactory()->createGhost(5, 11);
+    this->getFactory()->createGhost(5, 11);*/
 
     this->getFactory()->createFruit(1, 1);
     this->getFactory()->createFruit(9, 18);
@@ -362,7 +363,7 @@ bool Model::Ghost::canMove(const int &row, const int &col) {
         return false;
     }
     if (this->getWorld()->getItem(row, col)->getTag() == escapeWall){
-        bool inSpawn = std::count(this->getWorld()->getSpawnRegion().begin(), this->getWorld()->getSpawnRegion().end(), make_pair(row, col));
+        bool inSpawn = std::count(this->getWorld()->getSpawnRegion().begin(), this->getWorld()->getSpawnRegion().end(), make_pair(toTile(this->getY()), toTile(this->getX())));
         bool reset = this->getStateManager()->getCurrentTag() == ghostStateTag::reset;
         if (inSpawn or reset){
             return true;
@@ -427,8 +428,7 @@ void Model::Ghost::move(const double &seconds) {
         }
 
             // Als de volgende tile een muur is:
-        else if (this->getWorld()->getItem(toTile(this->getY()) - 1, toTile(this->getX())) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()) - 1, toTile(this->getX()))->getTag() == wall){
+        else if (!this->canMove(this->getCurrentDirection())){
             double maxYCoord = toTile(this->getY());
             if (yCoord < maxYCoord){
                 this->setY(maxYCoord);
@@ -482,8 +482,7 @@ void Model::Ghost::move(const double &seconds) {
             }
         }
             // Als de volgende tile een muur is:
-        else if (this->getWorld()->getItem(toTile(this->getY()) + 1, toTile(this->getX())) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()) + 1, toTile(this->getX()))->getTag() == wall){
+        else if (!this->canMove(direction::down)){
             double wallYCoord = toTile(this->getY());
             if (yCoord > wallYCoord){
                 this->setY(wallYCoord);
@@ -535,8 +534,7 @@ void Model::Ghost::move(const double &seconds) {
             }
         }
             // Als de volgende tile een muur is:
-        else if (this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()) + 1) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()), toTile(this->getX()) + 1)->getTag() == wall){
+        else if (!this->canMove(this->getCurrentDirection())){
             double wallXCoord = toTile(this->getX());
             if (xCoord > wallXCoord){
                 this->setX(wallXCoord);
@@ -588,8 +586,7 @@ void Model::Ghost::move(const double &seconds) {
             }
         }
             // Als de volgende tile een muur is:
-        else if (this->getWorld()->getItem(toTile(this->getY()), toTile(this->getX()) - 1) != nullptr and this->getWorld()->getItem(
-                toTile(this->getY()), toTile(this->getX()) - 1)->getTag() == wall){
+        else if (!this->canMove(this->getCurrentDirection())){
             double wallXCoord = toTile(this->getX());
             if (xCoord < wallXCoord){
                 this->setX(wallXCoord);
