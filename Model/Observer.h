@@ -13,6 +13,8 @@ public:
     virtual void update(const double &seconds) = 0;
 
     virtual void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) = 0;
+
+    virtual void levelPaused() = 0;
 };
 
 

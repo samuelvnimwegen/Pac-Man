@@ -204,9 +204,9 @@ direction GUI::Game::getDirection() {
 
 
 key GUI::Game::getInput() {
-    // Er mag elke 0.5 seconden en unieke nieuwe input zijn:
+    // Er mag elke 0.2 seconden en unieke nieuwe input zijn:
     static double lastInput = Model::Stopwatch::instance()->getTotalSeconds();
-    if (lastInput + 0.5 < Model::Stopwatch::instance()->getTotalSeconds()){
+    if (lastInput + 0.2 < Model::Stopwatch::instance()->getTotalSeconds()){
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
             lastInput = Model::Stopwatch::instance()->getTotalSeconds();
             return escape;

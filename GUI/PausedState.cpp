@@ -17,9 +17,9 @@ void GUI::PausedState::update(const key &key) {
     if (this->getStateManager().lock() and this->getWorld().lock()){
         auto stateManager = this->getStateManager().lock();
         auto world = this->getWorld().lock();
-        // Als er opnieuw escape wordt geduwd en er is 0.5 seconde voorbij (om dubbele clicks te voorkomen): poppen tot
+        // Als er opnieuw escape wordt geduwd en er is 0.2 seconde voorbij (om dubbele clicks te voorkomen): poppen tot
         // stacks size 1 heeft:
-        if (key == escape and (Model::Stopwatch::instance()->getLevelTime() - this->getPausedTime()) > 0.5){
+        if (key == escape and (Model::Stopwatch::instance()->getLevelTime() - this->getPausedTime()) > 0.2){
             world->restartWorld();
             while (stateManager->getSize() > 1){
                 stateManager->pop();

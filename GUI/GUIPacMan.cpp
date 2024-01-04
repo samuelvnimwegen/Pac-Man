@@ -48,6 +48,11 @@ std::shared_ptr<Model::PacMan> GUI::GUIPacMan::getPacManModel() const {
 }
 
 GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan> &subject) : EntityView(subject) {
+    lastCoinCollected = 0;
+    chompSoundBuffer = make_unique<sf::SoundBuffer>();
+    chompSoundBuffer->loadFromFile("SoundEffects/pacman_chomp2.wav");
+    chompSound = std::make_unique<sf::Sound>(*chompSoundBuffer);
+
     deadTextureNr = 0;
     textureNr = 0;
     auto texture = make_shared<sf::Texture>();
@@ -59,6 +64,9 @@ GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan> &subject) : EntityView
 }
 
 void GUI::GUIPacMan::update(const double &ticks) {
+    if (Model::Stopwatch::instance()->getTotalSeconds() - this->getLastCoinCollected() > 0.4){
+        this->chompSound->setLoop(false);
+    }
     this->updateSprite();
     auto camera = Camera::instance();
     auto camCoords = camera->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());
@@ -99,6 +107,28 @@ void GUI::GUIPacMan::setDeadTextureNr(int nr) {
     GUIPacMan::deadTextureNr = nr;
 }
 
+void GUI::GUIPacMan::collectableCollected(const weak_ptr<Model::Collectable> &collectable) {
+    if (this->chompSound->getStatus() != sf::SoundSource::Playing){
+        this->chompSound->setLoop(true);
+        this->chompSound->play();
+    }
+    this->setLastCoinCollected(Model::Stopwatch::instance()->getTotalSeconds());
+    EntityView::collectableCollected(collectable);
+}
+
+double GUI::GUIPacMan::getLastCoinCollected() const {
+    return lastCoinCollected;
+}
+
+void GUI::GUIPacMan::setLastCoinCollected(double lastCollected) {
+    GUIPacMan::lastCoinCollected = lastCollected;
+}
+
+void GUI::GUIPacMan::levelPaused() {
+    this->chompSound->setLoop(false);
+    this->chompSound->stop();
+    EntityView::levelPaused();
+}
 
 
 GUI::GUIPacMan::~GUIPacMan() = default;

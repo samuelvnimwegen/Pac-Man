@@ -151,4 +151,8 @@ void Model::Score::setCoinsCollected(int i) {
     Score::coinsCollected = i;
 }
 
+void Model::Score::levelPaused() {
+
+}
+
 

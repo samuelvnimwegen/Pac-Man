@@ -34,6 +34,8 @@ public:
 
     void nextLevel();
 
+    void levelPaused() override;
+
     void restart();
 
     void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) override;

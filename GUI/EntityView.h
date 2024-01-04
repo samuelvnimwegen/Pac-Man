@@ -20,6 +20,8 @@ public:
 
     virtual ~EntityView();
 
+    void levelPaused() override;
+
     [[nodiscard]] const std::shared_ptr<sf::Texture> &getTexture() const;
 
     void setTexture(const std::shared_ptr<sf::Texture> &sharedPtr);
