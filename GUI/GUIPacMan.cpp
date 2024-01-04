@@ -6,13 +6,6 @@
 #include "Camera.h"
 using namespace std;
 
-
-
-
-
-
-
-
 int GUI::GUIPacMan::getTextureNr() const {
     return textureNr;
 }
@@ -58,8 +51,9 @@ GUI::GUIPacMan::GUIPacMan(const shared_ptr<Model::PacMan> &subject) : EntityView
     deadTextureNr = 0;
     textureNr = 0;
     auto texture = make_shared<sf::Texture>();
-    texture->loadFromFile("Sprites.png");
+    texture->loadFromFile("Sprites/Sprites.png");
     this->setTexture(texture);
+
     pacManModel = subject;
     shared_ptr<Camera> cam = Camera::instance();
 }
@@ -104,5 +98,7 @@ int GUI::GUIPacMan::getDeadTextureNr() const {
 void GUI::GUIPacMan::setDeadTextureNr(int nr) {
     GUIPacMan::deadTextureNr = nr;
 }
+
+
 
 GUI::GUIPacMan::~GUIPacMan() = default;

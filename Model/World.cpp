@@ -156,10 +156,9 @@ void Model::World::buildWorld() {
     this->getFactory()->createPacMan(9, 9);
 
     this->getFactory()->createGhost(5, 8);
-    /*
     this->getFactory()->createGhost(5, 9);
     this->getFactory()->createGhost(5, 10);
-    this->getFactory()->createGhost(5, 11);*/
+    this->getFactory()->createGhost(5, 11);
 
     this->getFactory()->createFruit(1, 1);
     this->getFactory()->createFruit(9, 18);

@@ -30,7 +30,7 @@ void GUI::GUIWall::updateWall() {
     if (nameString.empty()){
         nameString = "None";
     }
-    nameString = "Walls/" + nameString + ".png";
+    nameString = "Sprites/Walls/" + nameString + ".png";
     auto texture = std::make_shared<sf::Texture>();
     texture->loadFromFile(nameString);
     this->setTexture(texture);
@@ -56,7 +56,7 @@ GUI::GUIWall::GUIWall(const std::shared_ptr<Model::EntityModel> &subject, const 
         : EntityView(subject), world(world) {
     wallUpdated = false;
     auto texture = std::make_shared<sf::Texture>();
-    texture->loadFromFile("Muur2.png");
+    texture->loadFromFile("Sprites/Muur2.png");
     this->setTexture(texture);
 
     auto camera = Camera::instance();

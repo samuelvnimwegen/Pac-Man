@@ -18,11 +18,11 @@ GUI::GUIGhost::GUIGhost(const std::shared_ptr<Model::Ghost> &ghost, color ghostC
     textureNr = 0;
     spriteX = ghostColor * 50;
     auto texture = std::make_shared<sf::Texture>();
-    texture->loadFromFile("Sprites.png");
+    texture->loadFromFile("Sprites/Sprites.png");
     this->setTexture(texture);
     auto camera = Camera::instance();
     scoreTexture = std::make_shared<sf::Texture>();
-    scoreTexture->loadFromFile("100_glowing.png");
+    scoreTexture->loadFromFile("Sprites/100_glowing.png");
 }
 
 std::shared_ptr<Model::Ghost> GUI::GUIGhost::getSubject(){

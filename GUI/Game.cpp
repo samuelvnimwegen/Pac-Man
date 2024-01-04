@@ -40,7 +40,7 @@ GUI::Game::Game() {
 
     // Score voor level:
     sf::Font font;
-    assert(font.loadFromFile("ScoreFont.ttf"));
+    assert(font.loadFromFile("Fonts/ScoreFont.ttf"));
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(15);
@@ -56,7 +56,7 @@ GUI::Game::Game() {
 
     // Text voor start:
     sf::Font font1;
-    assert(font1.loadFromFile("IntroFont.ttf"));
+    assert(font1.loadFromFile("Fonts/IntroFont.ttf"));
 
     sf::Text introText2;
     introText2.setFont(font1);
@@ -67,7 +67,7 @@ GUI::Game::Game() {
 
     // Intro image:
     sf::Texture image;
-    image.loadFromFile("Intro.png");
+    image.loadFromFile("Sprites/Intro.png");
     sf::Sprite introSprite;
     introSprite.setTexture(image);
     introSprite.setPosition(250, 50);
@@ -251,7 +251,7 @@ int GUI::Game::getScreenHeight() const {
 void GUI::Game::drawLives() const {
     auto window = GUI::Window::instance()->getWindow();
     sf::Texture texture;
-    texture.loadFromFile("Heart.png");
+    texture.loadFromFile("Sprites/Heart.png");
     sf::Sprite sprite(texture);
     int offset = 0;
     for (int i = 0; i < this->getWorld()->getScoreClass()->getLivesLeft(); ++i){
@@ -274,7 +274,7 @@ void GUI::Game::drawScoreboard() {
 
     sf::Text scoreBoardText;
     sf::Font font;
-    font.loadFromFile("IntroFont.ttf");
+    font.loadFromFile("Fonts/IntroFont.ttf");
     scoreBoardText.setFont(font);
 
     scoreBoardText.setCharacterSize(15);
@@ -313,7 +313,7 @@ void GUI::Game::drawStartButton() {
     rect2.setPosition(250 , 410);
 
     sf::Font font;
-    font.loadFromFile("IntroFont.ttf");
+    font.loadFromFile("Fonts/IntroFont.ttf");
     sf::Text introText;
     introText.setFont(font);
     introText.setCharacterSize(20);

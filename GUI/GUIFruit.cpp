@@ -8,7 +8,7 @@
 GUI::GUIFruit::GUIFruit(const std::shared_ptr<Model::Fruit> &subject)
         : GUI::EntityView(subject), subject(subject){
     auto texture = std::make_shared<sf::Texture>();
-    texture->loadFromFile("Sprites.png");
+    texture->loadFromFile("Sprites/Sprites.png");
     this->setTexture(texture);
 
     auto camCoords = Camera::instance()->getCameraCoords(this->getSubject()->getY(), this->getSubject()->getX());

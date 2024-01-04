@@ -7,7 +7,7 @@
 
 GUI::GUIEscapeWall::GUIEscapeWall(const std::shared_ptr<Model::EscapeWall> &sub) : GUI::EntityView(sub) {
     auto texture = std::make_shared<sf::Texture>();
-    texture->loadFromFile("EscapeWall.png");
+    texture->loadFromFile("Sprites/EscapeWall.png");
     this->setTexture(texture);
 
     auto camera = Camera::instance();
