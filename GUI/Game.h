@@ -54,6 +54,7 @@ public:
     static sf::Vector2i getMousePosition();
 
     static void drawStartButton();
+
 };
 
 

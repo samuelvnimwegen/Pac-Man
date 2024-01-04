@@ -24,7 +24,6 @@ void Model::GhostStateManager::reset() {
     while (stack.size() > 1){
         stack.pop();
     }
-    Model::Stopwatch::instance()->startLevel();
 }
 
 ghostStateTag Model::GhostStateManager::getCurrentTag() {

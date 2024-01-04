@@ -25,6 +25,10 @@ GUI::Game::Game() {
     auto concreteFactory = std::make_shared<GUI::ConcreteFactory>(world);
     world->setFactory(concreteFactory);
 
+    auto beginBuffer = make_unique<sf::SoundBuffer>();
+    beginBuffer->loadFromFile("SoundEffects/pacman_beginning.wav");
+    auto beginSound = make_unique<sf::Sound>(*beginBuffer);
+
     this->getCamera()->setModelHeight(this->getWorld()->getHeight());
     this->getCamera()->setModelWidth(this->getWorld()->getWidth());
     world->buildWorld();
@@ -83,6 +87,8 @@ GUI::Game::Game() {
     levelText.setFillColor(sf::Color::White);
     levelText.setPosition(340, float(this->getScreenHeight()) + 20);
 
+    beginSound->play();
+
     while (Window::instance()->getWindow()->isOpen()){
         sf::Event event{};
         while(Window::instance()->getWindow()->pollEvent(event)){
@@ -90,13 +96,17 @@ GUI::Game::Game() {
                 Window::instance()->getWindow()->close();
             }
         }
-        this->getStateManager()->update(getInput());
+        if (beginSound->getStatus() != sf::SoundSource::Playing){
+            this->getStateManager()->update(getInput());
+        }
         if (this->getStateManager()->getCurrentTag() == menu){
             Window::instance()->getWindow()->clear();
             Window::instance()->getWindow()->draw(introSprite);
             Window::instance()->getWindow()->draw(introText2);
-            drawStartButton();
-            drawScoreboard();
+            if (beginSound->getStatus() != sf::SoundSource::Playing){
+                drawStartButton();
+                drawScoreboard();
+            }
             Window::instance()->getWindow()->display();
         }
         else if (this->getStateManager()->getCurrentTag() == level){
@@ -331,6 +341,8 @@ void GUI::Game::drawStartButton() {
     window->draw(rect2);
     window->draw(introText);
 }
+
+
 
 
 
