@@ -67,9 +67,11 @@ GUI::Game::Game() {
 
     // Intro image:
     sf::Texture image;
-    image.loadFromFile("Sprites/Intro.png");
+    image.loadFromFile("Sprites/pacmanIntro.png");
     sf::Sprite introSprite;
     introSprite.setTexture(image);
+    sf::Vector2f targetSize(350.0f, 200.0f);
+    introSprite.setScale(targetSize.x / introSprite.getLocalBounds().width,targetSize.y / introSprite.getLocalBounds().height);
     introSprite.setPosition(250, 50);
 
     // Text voor pauze:
@@ -276,11 +278,11 @@ void GUI::Game::drawLives() const {
 void GUI::Game::drawScoreboard() {
     auto window = GUI::Window::instance()->getWindow();
 
-    sf::RectangleShape rectangle(sf::Vector2f(170, 150));
+    sf::RectangleShape rectangle(sf::Vector2f(155, 150));
     rectangle.setOutlineColor(sf::Color::Blue);
     rectangle.setFillColor(sf::Color::Transparent);
     rectangle.setOutlineThickness(5);
-    rectangle.setPosition(580, 10);
+    rectangle.setPosition(630, 10);
     window->draw(rectangle);
 
     sf::Text scoreBoardText;
@@ -290,8 +292,8 @@ void GUI::Game::drawScoreboard() {
 
     scoreBoardText.setCharacterSize(15);
     scoreBoardText.setFillColor(sf::Color::White);
-    scoreBoardText.setPosition(580, 10);
-    scoreBoardText.setString("scoreboard:");
+    scoreBoardText.setPosition(630, 10);
+    scoreBoardText.setString("scoreboard");
     window->draw(scoreBoardText);
 
     ifstream scoreFile("ScoreBoard.txt");
@@ -299,7 +301,7 @@ void GUI::Game::drawScoreboard() {
     int counter = 1;
     while (scoreFile >> score){
         scoreBoardText.setString(score);
-        scoreBoardText.setPosition(625, float(10 + counter * 25));
+        scoreBoardText.setPosition(675, float(10 + counter * 25));
         ++counter;
         window->draw(scoreBoardText);
     }
