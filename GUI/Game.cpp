@@ -101,6 +101,9 @@ GUI::Game::Game() {
         }
         else if (this->getStateManager()->getCurrentTag() == level){
             double time = Model::Stopwatch::instance()->getDeltaTime();
+            if (time > 0.3 and this->getWorld()->getPacMan()->getCurrentDirection() != direction::none){
+                throw std::runtime_error("Tick-time higher than 0.3 seconds");
+            }
             direction direction = getDirection();
             if (this->getWorld()->getPacMan()->getCurrentDirection() != direction::none){
                 if (!this->getWorld()->isGameStarted()){

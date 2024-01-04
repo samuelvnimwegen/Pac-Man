@@ -3,6 +3,12 @@ project(Pac-Man)
 
 set(CMAKE_CXX_STANDARD 17)
 
+# Look for SFML >= 2.0, with the specific subcomponents listed below
+FIND_PACKAGE(SFML 2 COMPONENTS system window graphics)
+
+# Add include dirs for SFML
+INCLUDE_DIRECTORIES(${SFML_INCLUDE_DIR})
+
 add_executable(Pac-Man
         main.cpp
         Model/Subject.cpp
@@ -52,9 +58,8 @@ add_executable(Pac-Man
         GUI/GUIEscapeWall.cpp
 )
 
-set(SFML_STATIC_LIBRARIES TRUE)
-set(SFML_DIR C:/SFML/lib/cmake/SFML)
-find_package(SFML COMPONENTS system window graphics audio network REQUIRED)
+# Link target to SFML libs
+TARGET_LINK_LIBRARIES(Pac-Man sfml-system sfml-graphics sfml-window)
 
-include_directories(C:/SFML/include)
-TARGET_LINK_LIBRARIES(Pac-Man sfml-system sfml-window sfml-graphics sfml-audio)
+# Install our executable to the CMAKE_INSTALL_PREFIX/bin
+INSTALL(TARGETS Pac-Man DESTINATION bin)
