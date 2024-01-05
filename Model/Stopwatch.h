@@ -14,6 +14,7 @@ private:
     clock_t pausedLevelTime;
     clock_t totalPauseTime;
     clock_t levelStartTime;
+
 protected:
     explicit Stopwatch();
 public:

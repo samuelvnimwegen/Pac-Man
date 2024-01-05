@@ -27,9 +27,9 @@ public:
     /*
      * Beweegt Pac-Man
      */
-    void move(const double &seconds);
+    void move(const double &nanoSeconds);
 
-    void update(const double &seconds) override;
+    void update(const double &nanoSeconds) override;
 
     /*
      * Resetten van pacman

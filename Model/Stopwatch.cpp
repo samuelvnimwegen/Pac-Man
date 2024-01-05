@@ -3,7 +3,7 @@
 //
 
 #include "Stopwatch.h"
-
+#include "chrono"
 std::shared_ptr<Model::Stopwatch> Model::Stopwatch::m_pStopwatch = nullptr;
 
 Model::Stopwatch::Stopwatch(){
@@ -14,13 +14,13 @@ Model::Stopwatch::Stopwatch(){
 }
 
 double Model::Stopwatch::getDeltaTime() {
-    auto elapsedTime = double(clock() - totalTime) / double(CLOCKS_PER_SEC);
-    while (elapsedTime <= 0.0){
-        elapsedTime = double(clock() - totalTime) / (double) CLOCKS_PER_SEC;
-    }
-    totalTime = clock();
+    static std::chrono::time_point lastClocked = std::chrono::high_resolution_clock::now();
+    auto now = std::chrono::high_resolution_clock::now();
+    auto nanoSeconds = std::chrono::duration_cast<std::chrono::nanoseconds>(now - lastClocked).count();
+    lastClocked = now;
 
-    return elapsedTime;
+    totalTime = clock();
+    return double(nanoSeconds);
 }
 
 std::shared_ptr<Model::Stopwatch> Model::Stopwatch::instance() {

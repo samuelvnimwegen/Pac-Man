@@ -48,7 +48,7 @@ public:
 
     void nextLevel();
 
-    void update(const double &seconds) const;
+    void update(const double &nanoSeconds) const;
 
     [[nodiscard]] int getHeight() const;
 

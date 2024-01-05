@@ -252,24 +252,24 @@ void Model::World::setWalls(const vector<std::shared_ptr<Wall>> &newWalls) {
     World::walls = newWalls;
 }
 
-void Model::World::update(const double &seconds) const {
+void Model::World::update(const double &nanoSeconds) const {
     for (const auto& wall: this->getWalls()){
-        wall->update(seconds);
+        wall->update(nanoSeconds);
     }
     for (const auto& coin: this->getCoins()){
-        coin->update(seconds);
+        coin->update(nanoSeconds);
     }
     for (const auto& fruit: this->getFruits()){
-        fruit->update(seconds);
+        fruit->update(nanoSeconds);
     }
     // Ghosts alleen updaten als pacman leeft:
     if (!this->getPacMan()->isDead()){
         for (const auto& ghost: this->getGhosts()){
-            ghost->update(seconds);
+            ghost->update(nanoSeconds);
         }
     }
 
-    this->getPacMan()->update(seconds);
+    this->getPacMan()->update(nanoSeconds);
 
     // Checken op collisions van ghosts en pacMans:
     for (const auto& ghost: this->getGhosts()){
@@ -304,7 +304,7 @@ Model::PacMan::PacMan(int row, int col, const shared_ptr<World>& world) : Entity
     dead = false;
     this->setCurrentDirection(direction::none);
     this->setNextDirection(direction::none);
-    speed = 5.0;
+    speed = 5.0 * pow(10, -9);
     this->setTag(pacMan);
     hasMoved = false;
     startRow = row;
@@ -385,20 +385,20 @@ Model::Ghost::Ghost(int row, int col, const std::shared_ptr<Model::World>& world
     startCol = col;
     nextDirection = direction::none;
     waitTime = 0;
-    defaultSpeed = 1.5;
+    defaultSpeed = 1.5 * pow(10, -9);
     speed = defaultSpeed;
     frightened = false;
 
 }
 
-void Model::Ghost::move(const double &seconds) {
+void Model::Ghost::move(const double &nanoSeconds) {
     // Niks doen bij idle mode:
     if (this->getStateManager()->getCurrentTag() == ghostStateTag::idle or this->getStateManager()->getCurrentTag() == ghostStateTag::eaten or this->getStateManager()->getCurrentTag() == ghostStateTag::idleFrightened){
         return;
     }
     if (this->getCurrentDirection() == direction::up){
         double yCoord = this->getY();
-        yCoord -= seconds * this->getSpeed();
+        yCoord -= nanoSeconds * this->getSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
         if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
             double maxYCoord = toTile(this->getY());
@@ -453,7 +453,7 @@ void Model::Ghost::move(const double &seconds) {
     }
     else if (this->getCurrentDirection() == direction::down){
         double yCoord = this->getY();
-        yCoord += seconds * this->getSpeed();
+        yCoord += nanoSeconds * this->getSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
         if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()),
                                                                            toTile(this->getX()) + 1)){
@@ -507,7 +507,7 @@ void Model::Ghost::move(const double &seconds) {
     }
     else if (this->getCurrentDirection() == direction::right){
         double xCoord = this->getX();
-        xCoord += seconds * this->getSpeed();
+        xCoord += nanoSeconds * this->getSpeed();
         // Als volgende direction naar links is en hij kan naar links:
         if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
             double wallXCoord = toTile(this->getX());
@@ -558,7 +558,7 @@ void Model::Ghost::move(const double &seconds) {
     }
     else if (this->getCurrentDirection() == direction::left){
         double xCoord = this->getX();
-        xCoord -= seconds * this->getSpeed();
+        xCoord -= nanoSeconds * this->getSpeed();
         // Als volgende direction naar links is en hij kan naar links:
         if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1,toTile(this->getX()))){
             double wallXCoord = toTile(this->getX());
@@ -617,12 +617,12 @@ shared_ptr<Model::World> Model::Ghost::getWorld() {
     return world.lock();
 }
 
-void Model::Ghost::update(const double &seconds) {
+void Model::Ghost::update(const double &nanoSeconds) {
     if (this->getWorld()->isGameStarted()){
-        this->move(seconds);
+        this->move(nanoSeconds);
     }
     for (const auto& observers: this->getObservers()){
-        observers->update(seconds);
+        observers->update(nanoSeconds);
     }
     this->getStateManager()->update();
 }
@@ -727,11 +727,11 @@ direction Model::Ghost::getDijkstraDirectionSpawn() {
     return graph.getDijkstraPath().at(0);
 }
 
-void Model::PacMan::move(const double &seconds) {
+void Model::PacMan::move(const double &nanoSeconds) {
     this->setHasMoved(true);
     if (this->getCurrentDirection() == direction::up){
         double yCoord = this->getY();
-        yCoord -= seconds * this->getSpeed();
+        yCoord -= nanoSeconds * this->getSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
         if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()), toTile(this->getX()) + 1)){
             double maxYCoord = toTile(this->getY());
@@ -804,7 +804,7 @@ void Model::PacMan::move(const double &seconds) {
     }
     else if (this->getCurrentDirection() == direction::down){
         double yCoord = this->getY();
-        yCoord += seconds * this->getSpeed();
+        yCoord += nanoSeconds * this->getSpeed();
         // Als volgende direction naar rechts is en hij kan naar rechts:
         if (this->getNextDirection() == direction::right and this->canMove(toTile(this->getY()),
                                                                            toTile(this->getX()) + 1)){
@@ -876,7 +876,7 @@ void Model::PacMan::move(const double &seconds) {
     }
     else if (this->getCurrentDirection() == direction::right){
         double xCoord = this->getX();
-        xCoord += seconds * this->getSpeed();
+        xCoord += nanoSeconds * this->getSpeed();
         // Als volgende direction naar links is en hij kan naar links:
         if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1, toTile(this->getX()))){
             double wallXCoord = toTile(this->getX());
@@ -946,7 +946,7 @@ void Model::PacMan::move(const double &seconds) {
     }
     else if (this->getCurrentDirection() == direction::left){
         double xCoord = this->getX();
-        xCoord -= seconds * this->getSpeed();
+        xCoord -= nanoSeconds * this->getSpeed();
         // Als volgende direction naar links is en hij kan naar links:
         if (this->getNextDirection() == direction::up and this->canMove(toTile(this->getY()) - 1,toTile(this->getX()))){
             double wallXCoord = toTile(this->getX());
@@ -1115,10 +1115,10 @@ void Model::PacMan::die() {
     }
 }
 
-void Model::PacMan::update(const double &seconds) {
+void Model::PacMan::update(const double &nanoSeconds) {
     // Niet moven bij dood
     if (!this->isDead()){
-        this->move(seconds);
+        this->move(nanoSeconds);
     }
     // Als er 3 seconden voorbij zijn, respawned de pacman
     if (this->isDead() and this->getDeathTime() + 2 < Stopwatch::instance()->getLevelTime()){
@@ -1126,7 +1126,7 @@ void Model::PacMan::update(const double &seconds) {
         this->getWorld()->restart();
     }
     for (const auto& observer: this->getObservers()){
-        observer->update(seconds);
+        observer->update(nanoSeconds);
     }
 
 }
