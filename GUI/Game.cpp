@@ -154,10 +154,11 @@ GUI::Game::Game() {
         else if (this->getStateManager()->getCurrentTag() == victory){
             sf::Text introText3;
             introText3.setFont(font1);
-            introText3.setCharacterSize(80);
+            introText3.setCharacterSize(50);
             introText3.setFillColor(sf::Color::White);
-            introText3.setPosition(120 , 200);
-            introText3.setString("Victory");
+            introText3.setPosition(50 , 200);
+            introText3.setString("Level Complete");
+
             sf::Text pressSpace;
             pressSpace.setFont(font1);
             pressSpace.setCharacterSize(20);
