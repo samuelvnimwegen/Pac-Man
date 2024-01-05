@@ -22,11 +22,13 @@ void Model::Ghost::changeDirection() {
     vector<direction> viableDirections;
 
     // Slechts mogelijke richting moet ook bepaald worden voor in feared mode
-    int maxDistance = 0;
+    int maxDistance = -1;
     direction worstDirection = direction::none;
 
     // Voor alle mogelijke directions afgaan of ze viable zijn en of ze de beste of slechtste direction zijn:
-    for (auto direction: {direction::up, direction::down, direction::left, direction::right}){
+    vector<direction> directions = {direction::up, direction::down, direction::left, direction::right};
+    randomSort(directions); // Directions in random volgorde zetten zodat er bij ties random gekozen wordt
+    for (auto direction: directions){
         if (this->canMove(direction)){
             viableDirections.push_back(direction);
 

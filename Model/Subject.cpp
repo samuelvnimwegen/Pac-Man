@@ -17,3 +17,4 @@ void Model::Subject::addObserver(const std::shared_ptr<Model::Observer>& observe
 }
 
 Model::Subject::Subject() = default;
+

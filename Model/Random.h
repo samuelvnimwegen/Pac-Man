@@ -24,5 +24,10 @@ public:
     double getRandomDouble(const double &lowestVal, const double &highestVal);
 };
 
+template <typename T>
+void randomSort(std::vector<T> &vector);
+
+
+
 
 #endif //PAC_MAN_RANDOM_H

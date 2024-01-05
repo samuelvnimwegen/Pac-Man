@@ -5,6 +5,7 @@
 #include "DijkstraGraph.h"
 #include "DijkstraPoint.h"
 #include "DijkstraTransition.h"
+#include "Random.h"
 
 #include <cassert>
 
@@ -95,6 +96,7 @@ void Model::DijkstraGraph::buildDijkstraMap() {
             }
             // Alle buur-vakjes kijken of er al iets is ingevuld, anders naartoe gaan en in queue zetten
             std::vector<std::pair<int, int>> neighbours = {{y + 1, x}, {y - 1, x}, {y, x + 1}, {y, x - 1}};
+            randomSort(neighbours); // Random sorteren zodat ze bij 2 even snelle paden niet altijd dezelfde pakken
             for (auto pair: neighbours){
                 if (this->getWorld().at(pair.first).at(pair.second) == nullptr and
                 dijkstraMap.at(pair.first).at(pair.second) == nullptr){
