@@ -6,7 +6,9 @@
 #define PAC_MAN_CAMERA_H
 #include "iostream"
 #include "../GUI/State.h"
-
+/*
+ * Class om coordinates correct door te geven
+ */
 class Coordinates{
     double xCoord;
     double yCoord;
@@ -18,6 +20,10 @@ public:
     [[nodiscard]] double getYCoord() const;
 
 };
+
+/*
+ * Class die voor de berekening van alle pixel coordinates zorgt
+ */
 class GUI::Camera {
     int modelWidth;
     int modelHeight;
@@ -29,6 +35,9 @@ public:
 
     static std::shared_ptr<GUI::Camera> instance();
 
+    /////////////////////////////////////////:
+    // Getters and setters
+    /////////////////////////////////////////:
     [[nodiscard]] int getModelWidth() const;
 
     void setModelWidth(int width);

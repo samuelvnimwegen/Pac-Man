@@ -65,4 +65,8 @@ void GUI::EntityView::restartGame() {
 
 }
 
+void GUI::EntityView::nextLevel() {
+
+}
+
 

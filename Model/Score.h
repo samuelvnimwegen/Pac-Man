@@ -32,7 +32,7 @@ public:
      */
     void storeScoreBoard();
 
-    void nextLevel();
+    void nextLevel() override;
 
     void pacManDied() override;
 

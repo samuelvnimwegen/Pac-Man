@@ -46,13 +46,24 @@ public:
     [[nodiscard]] int getScreenWidth() const;
 
     [[nodiscard]] int getScreenHeight() const;
-
+    /*
+     * Draws the current lives on the screen
+     */
     void drawLives() const;
 
+    /*
+     * Draws the scoreBoard
+     */
     static void drawScoreboard() ;
 
+    /*
+     * Gets the current mouse position
+     */
     static sf::Vector2i getMousePosition();
 
+    /*
+     * Draws the startbutton
+     */
     static void drawStartButton();
 
 };

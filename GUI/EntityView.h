@@ -28,6 +28,14 @@ public:
 
     void restartGame() override;
 
+    void nextLevel() override;
+
+    //////////////////////////////
+    // Getters en setters
+    //////////////////////////////
+
+    [[nodiscard]] static std::pair<int, int> cameraToPixels(double xCamera, double yCamera);
+
     [[nodiscard]] const std::shared_ptr<sf::Texture> &getTexture() const;
 
     void setTexture(const std::shared_ptr<sf::Texture> &sharedPtr);
@@ -39,10 +47,6 @@ public:
     void update(const double &ticks) override;
 
     [[nodiscard]] virtual std::shared_ptr<Model::EntityModel> getSubject() const;
-
-    [[nodiscard]] static std::pair<int, int> cameraToPixels(double xCamera, double yCamera) ;
-
-
 };
 
 

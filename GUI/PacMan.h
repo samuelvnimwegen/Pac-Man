@@ -38,6 +38,10 @@ public:
 
     void updateSprite();
 
+    /////////////////////////////////
+    // Getters and setters
+    /////////////////////////////////
+
     [[nodiscard]] int getTextureNr() const;
 
     void setTextureNr(int nr);

@@ -1085,7 +1085,9 @@ void Model::World::nextLevel() {
     for (const auto& fruit: this->getFruits()){
         fruit->restart();
     }
-    this->getScoreClass()->nextLevel();
+    for (const auto& observer: this->getPacMan()->getObservers()){
+        observer->nextLevel();
+    }
     this->setLevelNr(this->getLevelNr() + 1);
 }
 

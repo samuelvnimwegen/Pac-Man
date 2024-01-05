@@ -17,10 +17,19 @@ public:
     DijkstraGraph(const std::vector<std::vector<std::shared_ptr<Model::Wall>>> &world,
                   const std::shared_ptr<DijkstraPoint> &beginPoint, const std::shared_ptr<DijkstraPoint> &endPoint);
 
+    /*
+     * Builds the DijkstraMap until it reaches it's target
+     */
     void buildDijkstraMap();
 
+    /*
+     * Prints the dijkstraMap if you would want to
+     */
     [[maybe_unused]] void printDijkstraMap();
 
+    /*
+     * Makes a vector of directions that need to be followed to reach the target
+     */
     std::vector<direction> getDijkstraPath();
 
     [[nodiscard]] const std::shared_ptr<DijkstraPoint> &getBeginPoint() const;

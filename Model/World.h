@@ -50,6 +50,10 @@ public:
 
     void update(const double &nanoSeconds) const;
 
+    /////////////////////////////////
+    // Getters and setters
+    /////////////////////////////////
+
     [[nodiscard]] int getHeight() const;
 
     [[nodiscard]] int getWidth() const;

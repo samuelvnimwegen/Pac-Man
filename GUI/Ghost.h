@@ -25,6 +25,10 @@ public:
 
     void ghostEaten() override;
 
+    /////////////////////////////////
+    // Getters and setters
+    /////////////////////////////////
+
     std::shared_ptr<Model::Ghost> getSubject();
 
     [[nodiscard]] const std::shared_ptr<sf::Texture> &getScoreTexture() const;
@@ -51,4 +55,4 @@ public:
 };
 
 
-#endif //PAC_MAN_GHOST_H
+#endif //PAC_MAN_GUIGHOST_H
