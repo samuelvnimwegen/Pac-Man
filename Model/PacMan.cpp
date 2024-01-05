@@ -56,8 +56,10 @@ void Model::PacMan::changeDirection(const direction &dir) {
             auto directionPair = directions.at(dir);
             if (this->canMove(directionPair.first, directionPair.second)){
                 this->setCurrentDirection(dir);
+                Model::Stopwatch::instance()->getDeltaTime();
                 Model::Stopwatch::instance()->startLevel();
             }
+
         }
     }
     else if (dir == direction::up){

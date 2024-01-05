@@ -13,7 +13,7 @@ Model::Score::Score(const std::weak_ptr<Model::World> &world) : world(world) {
     lastCollected = 0;
     levelStartTime = 0;
     benchMarkTime = 0;
-    scoreBoardFileName = "ScoreBoard.txt";
+    scoreBoardFileName = "../ScoreBoard.txt";
     this->loadScoreBoard();
 }
 
@@ -91,7 +91,15 @@ void Model::Score::loadScoreBoard() {
     if (file.is_open()){
         std::string line;
         while (std::getline(file, line)){
-            this->scoreBoard.push_back(stoi(line));
+            if (!line.empty()){
+                try{
+                    this->scoreBoard.push_back(stoi(line));
+                }
+                catch(...){
+                    std::cerr<< "Error: Score couldn't be stored" << std::endl;
+                }
+            }
+
         }
         file.close();
     }
@@ -100,7 +108,9 @@ void Model::Score::loadScoreBoard() {
 
 void Model::Score::storeScoreBoard() {
     // Huidige score toevoegen en daarna sorteren in dalende orde
-    this->scoreBoard.push_back(this->getScore());
+    if (score > 0){
+        this->scoreBoard.push_back(this->getScore());
+    }
     std::sort(this->scoreBoard.begin(), this->scoreBoard.end(), std::greater());
 
     // Top 5 scores in file opslaan:
