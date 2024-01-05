@@ -6,6 +6,11 @@
 #include "cmath"
 void Model::GhostFrightenedState::update() {
     if (this->getGhost().lock() and this->getStateManager().lock()){
+        // Op het moment dat het fruit gepakt wordt, van richting veranderen.
+        if (!this->isFirstDirectionChange()){
+            this->getGhost().lock()->initialFearMove();
+            this->setFirstDirectionChange(true);
+        }
         // Als hij opnieuw frightened is in de timing, timer aanpassen met wachttijd
         if (this->getGhost().lock()->isFrightened()){
             frightenedTime = Model::Stopwatch::instance()->getLevelTime();
@@ -30,7 +35,7 @@ void Model::GhostFrightenedState::update() {
 Model::GhostFrightenedState::GhostFrightenedState(const std::weak_ptr<Model::GhostStateManager> &stateManager,
                                                   const std::weak_ptr<Model::Ghost> &ghost) : GhostState(stateManager,
                                                                                                          ghost) {
-
+    firstDirectionChange = false;
     frightenedTime = Model::Stopwatch::instance()->getLevelTime();
     tag = ghostStateTag::frightened;
     if (this->getGhost().lock()){
@@ -48,9 +53,19 @@ double Model::GhostFrightenedState::getFrightenedTime() const {
 Model::GhostFrightenedState::GhostFrightenedState(const std::weak_ptr<Model::GhostStateManager> &stateManager,
                                                   const std::weak_ptr<Model::Ghost> &ghost, double frightenedTime)
         : GhostState(stateManager, ghost), frightenedTime(frightenedTime) {
+    firstDirectionChange = false;
     tag = ghostStateTag::frightened;
     if (this->getGhost().lock()){
+        this->getGhost().lock()->changeDirection();
         // Maak de ghosts half zo snel als normaal
         this->getGhost().lock()->setSpeed(this->getGhost().lock()->getDefaultSpeed() / 2);
     }
+}
+
+bool Model::GhostFrightenedState::isFirstDirectionChange() const {
+    return firstDirectionChange;
+}
+
+void Model::GhostFrightenedState::setFirstDirectionChange(bool change) {
+    GhostFrightenedState::firstDirectionChange = change;
 }

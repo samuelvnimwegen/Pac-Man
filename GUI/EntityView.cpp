@@ -61,4 +61,8 @@ void GUI::EntityView::ghostEaten() {
 
 }
 
+void GUI::EntityView::restartGame() {
+
+}
+
 

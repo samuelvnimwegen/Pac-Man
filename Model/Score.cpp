@@ -128,13 +128,6 @@ void Model::Score::ghostConsumed() {
     this->setScore(this->getScore() + 100);
 }
 
-void Model::Score::restart() {
-    this->storeScoreBoard();
-    this->setScore(0);
-    this->setLivesLeft(3);
-    this->setCoinsCollected(0);
-}
-
 int Model::Score::getLivesLeft() const {
     return livesLeft;
 }
@@ -161,6 +154,13 @@ void Model::Score::pacManDied() {
 
 void Model::Score::ghostEaten() {
     this->ghostConsumed();
+}
+
+void Model::Score::restartGame() {
+    this->storeScoreBoard();
+    this->setScore(0);
+    this->setLivesLeft(3);
+    this->setCoinsCollected(0);
 }
 
 

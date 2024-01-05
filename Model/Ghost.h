@@ -36,6 +36,10 @@ public:
     direction getDijkstraDirection();
 
     direction getDijkstraDirectionSpawn();
+    /*
+     * Functie die bij de initial fear zorgt dat alle ghosts wegrennen van pacman:
+     */
+    void initialFearMove();
 
     [[nodiscard]] bool canMove(const int &row, const int &col) ;
 

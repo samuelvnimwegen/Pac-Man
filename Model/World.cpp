@@ -727,6 +727,29 @@ direction Model::Ghost::getDijkstraDirectionSpawn() {
     return graph.getDijkstraPath().at(0);
 }
 
+void Model::Ghost::initialFearMove() {
+    int worstDist = -1;
+    direction worstDir = none;
+    for (auto dir: {direction::right, direction::down, direction::left, direction::up}){
+        int distance = this->getManhattanDistancePacMan(dir);
+        if (canMove(dir) and worstDist < distance){
+            worstDist = distance;
+            worstDir = dir;
+        }
+    }
+    auto upDown = {direction::up, direction::down};
+    // Checken of de nieuwe beweging om een hoek gaat, als dit niet zo is, direct richting aanpassen
+    if (std::count(upDown.begin(), upDown.end(), this->getCurrentDirection()) ==
+            std::count(upDown.begin(), upDown.end(), worstDir)){
+        this->setCurrentDirection(worstDir);
+        this->setNextDirection(none);
+    }
+    // Anders in queue zetten
+    else{
+        this->setNextDirection(worstDir);
+    }
+}
+
 void Model::PacMan::move(const double &nanoSeconds) {
     this->setHasMoved(true);
     if (this->getCurrentDirection() == direction::up){
@@ -1048,7 +1071,9 @@ void Model::World::restartWorld() {
     for (const auto& fruit: this->getFruits()){
         fruit->restart();
     }
-    this->getScoreClass()->restart();
+    for (const auto& observer: this->getPacMan()->getObservers()){
+        observer->restartGame();
+    }
     this->setLevelNr(0);
 }
 

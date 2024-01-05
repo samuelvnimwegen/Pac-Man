@@ -40,7 +40,7 @@ public:
 
     void ghostEaten() override;
 
-    void restart();
+    void restartGame() override;
 
     void collectableCollected(const std::weak_ptr<Model::Collectable> &collectable) override;
 

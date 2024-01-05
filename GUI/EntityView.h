@@ -26,6 +26,8 @@ public:
 
     void ghostEaten() override;
 
+    void restartGame() override;
+
     [[nodiscard]] const std::shared_ptr<sf::Texture> &getTexture() const;
 
     void setTexture(const std::shared_ptr<sf::Texture> &sharedPtr);

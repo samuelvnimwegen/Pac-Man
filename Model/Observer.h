@@ -19,6 +19,8 @@ public:
     virtual void pacManDied() = 0;
 
     virtual void ghostEaten() = 0;
+
+    virtual void restartGame() = 0;
 };
 
 
