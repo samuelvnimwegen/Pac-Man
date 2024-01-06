@@ -14,9 +14,9 @@ class Model::PacMan: public Model::EntityModel{
     direction currentDirection;
     direction nextDirection;
     double speed;
-    bool hasMoved;
-    bool dead;
-    double deathTime;
+    bool hasMoved; // Bool die aangeeft of Pac-Man al bewogen heeft
+    bool dead; // Toggle voor als pacman dood is, wordt weer op false gezet na 2 seconden
+    double deathTime; // Tijd waarop pacman als laatst is doodgegaan
     int startRow;
     int startCol;
 public:
@@ -29,6 +29,9 @@ public:
      */
     void move(const double &nanoSeconds);
 
+    /*
+     * Update functie van de Pac-Man
+     */
     void update(const double &nanoSeconds) override;
 
     /*
@@ -41,8 +44,14 @@ public:
     */
     void changeDirection(const direction &dir);
 
+    /*
+     * Functie die wordt opgeroepen als Pac-Man sterft
+     */
     void die();
 
+    /*
+     * Checkt of PacMan kan staan op een bepaalde tile
+     */
     [[nodiscard]] bool canMove(const int &row, const int &col);
 
     [[nodiscard]] const direction &getCurrentDirection() const;

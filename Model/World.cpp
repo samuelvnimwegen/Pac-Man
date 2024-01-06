@@ -1107,7 +1107,7 @@ const vector<std::pair<int, int>> &Model::World::getSpawnRegion() const {
     return spawnRegion;
 }
 
-void Model::Score::update(const double &seconds) {
+void Model::Score::update(const double &nanoSeconds) {
     auto stopwatch = Model::Stopwatch::instance();
     // Als de game gestart is zetten we de level start time gelijk aan de huidige kloktijd.
     if (this->getWorld().lock() and this->getWorld().lock()->isGameStarted()){
@@ -1118,7 +1118,7 @@ void Model::Score::update(const double &seconds) {
         // Nu voor elke seconde dat het level langer dan 20 seconden duurt, worden er 5 punten afgetrokken:
         // dit wordt door een benchmark-time gedaan wat die begint op de begintijd van het level en telkens per seconde
         // over 20 sec telkens 1 seconden omhoog schuift zodat mooi bij elke seconde over tijd de score wordt aangepast.
-        if (stopwatch->getLevelTime() - this->getBenchMarkTime() > 20){
+        if (stopwatch->getLevelTime() - this->getBenchMarkTime() > 20 and this->getScore() >= 5){
             this->setScore(this->getScore() - 5);
             this->setBenchMarkTime(this->getBenchMarkTime() + 1);
         }
@@ -1147,7 +1147,7 @@ void Model::PacMan::update(const double &nanoSeconds) {
     if (!this->isDead()){
         this->move(nanoSeconds);
     }
-    // Als er 3 seconden voorbij zijn, respawned de pacman
+    // Als er 2 seconden voorbij zijn, respawned de pacman
     if (this->isDead() and this->getDeathTime() + 2 < Stopwatch::instance()->getLevelTime()){
         this->setDead(false);
         this->getWorld()->restart();

@@ -11,8 +11,8 @@ class GUI::Ghost: public GUI::EntityView{
     double walkLastUpdated;
     int textureNr;
     int fearedTextureNr;
-    double fearedUpdateTime;
-    int spriteX;
+    double fearedUpdateTime; // Laatste tijd waarop
+    int spriteX; // X-coordinate op sprite-sheet, dit is voor de kleur
     std::shared_ptr<sf::Texture> scoreTexture;
     std::unique_ptr<sf::SoundBuffer> ghostEatenSoundBuffer;
     std::unique_ptr<sf::Sound> ghostEatenSound;

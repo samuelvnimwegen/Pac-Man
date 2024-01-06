@@ -17,24 +17,42 @@ class Model::Ghost: public Model::EntityModel{
     std::shared_ptr<Model::GhostStateManager> stateManager;
     int startRow;
     int startCol;
-    double waitTime;
+    double waitTime; // Time before the ghost is released from the spawnRegion
     double speed;
     double defaultSpeed;
-    bool frightened;
-    double frightenTime;
+    bool frightened; // Toggle bool that turns 'true' when a fruit gets eaten, and is made 'false' next update
+    double frightenTime; // Last timestamp where the ghost was frightened
 public:
     Ghost(int row, int col, const std::shared_ptr<Model::World>& world);
 
+    /*
+     * Beweegt de ghost
+     */
     void move(const double &nanoSeconds);
 
+    /*
+     * Update de ghost na elk update-interval
+     */
     void update(const double &nanoSeconds) override;
 
+    /*
+     * Verandert de richting van de ghost
+     */
     void changeDirection();
 
+    /*
+     * Ghost gaat weer terug naar spawn
+     */
     void reset();
 
+    /*
+     * Zoekt de beste dijkstra richting met het Dijkstra-algoritme (naar de Pac-Man)
+     */
     direction getDijkstraDirection();
 
+    /*
+     * Zoekt de Dijkstra-richting naar de spawn
+     */
     direction getDijkstraDirectionSpawn();
     /*
      * Functie die bij de initial fear zorgt dat alle ghosts wegrennen van pacman:

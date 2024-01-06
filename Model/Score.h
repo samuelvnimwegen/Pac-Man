@@ -46,7 +46,7 @@ public:
 
     void ghostConsumed();
 
-    void update(const double &seconds) override;
+    void update(const double &nanoSeconds) override;
 
     double getAmplifyingFactor();
 
